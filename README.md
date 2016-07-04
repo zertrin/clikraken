@@ -40,14 +40,14 @@ pip install arrow
 Install python3-krakenex in the activated virtualenv:
 
 ```
-pip install -e "git+https://github.com/veox/python3-krakenex.git@33b758f1f56257a35da85b0b14eb9cb1afb7b045#egg=krakenex-20160418"
+pip install -e "git+https://github.com/veox/python3-krakenex.git@33b758f1f56257a35da85b0b14eb9cb1afb7b045#egg=krakenex-0.0.6"
 ```
 
 ### Step 3: Install clikraken
 
 ```
 # make sure you have installed arrow and krakenex before!
-pip install clikraken
+pip install --pre clikraken
 ```
 
 ### Step 4: Add your API key in the `$HOME/.config/kraken.key` file
