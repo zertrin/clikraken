@@ -4,7 +4,11 @@ Command-line client for the Kraken exchange
 
 ## Installation
 
-This software is in development. You should install it in a virtualenv.
+WARNING: This software is currently in development.
+
+**DO NOT USE for production!**
+
+You should install it in a virtualenv.
 
 ### Step 1: Create a virtualenv
 
@@ -18,16 +22,14 @@ And activate it:
 source ~/.venv/clikraken/bin/activate
 ```
 
-### Step 2: Install dependancies
+### Step 2: Install dependencies
 
 clikraken depends on two external modules:
 
 * `arrow`, for better handling of date and time
 * `python3-krakenex`, for the low-level interface with the Kraken API
 
-Somehow you need to install the two dependencies manually before installing clikraken.
-
-I haven't been successfull in making the dependency system of pip work consistently yet.
+Somehow you need to install the two dependencies manually before installing clikraken. I haven't been successfull in making the dependency system of pip work consistently yet with python3-krakenex being only available as a Git repository.
 
 Install arrow in the activated virtualenv:
 
@@ -48,7 +50,7 @@ pip install -e "git+https://github.com/veox/python3-krakenex.git@33b758f1f56257a
 pip install clikraken
 ```
 
-### Step4: Add your API key in the `$HOME/.config/kraken.key` file
+### Step 4: Add your API key in the `$HOME/.config/kraken.key` file
 
 You will need it to perform private queries to the Kraken API.
 
@@ -73,7 +75,7 @@ clikraken --help
 ## Attribution
 
 clikraken code is licensed under the Apache license, Version 2.0.
-It should be available in `LICENSE`. If not, see [here][corelicense].
+See the `LICENSE` file. For the full text, see [here][corelicense].
 
 ### Dependencies
 
