@@ -72,6 +72,16 @@ Get help:
 clikraken --help
 ```
 
+## Upgrade
+
+In the activated virtualenv:
+
+```
+pip install -U --no-deps --pre clikraken
+```
+
+`--no-deps` is currently needed because trying to upgrade the dependency `krakenex` fails, because it is not available on PyPi, only as a Git repository.
+
 ## Attribution
 
 clikraken code is licensed under the Apache license, Version 2.0.
