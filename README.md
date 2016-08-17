@@ -92,6 +92,10 @@ See the `LICENSE` file. For the full text, see [here][corelicense].
 * [python3-krakenex][python3-krakenex] code is licensed under the LGPLv3 license.
 * [Arrow][arrow-license] code is licensed under is licensed under the Apache License, Version 2.0.
 
+### Development dependencies
+
+* `pip install pypandoc twine wheel`
+
 [corelicense]: https://www.apache.org/licenses/LICENSE-2.0
 [python3-krakenex]: https://github.com/veox/python3-krakenex
 [arrow-license]: https://github.com/crsmithdev/arrow/blob/master/LICENSE
