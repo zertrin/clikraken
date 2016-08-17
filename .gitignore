@@ -14,6 +14,7 @@ nosetests.xml
 build/
 local/
 dist/
+dist_archive/
 docs/_build/
 .idea
 .DS_Store
