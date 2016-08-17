@@ -82,10 +82,19 @@ def get_balance(args=None):
     print_results(res)
 
 
-def list_orders(args):
+def list_open_orders(args):
     params = {
+        # TODO
     }
     res = k.query_private('OpenOrders', params)
+    print_results(res)
+
+
+def list_closed_orders(args):
+    params = {
+        # TODO
+    }
+    res = k.query_private('ClosedOrders', params)
     print_results(res)
 
 
@@ -175,7 +184,10 @@ def parse_args():
     parser_cancel.set_defaults(sub_func=cancel_order)
 
     parser_olist = subparsers.add_parser('olist', help='[private] Get a list of your open orders')
-    parser_olist.set_defaults(sub_func=list_orders)
+    parser_olist.set_defaults(sub_func=list_open_orders)
+
+    parser_clist = subparsers.add_parser('clist', help='[private] Get a list of your closed orders')
+    parser_clist.set_defaults(sub_func=list_closed_orders)
 
     args = parser.parse_args()
 
