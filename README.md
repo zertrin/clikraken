@@ -24,7 +24,7 @@ source ~/.venv/clikraken/bin/activate
 
 ### Step 2: Install dependencies
 
-clikraken depends on two external modules:
+clikraken depends on the following extra modules:
 
 * `arrow`, for better handling of date and time
 * `tabulate`, for printing results as tables
@@ -92,6 +92,7 @@ See the `LICENSE` file. For the full text, see [here][corelicense].
 
 * [python3-krakenex][python3-krakenex] code is licensed under the LGPLv3 license.
 * [Arrow][arrow-license] code is licensed under is licensed under the Apache License, Version 2.0.
+* [tabulate][tabulate-license] code is licensed under is licensed under the MIT Licence.
 
 ### Development dependencies
 
@@ -100,3 +101,4 @@ See the `LICENSE` file. For the full text, see [here][corelicense].
 [corelicense]: https://www.apache.org/licenses/LICENSE-2.0
 [python3-krakenex]: https://github.com/veox/python3-krakenex
 [arrow-license]: https://github.com/crsmithdev/arrow/blob/master/LICENSE
+[tabulate-license]: https://pypi.python.org/pypi/tabulate
