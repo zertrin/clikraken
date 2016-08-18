@@ -28,7 +28,8 @@ setup(
     url='https://github.com/zertrin/clikraken',
     install_requires=[
         'krakenex',
-        'arrow'
+        'arrow',
+        'tabulate'
     ],
     classifiers=[
         "Programming Language :: Python",

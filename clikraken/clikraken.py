@@ -9,11 +9,14 @@ Command line client for the Kraken exchange
 
 import argparse
 import arrow
+from collections import OrderedDict
 from decimal import Decimal
 import json
 import krakenex
 import os
 import sys
+
+from tabulate import tabulate
 
 from . import __version__
 
@@ -22,9 +25,86 @@ KRAKEN_API_KEYFILE = os.path.expanduser('~/.config/kraken.key')
 k = krakenex.API()
 k.load_key(KRAKEN_API_KEYFILE)
 
+TZ = 'Europe/Berlin'
+
+# -----------------------------
+# Helpers
+# -----------------------------
+
+date_field = {
+    'open': 'opentm',
+    'closed': 'closetm',
+    'canceled': 'closetm',
+    'expired': 'closetm'
+}
+date_label = {
+    'open': 'opening_date',
+    'closed': 'closing_date',
+    'canceled': 'closing_date',
+    'expired': 'closing_date'
+}
+
+
+def parse_order_res(in_ol, status_list_filter=None):
+    ol = {'buy': [], 'sell': []}
+    if status_list_filter is None:
+        status_list_filter = ['open', 'closed']
+
+    for txid in in_ol:
+        o = in_ol[txid]
+        ostatus = o['status']
+        odict = OrderedDict()
+
+        odict['orderid'] = txid
+        odict['status'] = ostatus
+        odict['type'] = o['descr']['type']
+        odict['vol'] = o['vol']
+
+        if ostatus == 'closed':
+            odict['vol_exec'] = o['vol_exec']
+
+        odict['pair'] = o['descr']['pair']
+        odict['ordertype'] = o['descr']['ordertype']
+
+        if ostatus == 'open':
+            odict['price'] = o['descr']['price']
+        else:
+            odict['price'] = o['price']
+
+        if ostatus == 'closed':
+            odict['cost'] = o['cost']
+            odict['fee'] = o['fee']
+
+        odict['viqc'] = ('viqc' in o['oflags'])
+        odict[date_label[ostatus]] = format_timestamp(o[date_field[ostatus]])
+
+        if ostatus in status_list_filter:
+            ol.get(odict['type']).append(odict)
+
+    return ol
+
+
+def map_tablecol_unzip_rezip(table, colnum, func):
+    t_unzip = list(zip(*table))
+    t_unzip[colnum] = tuple(map(func, t_unzip[colnum]))
+    t_rezip = list(zip(*t_unzip))
+    return t_rezip
+
+
+def humanize_timestamp(ts):
+    return arrow.get(ts).humanize()
+
+
+def format_timestamp(ts):
+    return arrow.get(ts).to(TZ).replace(microsecond=0).format('YYYY-MM-DD HH:mm:ss')
+
 
 def print_results(res):
     print(json.dumps(res, indent=2))
+
+# -----------------------------
+# Public API
+# -----------------------------
 
 
 def ticker(args):
@@ -32,7 +112,8 @@ def ticker(args):
         'pair': args.pair,
     }
     res = k.query_public('Ticker', params)
-    print_results(res)
+    if args.raw or True:  # TODO
+        print_results(res)
 
 
 def depth(args):
@@ -41,7 +122,19 @@ def depth(args):
         'count': args.count
     }
     res = k.query_public('Depth', params)
-    print_results(res)
+    if args.raw:
+        print_results(res)
+
+    asks = res['result'][args.pair]['asks']
+    bids = res['result'][args.pair]['bids']
+
+    func = humanize_timestamp
+    asks = map_tablecol_unzip_rezip(asks, 2, func)
+    bids = map_tablecol_unzip_rezip(bids, 2, func)
+
+    asks_table = tabulate(asks[::-1], headers=["Ask Price", "Volume", "timestamp"])
+    bids_table = tabulate(bids, headers=["Bid Price", "Volume", "timestamp"])
+    print("{}\n\n{}".format(asks_table, bids_table))
 
 
 def last_trades(args):
@@ -52,7 +145,8 @@ def last_trades(args):
         params['since'] = args.since
 
     res = k.query_public('Trades', params)
-    print_results(res)
+    if args.raw or True:  # TODO
+        print_results(res)
 
     results = res['result'][args.pair]
     last_id = res['result']['last']
@@ -63,39 +157,63 @@ def last_trades(args):
         last_sell = [x for x in results if x[3] == "s"][-1]
         last_sell_price = last_sell[0]
         last_sell_volume = last_sell[1]
-        last_sell_time = arrow.get(last_sell[2]).to('Europe/Berlin')
+        last_sell_time = arrow.get(last_sell[2]).to(TZ)
         print('Last Sell = {} € -- {} -- {}'.format(last_sell_price, last_sell_volume, last_sell_time))
 
     if buy_trades:
         last_buy  = [x for x in results if x[3] == "b"][-1]
         last_buy_price = last_buy[0]
         last_buy_volume = last_buy[1]
-        last_buy_time = arrow.get(last_buy[2]).to('Europe/Berlin')
+        last_buy_time = arrow.get(last_buy[2]).to(TZ)
         print('Last Buy  = {} € -- {} -- {}'.format(last_buy_price, last_buy_volume, last_buy_time))
 
     print('Last ID = {}'.format(last_id))
 
 
+# -----------------------------
+# Private API
+# -----------------------------
+
+
 def get_balance(args=None):
     params = {}
     res = k.query_private('Balance', params)
-    print_results(res)
+    if args.raw or True:  # TODO
+        print_results(res)
 
 
-def list_open_orders(args):
+def list_open_orders(args=None):
     params = {
         # TODO
     }
     res = k.query_private('OpenOrders', params)
-    print_results(res)
+    if args.raw:
+        print_results(res)
+
+    res_ol = res['result']['open']  # extract list of orders
+    ol = parse_order_res(res_ol)
+
+    # sort orders by price in each category
+    for otype in ol:
+        ol[otype] = sorted(ol[otype], key=lambda odict: odict['price'])
+
+    print(tabulate(ol['buy'] + ol['sell'], headers="keys"))
 
 
-def list_closed_orders(args):
+def list_closed_orders(args=None):
     params = {
         # TODO
     }
     res = k.query_private('ClosedOrders', params)
-    print_results(res)
+    if args.raw:
+        print_results(res)
+
+    res_ol = res['result']['closed']  # extract list of orders
+    ol = parse_order_res(res_ol)
+
+    # mix order types and sort by date
+    ol = sorted(ol['buy'] + ol['sell'], key=lambda odict: odict['closing_date'])
+    print(tabulate(ol, headers="keys"))
 
 
 def place_order(args):
@@ -120,7 +238,8 @@ def place_order(args):
         params['validate'] = 'true'
 
     res = k.query_private('AddOrder', params)
-    print_results(res)
+    if args.raw or True:  # TODO
+        print_results(res)
 
 
 def cancel_order(args):
@@ -128,7 +247,8 @@ def cancel_order(args):
         'txid': args.order_id,
     }
     res = k.query_private('CancelOrder', params)
-    print_results(res)
+    if args.raw or True:  # TODO
+        print_results(res)
 
 
 def version(args=None):
@@ -137,7 +257,9 @@ def version(args=None):
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Command line client for the Kraken exchange')
-    parser.add_argument('-v', '--version', action='store_const', const=version, dest='main_func')
+    parser.add_argument('-v', '--version', action='store_const', const=version, dest='main_func',
+                        help='Show program version')
+    parser.add_argument('--raw', action='store_true', help='Output raw json results')
     parser.set_defaults(main_func=None)
 
     subparsers = parser.add_subparsers(dest='subparser_name', help='available subcommands')

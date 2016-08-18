@@ -15,3 +15,10 @@ build_wheel:
 publish_to_pypi:
 	twine upload -r pypi dist/*
 
+dev: uninst_dev inst_dev
+
+uninst_dev:
+	python setup.py develop --uninstall
+
+inst_dev:
+	python setup.py develop

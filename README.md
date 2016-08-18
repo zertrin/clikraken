@@ -27,14 +27,15 @@ source ~/.venv/clikraken/bin/activate
 clikraken depends on two external modules:
 
 * `arrow`, for better handling of date and time
+* `tabulate`, for printing results as tables
 * `python3-krakenex`, for the low-level interface with the Kraken API
 
 Somehow you need to install the two dependencies manually before installing clikraken. I haven't been successfull in making the dependency system of pip work consistently yet with python3-krakenex being only available as a Git repository.
 
-Install arrow in the activated virtualenv:
+Install arrow and tabulate in the activated virtualenv:
 
 ```
-pip install arrow
+pip install arrow tabulate
 ```
 
 Install python3-krakenex in the activated virtualenv:
