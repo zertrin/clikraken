@@ -60,7 +60,7 @@ def parse_order_res(in_ol, status_list_filter=None):
         odict['type'] = o['descr']['type']
         odict['vol'] = o['vol']
 
-        if ostatus == 'closed':
+        if ostatus != 'open':
             odict['vol_exec'] = o['vol_exec']
 
         odict['pair'] = o['descr']['pair']
@@ -71,7 +71,7 @@ def parse_order_res(in_ol, status_list_filter=None):
         else:
             odict['price'] = o['price']
 
-        if ostatus == 'closed':
+        if ostatus != 'open':
             odict['cost'] = o['cost']
             odict['fee'] = o['fee']
 
@@ -191,7 +191,7 @@ def list_open_orders(args=None):
         print_results(res)
 
     res_ol = res['result']['open']  # extract list of orders
-    ol = parse_order_res(res_ol)
+    ol = parse_order_res(res_ol, ['open'])
 
     # sort orders by price in each category
     for otype in ol:
@@ -209,10 +209,15 @@ def list_closed_orders(args=None):
         print_results(res)
 
     res_ol = res['result']['closed']  # extract list of orders
-    ol = parse_order_res(res_ol)
+    ol = parse_order_res(res_ol, ['closed', 'canceled'])
 
-    # mix order types and sort by date
-    ol = sorted(ol['buy'] + ol['sell'], key=lambda odict: odict['closing_date'])
+    # mix order types
+    ol = ol['buy'] + ol['sell']
+    # filter out orders with zero volume executed
+    ol = [odict for odict in ol if Decimal(odict['vol_exec']) > 0]
+    # sort by date
+    ol = sorted(ol, key=lambda odict: odict['closing_date'])
+
     print(tabulate(ol, headers="keys"))
 
 
