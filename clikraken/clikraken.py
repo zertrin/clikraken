@@ -161,8 +161,9 @@ def depth(args):
     asks = map_tablecol_unzip_rezip(asks, 2, func)
     bids = map_tablecol_unzip_rezip(bids, 2, func)
 
-    asks_table = tabulate(asks[::-1], headers=["Ask Price", "Volume", "timestamp"])
-    bids_table = tabulate(bids, headers=["Bid Price", "Volume", "timestamp"])
+    shortpair = asset_pair_short(args.pair)
+    asks_table = tabulate(asks[::-1], headers=[shortpair + " Ask", "Volume", "timestamp"])
+    bids_table = tabulate(bids, headers=[shortpair + " Bid", "Volume", "timestamp"])
     print("{}\n\n{}".format(asks_table, bids_table))
 
 
@@ -213,7 +214,7 @@ def get_balance(args=None):
     bal_list = []
     for asset in res['result']:
         asset_dict = OrderedDict()
-        asset_dict['asset'] = asset
+        asset_dict['asset'] = asset[1:]
         asset_dict['balance'] = res['result'][asset]
         bal_list.append(asset_dict)
 
