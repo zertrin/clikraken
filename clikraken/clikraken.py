@@ -187,8 +187,22 @@ def last_trades(args):
 def get_balance(args=None):
     params = {}
     res = k.query_private('Balance', params)
-    if args.raw or True:  # TODO
+    if args.raw:
         print_results(res)
+
+    bal_list = []
+    for asset in res['result']:
+        asset_dict = OrderedDict()
+        asset_dict['asset'] = asset
+        asset_dict['balance'] = res['result'][asset]
+        bal_list.append(asset_dict)
+
+    if not bal_list:
+        return
+
+    bal_list = sorted(bal_list, key=lambda asset_dict: asset_dict['asset'])
+
+    print(tabulate(bal_list, headers="keys"))
 
 
 def list_open_orders(args):
