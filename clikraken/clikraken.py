@@ -131,6 +131,8 @@ def ticker(args):
         pticker['low'] = pair_res['l'][1]   # last 24h
         pticker['vol'] = pair_res['v'][1]   # last 24h
         pticker['wavg'] = pair_res['p'][1]  # last 24h
+        quote_val = round(Decimal(pticker['vol']) * Decimal(pticker['wavg']) / 1000)
+        pticker['vol value'] = str(quote_val) + ' k' + pticker['pair'][-3:]
         pticker['ask'] = pair_res['a'][0]
         pticker['bid'] = pair_res['b'][0]
         ticker_list.append(pticker)
