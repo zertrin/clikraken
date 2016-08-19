@@ -121,12 +121,13 @@ def ticker(args):
     if args.raw:
         print_results(res)
 
-    if not res['result']:
+    res = res.get('result')
+    if not res:
         return
 
     ticker_list = []
-    for pair in res['result']:
-        pair_res = res['result'][pair]
+    for pair in res:
+        pair_res = res[pair]
         pticker = OrderedDict()
         pticker['pair'] = asset_pair_short(pair)
         pticker['last'] = pair_res['c'][0]
@@ -157,11 +158,12 @@ def depth(args):
     if args.raw:
         print_results(res)
 
-    if not res['result']:
+    res = res.get('result')
+    if not res:
         return
 
-    asks = res['result'][args.pair]['asks']
-    bids = res['result'][args.pair]['bids']
+    asks = res[args.pair]['asks']
+    bids = res[args.pair]['bids']
 
     func = humanize_timestamp
     asks = map_tablecol_unzip_rezip(asks, 2, func)
@@ -217,7 +219,7 @@ def get_balance(args=None):
     if args.raw:
         print_results(res)
 
-    res = res.get('result', None)
+    res = res.get('result')
     if not res:
         return
 
@@ -244,7 +246,7 @@ def list_open_orders(args):
     if args.raw:
         print_results(res)
 
-    res = res.get('result', None)
+    res = res.get('result')
     if not res:
         return
 
@@ -274,7 +276,7 @@ def list_closed_orders(args):
     if args.raw:
         print_results(res)
 
-    res = res.get('result', None)
+    res = res.get('result')
     if not res:
         return
 
