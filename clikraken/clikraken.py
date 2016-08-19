@@ -105,10 +105,7 @@ def print_results(res):
 
 def asset_pair_short(ap_str):
     """Convert XETHZEUR to ETHEUR"""
-    ap_list = list(ap_str)
-    del(ap_list[0])  # delete first char
-    del(ap_list[3])  # delete fourth char
-    return "".join(ap_list)
+    return ap_str[1:4] + ap_str[5:]
 
 
 # -----------------------------
@@ -121,8 +118,29 @@ def ticker(args):
         'pair': args.pair,
     }
     res = k.query_public('Ticker', params)
-    if args.raw or True:  # TODO
+    if args.raw:
         print_results(res)
+
+    ticker_list = []
+    for pair in res['result']:
+        pair_res = res['result'][pair]
+        pticker = OrderedDict()
+        pticker['pair'] = asset_pair_short(pair)
+        pticker['last'] = pair_res['c'][0]
+        pticker['high'] = pair_res['h'][1]  # last 24h
+        pticker['low'] = pair_res['l'][1]   # last 24h
+        pticker['vol'] = pair_res['v'][1]   # last 24h
+        pticker['wavg'] = pair_res['p'][1]  # last 24h
+        pticker['ask'] = pair_res['a'][0]
+        pticker['bid'] = pair_res['b'][0]
+        ticker_list.append(pticker)
+
+    if not ticker_list:
+        return
+
+    ticker_list = sorted(ticker_list, key=lambda pticker: pticker['pair'])
+
+    print(tabulate(ticker_list, headers="keys"))
 
 
 def depth(args):
