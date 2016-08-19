@@ -121,6 +121,9 @@ def ticker(args):
     if args.raw:
         print_results(res)
 
+    if not res['result']:
+        return
+
     ticker_list = []
     for pair in res['result']:
         pair_res = res['result'][pair]
@@ -153,6 +156,9 @@ def depth(args):
     res = k.query_public('Depth', params)
     if args.raw:
         print_results(res)
+
+    if not res['result']:
+        return
 
     asks = res['result'][args.pair]['asks']
     bids = res['result'][args.pair]['bids']
@@ -234,6 +240,9 @@ def list_open_orders(args):
     if args.raw:
         print_results(res)
 
+    if not res['result']:
+        return
+
     res_ol = res['result']['open']  # extract list of orders
     ol = parse_order_res(res_ol, ['open'])
 
@@ -259,6 +268,9 @@ def list_closed_orders(args):
     res = k.query_private('ClosedOrders', params)
     if args.raw:
         print_results(res)
+
+    if not res['result']:
+        return
 
     res_ol = res['result']['closed']  # extract list of orders
     ol = parse_order_res(res_ol, ['closed', 'canceled'])
