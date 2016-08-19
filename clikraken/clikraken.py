@@ -217,11 +217,15 @@ def get_balance(args=None):
     if args.raw:
         print_results(res)
 
+    res = res.get('result', None)
+    if not res:
+        return
+
     bal_list = []
-    for asset in res['result']:
+    for asset in res:
         asset_dict = OrderedDict()
         asset_dict['asset'] = asset[1:]
-        asset_dict['balance'] = res['result'][asset]
+        asset_dict['balance'] = res[asset]
         bal_list.append(asset_dict)
 
     if not bal_list:
@@ -240,10 +244,11 @@ def list_open_orders(args):
     if args.raw:
         print_results(res)
 
-    if not res['result']:
+    res = res.get('result', None)
+    if not res:
         return
 
-    res_ol = res['result']['open']  # extract list of orders
+    res_ol = res['open']  # extract list of orders
     ol = parse_order_res(res_ol, ['open'])
 
     # filter and sort orders by price in each category
@@ -269,10 +274,11 @@ def list_closed_orders(args):
     if args.raw:
         print_results(res)
 
-    if not res['result']:
+    res = res.get('result', None)
+    if not res:
         return
 
-    res_ol = res['result']['closed']  # extract list of orders
+    res_ol = res['closed']  # extract list of orders
     ol = parse_order_res(res_ol, ['closed', 'canceled'])
 
     # mix order types
