@@ -102,6 +102,15 @@ def format_timestamp(ts):
 def print_results(res):
     print(json.dumps(res, indent=2))
 
+
+def asset_pair_short(ap_str):
+    """Convert XETHZEUR to ETHEUR"""
+    ap_list = list(ap_str)
+    del(ap_list[0])  # delete first char
+    del(ap_list[3])  # delete fourth char
+    return "".join(ap_list)
+
+
 # -----------------------------
 # Public API
 # -----------------------------
@@ -182,7 +191,7 @@ def get_balance(args=None):
         print_results(res)
 
 
-def list_open_orders(args=None):
+def list_open_orders(args):
     params = {
         # TODO
     }
@@ -193,14 +202,18 @@ def list_open_orders(args=None):
     res_ol = res['result']['open']  # extract list of orders
     ol = parse_order_res(res_ol, ['open'])
 
-    # sort orders by price in each category
+    # filter and sort orders by price in each category
     for otype in ol:
+        # filter orders
+        ol[otype] = [odict for odict in ol[otype]
+                     if (odict['pair'] == asset_pair_short(args.pair) or args.pair == 'all')]
+        # sort orders by price
         ol[otype] = sorted(ol[otype], key=lambda odict: odict['price'])
 
     print(tabulate(ol['buy'] + ol['sell'], headers="keys"))
 
 
-def list_closed_orders(args=None):
+def list_closed_orders(args):
     params = {
         # TODO
     }
@@ -214,7 +227,11 @@ def list_closed_orders(args=None):
     # mix order types
     ol = ol['buy'] + ol['sell']
     # filter out orders with zero volume executed
-    ol = [odict for odict in ol if Decimal(odict['vol_exec']) > 0]
+    ol = [odict for odict in ol
+          if Decimal(odict['vol_exec']) > 0
+          and (odict['pair'] == asset_pair_short(args.pair) or args.pair == 'all')]
+    if not ol:
+        return
     # sort by date
     ol = sorted(ol, key=lambda odict: odict['closing_date'])
 
@@ -279,12 +296,12 @@ def parse_args():
 
     parser_depth = subparsers.add_parser('depth', help='[public] Get the current market depth data')
     parser_depth.add_argument('-p', '--pair', default='XETHZEUR')
-    parser_depth.add_argument('-c', '--count', type=int, default=5)
+    parser_depth.add_argument('-c', '--count', type=int, default=7)
     parser_depth.set_defaults(sub_func=depth)
 
     parser_last_trades = subparsers.add_parser('last_trades', help='[public] Get the last trades')
     parser_last_trades.add_argument('-p', '--pair', default='XETHZEUR')
-    parser_last_trades.add_argument('-since', '--since', default=None)
+    parser_last_trades.add_argument('-s', '--since', default=None)
     parser_last_trades.set_defaults(sub_func=last_trades)
 
     # -----------
@@ -311,9 +328,11 @@ def parse_args():
     parser_cancel.set_defaults(sub_func=cancel_order)
 
     parser_olist = subparsers.add_parser('olist', help='[private] Get a list of your open orders')
+    parser_olist.add_argument('-p', '--pair', default='XETHZEUR')
     parser_olist.set_defaults(sub_func=list_open_orders)
 
     parser_clist = subparsers.add_parser('clist', help='[private] Get a list of your closed orders')
+    parser_clist.add_argument('-p', '--pair', default='XETHZEUR')
     parser_clist.set_defaults(sub_func=list_closed_orders)
 
     args = parser.parse_args()
