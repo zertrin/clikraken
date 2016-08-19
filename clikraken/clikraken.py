@@ -245,7 +245,11 @@ def list_open_orders(args):
         # sort orders by price
         ol[otype] = sorted(ol[otype], key=lambda odict: odict['price'])
 
-    print(tabulate(ol['buy'] + ol['sell'], headers="keys"))
+    ol_all = ol['buy'] + ol['sell']
+    if not ol_all:
+        return
+
+    print(tabulate(ol_all, headers="keys"))
 
 
 def list_closed_orders(args):
