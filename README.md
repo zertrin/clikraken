@@ -47,7 +47,7 @@ pip install -e "git+https://github.com/veox/python3-krakenex.git@33b758f1f56257a
 ### Step 3: Install clikraken
 
 ```
-# make sure you have installed arrow and krakenex before!
+# make sure you have installed arrow, tabulate and krakenex before!
 pip install --pre clikraken
 ```
 
@@ -67,11 +67,41 @@ First activate the virtualenv:
 ```
 source ~/.venv/clikraken/bin/activate
 ```
-Get help:
+
+Get help to see the available commands:
 
 ```
 clikraken --help
 ```
+
+Output:
+
+```
+usage: clikraken [-h] [-v] [--raw]
+                 {ticker,depth,last_trades,balance,place,cancel,olist,clist}
+                 ...
+
+Command line client for the Kraken exchange
+
+positional arguments:
+  {ticker,depth,last_trades,balance,place,cancel,olist,clist}
+                        available subcommands
+    ticker              [public] Get the Ticker
+    depth               [public] Get the current market depth data
+    last_trades         [public] Get the last trades
+    balance             [private] Get your current balance
+    place               [private] Place an order
+    cancel              [private] Cancel an order
+    olist               [private] Get a list of your open orders
+    clist               [private] Get a list of your closed orders
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -v, --version         Show program version
+  --raw                 Output raw json results
+```
+
+You can deactivate the virtualenv with `deactivate`.
 
 ## Upgrade
 
