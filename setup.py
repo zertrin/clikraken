@@ -33,7 +33,7 @@ setup(
     ],
     classifiers=[
         "Programming Language :: Python",
-        "Development Status :: 2 - Pre-Alpha",
+        "Development Status :: 3 - Alpha",
         "License :: OSI Approved :: Apache Software License",
         "Operating System :: OS Independent",
         "Programming Language :: Python :: 3",
