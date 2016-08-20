@@ -14,6 +14,7 @@ from decimal import Decimal
 import json
 import krakenex
 import os
+import socket
 import sys
 
 from tabulate import tabulate
@@ -110,7 +111,7 @@ def asset_pair_short(ap_str):
 
 
 def query_api(api_type, *args):
-    res = None
+    res = {}
     api_func = {
         'public': k.query_public,
         'private': k.query_private
@@ -119,7 +120,7 @@ def query_api(api_type, *args):
     if func is not None:
         try:
             res = api_func[api_type](*args)
-        except Exception as e:
+        except (socket.timeout, socket.error) as e:
             print('Error while querying API!')
             print(repr(e))
     return res
