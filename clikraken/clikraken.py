@@ -172,7 +172,9 @@ def depth(args):
         'pair': args.pair,
         'count': args.count
     }
+
     res = query_api('public', 'Depth', params)
+
     if args.raw:
         print_results(res)
 
@@ -180,16 +182,30 @@ def depth(args):
     if not res:
         return
 
-    asks = res[args.pair]['asks']
-    bids = res[args.pair]['bids']
-
-    func = humanize_timestamp
-    asks = map_tablecol_unzip_rezip(asks, 2, func)
-    bids = map_tablecol_unzip_rezip(bids, 2, func)
+    depth_dict = {'asks': [], 'bids': []}
+    depth_label = {'asks': "Ask", 'bids': "Bid"}
 
     shortpair = asset_pair_short(args.pair)
-    asks_table = tabulate(asks[::-1], headers=[shortpair + " Ask", "Volume", "timestamp"])
-    bids_table = tabulate(bids, headers=[shortpair + " Bid", "Volume", "timestamp"])
+
+    for dtype in ['asks', 'bids']:
+        dlist = res[args.pair][dtype]
+        price_label = shortpair + " " + depth_label[dtype]
+
+        for delem in dlist:
+            dentry = OrderedDict()
+            dentry[price_label] = delem[0]
+            dentry["Volume"] = delem[1]
+            dentry["Age"] = humanize_timestamp(delem[2])
+            depth_dict[dtype].append(dentry)
+
+        if not dlist:
+            continue
+
+        depth_dict[dtype] = reversed(sorted(depth_dict[dtype], key=lambda dentry: dentry[price_label]))
+
+    asks_table = tabulate(depth_dict['asks'], headers="keys")
+    bids_table = tabulate(depth_dict['bids'], headers="keys")
+
     print("{}\n\n{}".format(asks_table, bids_table))
 
 
