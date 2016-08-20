@@ -10,6 +10,7 @@ Command line client for the Kraken exchange
 import argparse
 import arrow
 from collections import OrderedDict
+import configparser
 from decimal import Decimal
 import json
 import krakenex
@@ -21,8 +22,13 @@ from tabulate import tabulate
 
 from . import __version__
 
+# -----------------------------
+# Kraken API keyfile
+# -----------------------------
+
 # Resolve userpath to an absolute path
 KRAKEN_API_KEYFILE = os.path.expanduser('~/.config/clikraken/kraken.key')
+USER_SETTINGS_PATH = os.path.expanduser('~/.config/clikraken/settings.ini')
 
 # Instanciate the krakenex module to communicate with Kraken's API
 k = krakenex.API()
@@ -30,8 +36,31 @@ k = krakenex.API()
 # Load the API key of the user
 k.load_key(KRAKEN_API_KEYFILE)
 
-DEFAULT_PAIR = 'XETHZEUR'
-TZ = 'Europe/Berlin'
+# -----------------------------
+# Settings
+# -----------------------------
+
+# Default settings
+DEFAULT_SETTINGS_INI = """[clikraken]
+# default currency pair when no option '-p' or '--pair' is given
+currency_pair = XETHZEUR
+# Timezone for displaying date and time infos
+timezone = Europe/Berlin
+"""
+
+config = configparser.ConfigParser()
+config.read_string(DEFAULT_SETTINGS_INI)
+config.read(USER_SETTINGS_PATH)
+
+conf = config['clikraken']
+
+DEFAULT_PAIR = conf.get('currency_pair')
+TZ = conf.get('timezone')
+
+
+def output_default_settings_ini(args):
+    """Output the contents of the default settings.ini file"""
+    print(DEFAULT_SETTINGS_INI)
 
 # -----------------------------
 # Helpers
@@ -522,14 +551,24 @@ def parse_args():
     pairs_help = "comma delimited list of asset pairs"
     pair_help = "asset pair"
 
+    epilog_str = ("Current default currency pair: {}. Create or edit {} to change it. "
+                  "See also the subcommand 'generate_settings'.").format(DEFAULT_PAIR, USER_SETTINGS_PATH)
     parser = argparse.ArgumentParser(
-        description='Command line client for the Kraken exchange')
+        description='Command line client for the Kraken exchange',
+        epilog=epilog_str)
     parser.add_argument('-v', '--version', action='store_const', const=version, dest='main_func',
                         help='show program version')
     parser.add_argument('--raw', action='store_true', help='output raw json results from the API')
     parser.set_defaults(main_func=None)
 
     subparsers = parser.add_subparsers(dest='subparser_name', help='available subcommands')
+
+    # Generate setting.ini
+    parser_gen_settings = subparsers.add_parser(
+        'generate_settings',
+        help='[clikraken] Output the default settings.ini file',
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser_gen_settings.set_defaults(sub_func=output_default_settings_ini)
 
     # ----------
     # Public API

@@ -69,6 +69,19 @@ secretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretse
 
 You should probably change the permissions to this file to protect it: `chmod 600 ~/.config/clikraken/kraken.key`
 
+### Step 5 (optional): Generate a settings file and adapt it to your needs
+
+clikraken looks for settings in `~/.config/clikraken/settings.ini`. 
+
+If the settings file doesn't exist yet, default settings are assumed. You can see the default settings by calling `clikraken generate_settings`. Currently these settings are mostly useful for defining the default currency pair to assume if not provided as an option (--pair). The current built-in default pair is XETHZEUR. You may want to change that if you are mostly trading with another currency pair.
+
+You can generate your `settings.ini` by doing the following:
+
+```
+mkdir -p ~/.config/clikraken # only if the folder doesn't exist yet
+clikraken generate_settings > ~/.config/clikraken/settings.ini
+```
+
 ## Usage
 
 First activate the virtualenv:
