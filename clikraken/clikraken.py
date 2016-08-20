@@ -210,27 +210,46 @@ def last_trades(args):
         params['since'] = args.since
 
     res = query_api('public', 'Trades', params)
-    if args.raw or True:  # TODO
+    if args.raw:
         print_results(res)
 
-    results = res['result'][args.pair]
-    last_id = res['result']['last']
-    sell_trades = [x for x in results if x[3] == "s"]
-    buy_trades  = [x for x in results if x[3] == "b"]
+    res = res.get('result')
+    if not res:
+        return
+
+    results = res[args.pair]
+    last_id = res['last']
+
+    tlist = []
+    ttype_label = {'b': 'buy', 's': 'sell'}
+    otype_label = {'l': 'limit', 'm': 'market'}
+
+    for trade in results:
+        tdict = OrderedDict()
+        tdict["Trade type"] = ttype_label.get(trade[3], 'unknown')
+        tdict["Order type"] = otype_label.get(trade[4], 'unknown')
+        tdict["Price"] = trade[0]
+        tdict["Volume"] = trade[1]
+        tdict["Age"] = humanize_timestamp(trade[2])
+        # tdict["Misc"] = trade[5]
+        tlist.append(tdict)
+
+    if not tlist:
+        return
+
+    tlist = tlist[::-1]
+    print(tabulate(tlist[:args.count], headers="keys") + '\n')
+
+    sell_trades = [x for x in tlist if x["Trade type"] == "sell"]
+    buy_trades  = [x for x in tlist if x["Trade type"] == "buy"]
 
     if sell_trades:
-        last_sell = [x for x in results if x[3] == "s"][-1]
-        last_sell_price = last_sell[0]
-        last_sell_volume = last_sell[1]
-        last_sell_time = arrow.get(last_sell[2]).to(TZ)
-        print('Last Sell = {} € -- {} -- {}'.format(last_sell_price, last_sell_volume, last_sell_time))
+        last_sell = sell_trades[0]
+        print('Last Sell = {} € -- {} -- {}'.format(last_sell["Price"], last_sell["Volume"], last_sell["Age"]))
 
     if buy_trades:
-        last_buy  = [x for x in results if x[3] == "b"][-1]
-        last_buy_price = last_buy[0]
-        last_buy_volume = last_buy[1]
-        last_buy_time = arrow.get(last_buy[2]).to(TZ)
-        print('Last Buy  = {} € -- {} -- {}'.format(last_buy_price, last_buy_volume, last_buy_time))
+        last_buy = buy_trades[0]
+        print('Last Buy =  {} € -- {} -- {}'.format(last_buy["Price"], last_buy["Volume"], last_buy["Age"]))
 
     print('Last ID = {}'.format(last_id))
 
@@ -388,6 +407,7 @@ def parse_args():
     parser_last_trades = subparsers.add_parser('last_trades', help='[public] Get the last trades')
     parser_last_trades.add_argument('-p', '--pair', default='XETHZEUR')
     parser_last_trades.add_argument('-s', '--since', default=None)
+    parser_last_trades.add_argument('-c', '--count', type=int, default=15)
     parser_last_trades.set_defaults(sub_func=last_trades)
 
     # -----------
