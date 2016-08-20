@@ -2,6 +2,11 @@
 
 Command-line client for the Kraken exchange
 
+This command line client allows you to get useful public and private information
+from Kraken's API and displays it in formatted tables.
+
+Moreover you can place or cancel simple orders.
+
 ## Installation
 
 WARNING: This software is currently in development.
@@ -30,7 +35,7 @@ clikraken depends on the following extra modules:
 * `tabulate`, for printing results as tables
 * `python3-krakenex`, for the low-level interface with the Kraken API
 
-Somehow you need to install the two dependencies manually before installing clikraken. I haven't been successfull in making the dependency system of pip work consistently yet with python3-krakenex being only available as a Git repository.
+Somehow you need to install the dependencies manually before installing clikraken. I haven't had success in making the dependency system of pip work consistently with python3-krakenex being only available as a Git repository yet.
 
 Install arrow and tabulate in the activated virtualenv:
 
@@ -48,7 +53,7 @@ pip install -e "git+https://github.com/veox/python3-krakenex.git@33b758f1f56257a
 
 ```
 # make sure you have installed arrow, tabulate and krakenex before!
-pip install --pre clikraken
+pip install clikraken
 ```
 
 ### Step 4: Add your API key in the `$HOME/.config/kraken.key` file
@@ -68,7 +73,9 @@ First activate the virtualenv:
 source ~/.venv/clikraken/bin/activate
 ```
 
-Get help to see the available commands:
+This command line client works by calling subcommands with their respective options and arguments
+
+Get help to see the available subcommands:
 
 ```
 clikraken --help
@@ -77,28 +84,34 @@ clikraken --help
 Output:
 
 ```
-usage: clikraken [-h] [-v] [--raw]
-                 {ticker,depth,last_trades,balance,place,cancel,olist,clist}
-                 ...
+usage: clikraken.py [-h] [-v] [--raw]
+                    {ticker,depth,last_trades,lt,balance,bal,place,cancel,olist,ol,clist,cl}
+                    ...
 
 Command line client for the Kraken exchange
 
 positional arguments:
-  {ticker,depth,last_trades,balance,place,cancel,olist,clist}
+  {ticker,depth,last_trades,lt,balance,bal,place,cancel,olist,ol,clist,cl}
                         available subcommands
     ticker              [public] Get the Ticker
     depth               [public] Get the current market depth data
-    last_trades         [public] Get the last trades
-    balance             [private] Get your current balance
+    last_trades (lt)    [public] Get the last trades
+    balance (bal)       [private] Get your current balance
     place               [private] Place an order
     cancel              [private] Cancel an order
-    olist               [private] Get a list of your open orders
-    clist               [private] Get a list of your closed orders
+    olist (ol)          [private] Get a list of your open orders
+    clist (cl)          [private] Get a list of your closed orders
 
 optional arguments:
   -h, --help            show this help message and exit
-  -v, --version         Show program version
-  --raw                 Output raw json results
+  -v, --version         show program version
+  --raw                 output raw json results from the API
+```
+
+To get information on how to use a subcommand:
+
+```
+clikraken SUBCOMMAND --help
 ```
 
 You can deactivate the virtualenv with `deactivate`.
@@ -108,7 +121,7 @@ You can deactivate the virtualenv with `deactivate`.
 In the activated virtualenv:
 
 ```
-pip install -U --no-deps --pre clikraken
+pip install -U --no-deps clikraken
 ```
 
 `--no-deps` is currently needed because trying to upgrade the dependency `krakenex` fails, because it is not available on PyPi, only as a Git repository.
