@@ -86,13 +86,6 @@ def parse_order_res(in_ol, status_list_filter=None):
     return ol
 
 
-def map_tablecol_unzip_rezip(table, colnum, func):
-    t_unzip = list(zip(*table))
-    t_unzip[colnum] = tuple(map(func, t_unzip[colnum]))
-    t_rezip = list(zip(*t_unzip))
-    return t_rezip
-
-
 def humanize_timestamp(ts):
     return arrow.get(ts).humanize()
 
