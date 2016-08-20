@@ -56,14 +56,18 @@ pip install -e "git+https://github.com/veox/python3-krakenex.git@33b758f1f56257a
 pip install clikraken
 ```
 
-### Step 4: Add your API key in the `$HOME/.config/kraken.key` file
+### Step 4: Add your API key in the file `~/.config/clikraken/kraken.key`
 
 You will need it to perform private queries to the Kraken API.
+
+(Create the config folder if needed: `mkdir -p ~/.config/clikraken`)
 
 ```
 keykeykeykeykeykeykeykeykeykeykeykeykeykeykeykeykeykeykey
 secretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecret
 ```
+
+You should probably change the permissions to this file to protect it: `chmod 600 ~/.config/clikraken/kraken.key`
 
 ## Usage
 

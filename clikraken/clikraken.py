@@ -22,7 +22,7 @@ from tabulate import tabulate
 from . import __version__
 
 # Resolve userpath to an absolute path
-KRAKEN_API_KEYFILE = os.path.expanduser('~/.config/kraken.key')
+KRAKEN_API_KEYFILE = os.path.expanduser('~/.config/clikraken/kraken.key')
 
 # Instanciate the krakenex module to communicate with Kraken's API
 k = krakenex.API()
