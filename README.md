@@ -5,19 +5,21 @@ Command-line client for the Kraken exchange
 This command line client allows you to get useful public and private information
 from Kraken's API and displays it in formatted tables.
 
-Moreover you can place or cancel simple orders.
+Moreover you can place or cancel simple orders
+(only buy/sell market/limit is currently implemented).
+
+**WARNING**: This software is currently in development.
+I consider it in _alpha_ state, which means that it works well enough for me but hasn't been thoroughly tested.
+There are probably undetected bugs left. **Use at your own risk!**
 
 ## Installation
 
-WARNING: This software is currently in development.
-
-**DO NOT USE for production!**
-
-You should install it in a virtualenv.
+You should install it in a virtualenv, but that's not mandatory.
 
 ### Step 1: Create a virtualenv
 
 ```
+mkdir -p ~/.venv  # or any folder of your choice
 pyvenv ~/.venv/clikraken
 ```
 
@@ -35,7 +37,7 @@ clikraken depends on the following extra modules:
 * `tabulate`, for printing results as tables
 * `python3-krakenex`, for the low-level interface with the Kraken API
 
-Somehow you need to install the dependencies manually before installing clikraken. I haven't had success in making the dependency system of pip work consistently with python3-krakenex being only available as a Git repository yet.
+Somehow you need to install the dependencies manually before installing clikraken. I haven't had success in making the dependency system of pip work consistently with `python3-krakenex` being only available as a Git repository yet. It would be nicer if it were packaged for Pypi.
 
 Install arrow and tabulate in the activated virtualenv:
 
@@ -52,9 +54,11 @@ pip install -e "git+https://github.com/veox/python3-krakenex.git@33b758f1f56257a
 ### Step 3: Install clikraken
 
 ```
-# make sure you have installed arrow, tabulate and krakenex before!
+# make sure you have installed arrow, tabulate and krakenex before! You can check with 'pip list'
 pip install clikraken
 ```
+
+If everything went well, `clikraken --version` should output the program's version without error.
 
 ### Step 4: Add your API key in the file `~/.config/clikraken/kraken.key`
 
@@ -90,6 +94,8 @@ First activate the virtualenv:
 source ~/.venv/clikraken/bin/activate
 ```
 
+(When you are done using clikraken, you can deactivate the virtualenv with `deactivate`.)
+
 This command line client works by calling subcommands with their respective options and arguments
 
 Get help to see the available subcommands:
@@ -101,15 +107,16 @@ clikraken --help
 Output:
 
 ```
-usage: clikraken.py [-h] [-v] [--raw]
-                    {ticker,depth,last_trades,lt,balance,bal,place,cancel,olist,ol,clist,cl}
-                    ...
+usage: clikraken [-h] [-v] [--raw]
+                 {generate_settings,ticker,depth,last_trades,lt,balance,bal,place,cancel,olist,ol,clist,cl}
+                 ...
 
 Command line client for the Kraken exchange
 
 positional arguments:
-  {ticker,depth,last_trades,lt,balance,bal,place,cancel,olist,ol,clist,cl}
+  {generate_settings,ticker,depth,last_trades,lt,balance,bal,place,cancel,olist,ol,clist,cl}
                         available subcommands
+    generate_settings   [clikraken] Output the default settings.ini file
     ticker              [public] Get the Ticker
     depth               [public] Get the current market depth data
     last_trades (lt)    [public] Get the last trades
@@ -123,6 +130,10 @@ optional arguments:
   -h, --help            show this help message and exit
   -v, --version         show program version
   --raw                 output raw json results from the API
+
+Current default currency pair: XETHZEUR. Create or edit
+~/.config/clikraken/settings.ini to change it. See also the
+subcommand 'generate_settings'.
 ```
 
 To get information on how to use a subcommand:
@@ -130,8 +141,6 @@ To get information on how to use a subcommand:
 ```
 clikraken SUBCOMMAND --help
 ```
-
-You can deactivate the virtualenv with `deactivate`.
 
 ## Upgrade
 
