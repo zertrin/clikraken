@@ -37,6 +37,7 @@ date_field = {
     'canceled': 'closetm',
     'expired': 'closetm'
 }
+
 date_label = {
     'open': 'opening_date',
     'closed': 'closing_date',
@@ -108,6 +109,22 @@ def asset_pair_short(ap_str):
     return ap_str[1:4] + ap_str[5:]
 
 
+def query_api(api_type, *args):
+    res = None
+    api_func = {
+        'public': k.query_public,
+        'private': k.query_private
+    }
+    func = api_func.get(api_type)
+    if func is not None:
+        try:
+            res = api_func[api_type](*args)
+        except Exception as e:
+            print('Error while querying API!')
+            print(repr(e))
+    return res
+
+
 # -----------------------------
 # Public API
 # -----------------------------
@@ -117,7 +134,7 @@ def ticker(args):
     params = {
         'pair': args.pair,
     }
-    res = k.query_public('Ticker', params)
+    res = query_api('public', 'Ticker', params)
     if args.raw:
         print_results(res)
 
@@ -154,7 +171,7 @@ def depth(args):
         'pair': args.pair,
         'count': args.count
     }
-    res = k.query_public('Depth', params)
+    res = query_api('public', 'Depth', params)
     if args.raw:
         print_results(res)
 
@@ -182,7 +199,7 @@ def last_trades(args):
     if args.since:
         params['since'] = args.since
 
-    res = k.query_public('Trades', params)
+    res = query_api('public', 'Trades', params)
     if args.raw or True:  # TODO
         print_results(res)
 
@@ -215,7 +232,7 @@ def last_trades(args):
 
 def get_balance(args=None):
     params = {}
-    res = k.query_private('Balance', params)
+    res = query_api('private', 'Balance', params)
     if args.raw:
         print_results(res)
 
@@ -242,7 +259,7 @@ def list_open_orders(args):
     params = {
         # TODO
     }
-    res = k.query_private('OpenOrders', params)
+    res = query_api('private', 'OpenOrders', params)
     if args.raw:
         print_results(res)
 
@@ -272,7 +289,7 @@ def list_closed_orders(args):
     params = {
         # TODO
     }
-    res = k.query_private('ClosedOrders', params)
+    res = query_api('private', 'ClosedOrders', params)
     if args.raw:
         print_results(res)
 
@@ -318,7 +335,7 @@ def place_order(args):
     if args.validate:
         params['validate'] = 'true'
 
-    res = k.query_private('AddOrder', params)
+    res = query_api('private', 'AddOrder', params)
     if args.raw or True:  # TODO
         print_results(res)
 
@@ -327,7 +344,7 @@ def cancel_order(args):
     params = {
         'txid': args.order_id,
     }
-    res = k.query_private('CancelOrder', params)
+    res = query_api('private', 'CancelOrder', params)
     if args.raw or True:  # TODO
         print_results(res)
 
