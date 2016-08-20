@@ -189,7 +189,7 @@ def query_api(api_type, *args):
         try:
             # call to the krakenex API
             res = api_func[api_type](*args)
-        except (socket.timeout, socket.error) as e:
+        except (socket.timeout, socket.error, ValueError) as e:
             print('Error while querying API!')
             print(repr(e))
 
