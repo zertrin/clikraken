@@ -298,7 +298,7 @@ def depth(args):
             continue
 
         # sort by price descending
-        depth_dict[dtype] = reversed(sorted(depth_dict[dtype], key=lambda dentry: dentry[price_label]))
+        depth_dict[dtype] = reversed(sorted(depth_dict[dtype], key=lambda dentry: Decimal(dentry[price_label])))
 
     asks_table = tabulate(depth_dict['asks'], headers="keys")
     bids_table = tabulate(depth_dict['bids'], headers="keys")
@@ -434,7 +434,7 @@ def list_open_orders(args):
         ol[otype] = [odict for odict in ol[otype]
                      if (odict['pair'] == asset_pair_short(args.pair) or args.pair == 'all')]
         # sort orders by price
-        ol[otype] = sorted(ol[otype], key=lambda odict: odict['price'])
+        ol[otype] = sorted(ol[otype], key=lambda odict: Decimal(odict['price']))
 
     # final list is concatenation of buy orders followed by sell orders
     ol_all = ol['buy'] + ol['sell']
