@@ -117,12 +117,12 @@ positional arguments:
   {generate_settings,ticker,depth,last_trades,lt,balance,bal,place,cancel,olist,ol,clist,cl}
                         available subcommands
     generate_settings   [clikraken] Output the default settings.ini file
-    ticker              [public] Get the Ticker
-    depth               [public] Get the current market depth data
+    ticker (t)          [public] Get the Ticker
+    depth (d)           [public] Get the current market depth data
     last_trades (lt)    [public] Get the last trades
     balance (bal)       [private] Get your current balance
     place               [private] Place an order
-    cancel              [private] Cancel an order
+    cancel (x)          [private] Cancel an order
     olist (ol)          [private] Get a list of your open orders
     clist (cl)          [private] Get a list of your closed orders
 

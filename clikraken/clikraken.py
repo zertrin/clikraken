@@ -577,6 +577,7 @@ def parse_args():
     # Ticker
     parser_ticker = subparsers.add_parser(
         'ticker',
+        aliases=['t'],
         help='[public] Get the Ticker',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser_ticker.add_argument('-p', '--pair', default=DEFAULT_PAIR,
@@ -586,6 +587,7 @@ def parse_args():
     # Market depth (Order book)
     parser_depth = subparsers.add_parser(
         'depth',
+        aliases=['d'],
         help='[public] Get the current market depth data',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser_depth.add_argument('-p', '--pair', default=DEFAULT_PAIR, help=pair_help)
@@ -636,6 +638,7 @@ def parse_args():
     # cancel an order
     parser_cancel = subparsers.add_parser(
         'cancel',
+        aliases=['x'],
         help='[private] Cancel an order',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser_cancel.add_argument('order_id', type=str, help="transaction id")
