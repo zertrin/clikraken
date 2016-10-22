@@ -242,8 +242,17 @@ def ticker(args):
 
         # calculate an estimate of the traded volume in quoted currency
         # for the last 24h: Volume x Average price
-        quote_val = round(Decimal(pticker['vol']) * Decimal(pticker['wavg']) / 1000)
-        pticker['vol value'] = str(quote_val) + ' k' + pticker['pair'][-3:]
+        quote_val = Decimal(pticker['vol']) * Decimal(pticker['wavg'])
+
+        unit_prefix = ''
+        if quote_val >= 10e6:
+            quote_val = quote_val / Decimal(1e6)
+            unit_prefix = 'M'
+        elif quote_val >= 10e3:
+            quote_val = quote_val / Decimal(1e3)
+            unit_prefix = 'k'
+
+        pticker['vol value'] = str(round(quote_val)) + ' ' + unit_prefix + pticker['pair'][-3:]
 
         # get the price only
         pticker['ask'] = pair_res['a'][0]
