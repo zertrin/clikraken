@@ -91,7 +91,7 @@ def parse_order_res(in_ol, status_list_filter=None):
     See Kraken's API documentation for details.
     """
 
-    # we will store the buy ond sell orders separately during parsing
+    # we will store the buy and sell orders separately during parsing
     ol = {'buy': [], 'sell': []}
 
     # status_list_filter is an optional argument of type list
@@ -192,6 +192,10 @@ def query_api(api_type, *args):
         except (socket.timeout, socket.error, ValueError) as e:
             print('Error while querying API!')
             print(repr(e))
+
+    err = res.get('error')
+    for e in err:
+        print('ERROR: {}'.format(e))
 
     return res
 
