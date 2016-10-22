@@ -582,7 +582,7 @@ def parse_args():
     parser = argparse.ArgumentParser(
         description='Command line client for the Kraken exchange',
         epilog=epilog_str)
-    parser.add_argument('-v', '--version', action='store_const', const=version, dest='main_func',
+    parser.add_argument('-V', '--version', action='store_const', const=version, dest='main_func',
                         help='show program version')
     parser.add_argument('--raw', action='store_true', help='output raw json results from the API')
     parser.set_defaults(main_func=None)
