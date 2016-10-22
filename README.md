@@ -14,9 +14,9 @@ There are probably undetected bugs left. **Use at your own risk!**
 
 ## Installation
 
-You should install it in a virtualenv, but that's not mandatory.
+I recommend installing it in a virtualenv, but that's not mandatory.
 
-### Step 1: Create a virtualenv
+### Step 1: Create a virtualenv (optional)
 
 ```
 mkdir -p ~/.venv  # or any folder of your choice
@@ -77,7 +77,7 @@ You should probably change the permissions to this file to protect it: `chmod 60
 
 clikraken looks for settings in `~/.config/clikraken/settings.ini`. 
 
-If the settings file doesn't exist yet, default settings are assumed. You can see the default settings by calling `clikraken generate_settings`. Currently these settings are mostly useful for defining the default currency pair to assume if not provided as an option (--pair). The current built-in default pair is XETHZEUR. You may want to change that if you are mostly trading with another currency pair.
+If the settings file doesn't exist yet, default settings are assumed. You can see the default settings by calling `clikraken generate_settings`. Currently these settings are mostly useful for defining the default currency pair to assume if not provided as an option (--pair). *The current built-in default pair is XETHZEUR*. You may want to change that if you are mostly trading with another currency pair.
 
 You can generate your `settings.ini` by doing the following:
 
@@ -88,15 +88,9 @@ clikraken generate_settings > ~/.config/clikraken/settings.ini
 
 ## Usage
 
-First activate the virtualenv:
+If installed in a virtualenv, activate it first: `source ~/.venv/clikraken/bin/activate` (When you are done using clikraken, you can deactivate the virtualenv with `deactivate`.)
 
-```
-source ~/.venv/clikraken/bin/activate
-```
-
-(When you are done using clikraken, you can deactivate the virtualenv with `deactivate`.)
-
-This command line client works by calling subcommands with their respective options and arguments
+This command line client works by calling subcommands with their respective options and arguments (similar to git).
 
 Get help to see the available subcommands:
 
@@ -136,10 +130,70 @@ Current default currency pair: XETHZEUR. Create or edit
 subcommand 'generate_settings'.
 ```
 
-To get information on how to use a subcommand:
+Each subcommand has different optional arguments, to get information on how to use a subcommand:
 
 ```
 clikraken SUBCOMMAND --help
+```
+
+For example, the `place` subcommand has following help:
+
+```
+usage: clikraken.py place [-h] [-p PAIR] [-t {market,limit}] [-s STARTTM]
+                          [-e EXPIRETM] [-q] [-v]
+                          {sell,buy} volume [price]
+
+positional arguments:
+  {sell,buy}
+  volume
+  price
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -p PAIR, --pair PAIR  asset pair (default: XETHZEUR)
+  -t {market,limit}, --ordertype {market,limit}
+                        order type. Currently implemented: [limit, market].
+                        (default: limit)
+  -s STARTTM, --starttm STARTTM
+                        scheduled start time (default: 0)
+  -e EXPIRETM, --expiretm EXPIRETM
+                        expiration time (default: 0)
+  -q, --viqc            volume in quote currency (default: False)
+  -v, --validate        validate inputs only. do not submit order (default:
+                        False)
+```
+
+### Usage examples
+
+Notice: Without the `-p` option, default currency pair is taken from the settings file, defaulting to `XETHZEUR` if the settings file does not exist.
+
+```
+clikraken ticker
+clikraken balance
+clikraken depth
+
+clikraken place buy -t limit 0.42 11.1337
+clikraken place buy -t market 0.1
+
+# without the -t option, defaults to limit orders
+clikraken place sell 0.5 13.3701
+
+clikraken cancel OUQUPX-9FBMJ-DL7L6W
+```
+
+Examples in another currency pair:
+
+```
+# BTC/EUR currency pair
+clikraken ticker -p XXBTZEUR
+clikraken depth -p XXBTZEUR
+clikraken place buy 0.08 587.12 -p XXBTZEUR
+clikraken olist -p XXBTZEUR
+
+# ETH/BTC currency pair
+clikraken ticker -p XETHXXBT
+clikraken depth -p XETHXXBT
+clikraken last_trades -p XETHXXBT
 ```
 
 ## Upgrade
