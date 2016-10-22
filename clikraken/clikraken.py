@@ -536,8 +536,27 @@ def place_order(args):
         params['validate'] = 'true'
 
     res = query_api('private', 'AddOrder', params)
-    if args.raw or True:  # TODO pretty-print output
+    if args.raw:
         print_results(res)
+
+    res = res.get('result')
+    if not res:
+        return
+
+    descr = res.get('descr')
+    odesc = descr.get('order', 'No description available!')
+    print(odesc)
+
+    txid = res.get('txid')
+
+    if not txid:
+        if args.validate:
+            print('NOTICE: validating inputs only. Order not submitted!')
+        else:
+            print('WARNING: order was NOT successfully added!')
+    else:
+        for tx in txid:
+            print(txid)
 
 
 def cancel_order(args):
@@ -549,8 +568,20 @@ def cancel_order(args):
     }
 
     res = query_api('private', 'CancelOrder', params)
-    if args.raw or True:  # TODO pretty-print output
+    if args.raw:
         print_results(res)
+
+    res = res.get('result')
+    if not res:
+        return
+
+    count = res.get('count')
+    pending = res.get('pending')
+
+    if count:
+        print('count: {}'.format(count))
+    if pending:
+        print('NOTICE: order(s) is/are pending cancellation!')
 
 
 def version(args=None):
