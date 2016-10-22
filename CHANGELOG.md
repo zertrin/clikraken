@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
-- Placeholder
+- Add link to PyPI package page in the README.
 
 ## [0.1.7] - 2016-10-22
 

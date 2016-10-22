@@ -8,6 +8,8 @@ from Kraken's API and displays it in formatted tables.
 Moreover you can place or cancel simple orders
 (only buy/sell market/limit is currently implemented).
 
+See package on PyPI: https://pypi.python.org/pypi/clikraken
+
 **WARNING**: This software is currently in development.
 I consider it in _alpha_ state, which means that it works well enough for me but hasn't been thoroughly tested.
 There are probably undetected bugs left. **Use at your own risk!**
