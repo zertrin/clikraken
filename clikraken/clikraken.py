@@ -512,12 +512,25 @@ def place_order(args):
         'pair': args.pair,
         'type': args.type,
         'ordertype': args.ordertype,
-        'price': args.price,
         'volume': args.volume,
         'oflags': ','.join(oflags),
         'starttm': args.starttm,
         'expiretm': args.expiretm,
     }
+
+    if args.ordertype == 'limit':
+        if args.price is None:
+            print('ERROR: For limit orders, the price must be given!')
+            return
+        else:
+            params['price'] = args.price
+    elif args.ordertype == 'market':
+        if args.price is not None:
+            print('WARNING: price is ignored for market orders!')
+
+    if not oflags:
+        # if oflags is empty, just remove it from the params
+        params.pop('oflags', None)
 
     if args.validate:
         params['validate'] = 'true'
@@ -638,7 +651,7 @@ def parse_args():
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser_place.add_argument('type', choices=['sell', 'buy'])
     parser_place.add_argument('volume', type=Decimal)
-    parser_place.add_argument('price', type=Decimal)  # TODO: optional if market order
+    parser_place.add_argument('price', default=None, nargs='?')
     parser_place.add_argument('-p', '--pair', default=DEFAULT_PAIR, help=pair_help)
     parser_place.add_argument('-t', '--ordertype', choices=['market', 'limit'], default='limit',
                               help="order type. Currently implemented: [limit, market].")
