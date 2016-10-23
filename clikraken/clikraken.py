@@ -193,7 +193,7 @@ def query_api(api_type, *args):
             print('Error while querying API!')
             print(repr(e))
 
-    err = res.get('error')
+    err = res.get('error', [])
     for e in err:
         print('ERROR: {}'.format(e))
 

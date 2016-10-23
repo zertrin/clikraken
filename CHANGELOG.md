@@ -6,7 +6,15 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+- placeholder
+
+## [0.1.8] - 2016-10-23
+
+### Added
 - Add link to PyPI package page in the README.
+
+### Fixed
+- Fix bug when Kraken API returns no error field.
 
 ## [0.1.7] - 2016-10-22
 
@@ -55,7 +63,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - API key file location moved to '~/.config/clikraken/kraken.key'
 
-[Unreleased]: https://github.com/zertrin/clikraken/compare/0.1.7...HEAD
+[Unreleased]: https://github.com/zertrin/clikraken/compare/0.1.8...HEAD
+[0.1.8]: https://github.com/zertrin/clikraken/compare/0.1.7...0.1.8
 [0.1.7]: https://github.com/zertrin/clikraken/compare/0.1.6...0.1.7
 [0.1.6]: https://github.com/zertrin/clikraken/compare/0.1.5...0.1.6
 [0.1.5]: https://github.com/zertrin/clikraken/compare/0.1.4...0.1.5
