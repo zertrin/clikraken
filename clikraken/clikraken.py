@@ -44,8 +44,13 @@ k.load_key(KRAKEN_API_KEYFILE)
 DEFAULT_SETTINGS_INI = """[clikraken]
 # default currency pair when no option '-p' or '--pair' is given
 currency_pair = XETHZEUR
+
 # Timezone for displaying date and time infos
 timezone = Europe/Berlin
+
+# API Trading Agreement
+# (change to "agree" after reading https://www.kraken.com/u/settings/api)
+trading_agreement = not_agree
 """
 
 config = configparser.ConfigParser()
@@ -56,6 +61,7 @@ conf = config['clikraken']
 
 DEFAULT_PAIR = conf.get('currency_pair')
 TZ = conf.get('timezone')
+TRADING_AGREEMENT = conf.get('trading_agreement')
 
 
 def output_default_settings_ini(args):
@@ -167,6 +173,16 @@ def print_results(res):
 def asset_pair_short(ap_str):
     """Convert XETHZEUR to ETHEUR"""
     return ap_str[1:4] + ap_str[5:]
+
+
+def check_trading_agreement():
+    if TRADING_AGREEMENT != 'agree':
+        print('WARNING: before being able to use the Kraken API for market orders, '
+              'orders that trigger market orders, trailing stop limit orders, and margin orders, '
+              'you need to agree to the trading agreement at https://www.kraken.com/u/settings/api '
+              'and set the parameter "trading_agreement" to "agree" in the settings file '
+              '(located at ' + USER_SETTINGS_PATH + '). If the settings file does not yet exists, '
+              'you can generate one by following the instructions in the README.md file.')
 
 
 def query_api(api_type, *args):
@@ -518,6 +534,9 @@ def place_order(args):
         'expiretm': args.expiretm,
     }
 
+    if TRADING_AGREEMENT == 'agree':
+        params['trading_agreement'] = 'agree'
+
     if args.ordertype == 'limit':
         if args.price is None:
             print('ERROR: For limit orders, the price must be given!')
@@ -527,6 +546,7 @@ def place_order(args):
     elif args.ordertype == 'market':
         if args.price is not None:
             print('WARNING: price is ignored for market orders!')
+        check_trading_agreement()
 
     if not oflags:
         # if oflags is empty, just remove it from the params

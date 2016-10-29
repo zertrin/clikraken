@@ -6,7 +6,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
-- placeholder
+
+### Added
+- New setting "traging_agreement", defaulting to "not_agree".
+
+### Fixed
+- Fix market orders by adding "trading_agreement = agree" in the AddOrder call.
 
 ## [0.1.8] - 2016-10-23
 
