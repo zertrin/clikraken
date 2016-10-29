@@ -516,20 +516,12 @@ def list_closed_orders(args):
 def place_order(args):
     """Place an order."""
 
-    oflags = []  # order flags
-    if args.ordertype == 'limit':
-        # for limit orders, always set post only order flag
-        oflags.append('post')
-    if args.viqc:
-        oflags.append('viqc')
-
     # Parameters to pass to the API
     params = {
         'pair': args.pair,
         'type': args.type,
         'ordertype': args.ordertype,
         'volume': args.volume,
-        'oflags': ','.join(oflags),
         'starttm': args.starttm,
         'expiretm': args.expiretm,
     }
@@ -548,9 +540,14 @@ def place_order(args):
             print('WARNING: price is ignored for market orders!')
         check_trading_agreement()
 
-    if not oflags:
-        # if oflags is empty, just remove it from the params
-        params.pop('oflags', None)
+    oflags = []  # order flags
+    if args.ordertype == 'limit':
+        # for limit orders, always set post only order flag
+        oflags.append('post')
+    if args.viqc:
+        oflags.append('viqc')
+    if oflags:
+        params['oflags'] = ','.join(oflags)
 
     if args.validate:
         params['validate'] = 'true'

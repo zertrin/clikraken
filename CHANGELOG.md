@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+- placeholder
+
+## [0.1.9] - 2016-10-29
 
 ### Added
 - New setting "traging_agreement", defaulting to "not_agree".
@@ -68,7 +71,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - API key file location moved to '~/.config/clikraken/kraken.key'
 
-[Unreleased]: https://github.com/zertrin/clikraken/compare/0.1.8...HEAD
+[Unreleased]: https://github.com/zertrin/clikraken/compare/0.1.9...HEAD
+[0.1.9]: https://github.com/zertrin/clikraken/compare/0.1.8...0.1.9
 [0.1.8]: https://github.com/zertrin/clikraken/compare/0.1.7...0.1.8
 [0.1.7]: https://github.com/zertrin/clikraken/compare/0.1.6...0.1.7
 [0.1.6]: https://github.com/zertrin/clikraken/compare/0.1.5...0.1.6
