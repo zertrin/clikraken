@@ -26,69 +26,14 @@ from tabulate import tabulate
 # local
 from . import __version__
 
-# -----------------------------
-# Kraken API keyfile
-# -----------------------------
-
-# Resolve userpath to an absolute path
-DEFAULT_KRAKEN_API_KEYFILE = os.path.expanduser('~/.config/clikraken/kraken.key')
-
-# If the environment variable is set, override the default value
-KRAKEN_API_KEYFILE = os.getenv('CLIKRAKEN_API_KEYFILE', DEFAULT_KRAKEN_API_KEYFILE)
-
-if not os.path.exists(KRAKEN_API_KEYFILE):
-    print("ERROR: the API keyfile {} was not found! Aborting...".format(KRAKEN_API_KEYFILE))
-    exit(2)
-
-# Instanciate the krakenex module to communicate with Kraken's API
-k = krakenex.API()
-
-# Load the API key of the user
-k.load_key(KRAKEN_API_KEYFILE)
-
-# -----------------------------
-# Settings
-# -----------------------------
-
-# Resolve userpath to an absolute path
-DEFAULT_USER_SETTINGS_PATH = os.path.expanduser('~/.config/clikraken/settings.ini')
-
-# If the environment variable is set, override the default value
-USER_SETTINGS_PATH = os.getenv('CLIKRAKEN_USER_SETTINGS_PATH', DEFAULT_USER_SETTINGS_PATH)
-
-if not os.path.exists(USER_SETTINGS_PATH):
-    print("NOTICE: the user settings file {} was not found! Using hardcoded default values.".format(USER_SETTINGS_PATH))
-
-# Default settings
-DEFAULT_SETTINGS_INI = """[clikraken]
-# default currency pair when no option '-p' or '--pair' is given
-# and the environment variable CLIKRAKEN_DEFAULT_PAIR is not set
-currency_pair = XETHZEUR
-
-# Timezone for displaying date and time infos
-timezone = Europe/Berlin
-
-# API Trading Agreement
-# (change to "agree" after reading https://www.kraken.com/u/settings/api)
-trading_agreement = not_agree
-"""
-
-config = configparser.ConfigParser()
-config.read_string(DEFAULT_SETTINGS_INI)
-config.read(USER_SETTINGS_PATH)
-
-conf = config['clikraken']
-
-# Get the default currency pair from environment variable if available
-# otherwise take the value from the config file.
-DEFAULT_PAIR = os.getenv('CLIKRAKEN_DEFAULT_PAIR', conf.get('currency_pair'))
-
-TZ = conf.get('timezone')
-TRADING_AGREEMENT = conf.get('trading_agreement')
-
-# -----------------------------
-# Helpers
-# -----------------------------
+# global variables, that are later initialized
+KRAKEN_API_KEYFILE = None
+KRAKEN_API = None
+USER_SETTINGS_PATH = None
+DEFAULT_SETTINGS_INI = None
+DEFAULT_PAIR = None
+TZ = None
+TRADING_AGREEMENT = None
 
 date_field = {
     'open': 'opentm',
@@ -103,6 +48,82 @@ date_label = {
     'canceled': 'closing_date',
     'expired': 'closing_date'
 }
+
+
+def initialize():
+    """Call the functions for the initialization"""
+    load_api_keyfile()
+    load_config()
+
+
+def load_api_keyfile():
+    """Load the Kraken API keyfile"""
+
+    global KRAKEN_API_KEYFILE
+    global KRAKEN_API
+
+    # Resolve userpath to an absolute path
+    DEFAULT_KRAKEN_API_KEYFILE = os.path.expanduser('~/.config/clikraken/kraken.key')
+
+    # If the environment variable is set, override the default value
+    KRAKEN_API_KEYFILE = os.getenv('CLIKRAKEN_API_KEYFILE', DEFAULT_KRAKEN_API_KEYFILE)
+
+    if not os.path.exists(KRAKEN_API_KEYFILE):
+        print("ERROR: the API keyfile {} was not found! Aborting...".format(KRAKEN_API_KEYFILE))
+        exit(2)
+
+    # Instanciate the krakenex module to communicate with Kraken's API
+    KRAKEN_API = krakenex.API()
+
+    # Load the API key of the user
+    KRAKEN_API.load_key(KRAKEN_API_KEYFILE)
+
+
+def load_config():
+    """Load configuration parameters from the settings file"""
+
+    global USER_SETTINGS_PATH
+    global DEFAULT_SETTINGS_INI
+    global DEFAULT_PAIR
+    global TZ
+    global TRADING_AGREEMENT
+
+    # Resolve userpath to an absolute path
+    DEFAULT_USER_SETTINGS_PATH = os.path.expanduser('~/.config/clikraken/settings.ini')
+
+    # If the environment variable is set, override the default value
+    USER_SETTINGS_PATH = os.getenv('CLIKRAKEN_USER_SETTINGS_PATH', DEFAULT_USER_SETTINGS_PATH)
+
+    if not os.path.exists(USER_SETTINGS_PATH):
+        print("NOTICE: the user settings file {} was not found! "
+              "Using hardcoded default values.".format(USER_SETTINGS_PATH))
+
+    # Default settings
+    DEFAULT_SETTINGS_INI = """[clikraken]
+    # default currency pair when no option '-p' or '--pair' is given
+    # and the environment variable CLIKRAKEN_DEFAULT_PAIR is not set
+    currency_pair = XETHZEUR
+
+    # Timezone for displaying date and time infos
+    timezone = Europe/Berlin
+
+    # API Trading Agreement
+    # (change to "agree" after reading https://www.kraken.com/u/settings/api)
+    trading_agreement = not_agree
+    """
+
+    config = configparser.ConfigParser()
+    config.read_string(DEFAULT_SETTINGS_INI)
+    config.read(USER_SETTINGS_PATH)
+
+    conf = config['clikraken']
+
+    # Get the default currency pair from environment variable if available
+    # otherwise take the value from the config file.
+    DEFAULT_PAIR = os.getenv('CLIKRAKEN_DEFAULT_PAIR', conf.get('currency_pair'))
+
+    TZ = conf.get('timezone')
+    TRADING_AGREEMENT = conf.get('trading_agreement')
 
 
 def output_default_settings_ini(args):
@@ -219,8 +240,8 @@ def query_api(api_type, *args):
 
     # just a mapping from api_type to the function to be called
     api_func = {
-        'public': k.query_public,
-        'private': k.query_private
+        'public': KRAKEN_API.query_public,
+        'private': KRAKEN_API.query_private
     }
     func = api_func.get(api_type)
 
@@ -780,6 +801,7 @@ def parse_args():
 
 
 def main():
+    initialize()
     args = parse_args()
     func = args.sub_func if 'sub_func' in args else args.main_func
     if func is not None:
