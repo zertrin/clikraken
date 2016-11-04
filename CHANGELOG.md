@@ -6,7 +6,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
-- placeholder
+
+### Added
+- New environment variable CLIKRAKEN_DEFAULT_PAIR to override the default currency pair.
+- New environment variable CLIKRAKEN_API_KEYFILE to override the default keyfile location.
+- New environment variable CLIKRAKEN_USER_SETTINGS_PATH to override the default user settings file location.
 
 ## [0.1.9] - 2016-10-29
 

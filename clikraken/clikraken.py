@@ -17,6 +17,7 @@ import krakenex
 import os
 import socket
 import sys
+import textwrap
 
 from tabulate import tabulate
 
@@ -27,8 +28,14 @@ from . import __version__
 # -----------------------------
 
 # Resolve userpath to an absolute path
-KRAKEN_API_KEYFILE = os.path.expanduser('~/.config/clikraken/kraken.key')
-USER_SETTINGS_PATH = os.path.expanduser('~/.config/clikraken/settings.ini')
+DEFAULT_KRAKEN_API_KEYFILE = os.path.expanduser('~/.config/clikraken/kraken.key')
+
+# If the environment variable is set, override the default value
+KRAKEN_API_KEYFILE = os.getenv('CLIKRAKEN_API_KEYFILE', DEFAULT_KRAKEN_API_KEYFILE)
+
+if not os.path.exists(KRAKEN_API_KEYFILE):
+    print("ERROR: the API keyfile {} was not found! Aborting...".format(KRAKEN_API_KEYFILE))
+    exit(2)
 
 # Instanciate the krakenex module to communicate with Kraken's API
 k = krakenex.API()
@@ -40,9 +47,19 @@ k.load_key(KRAKEN_API_KEYFILE)
 # Settings
 # -----------------------------
 
+# Resolve userpath to an absolute path
+DEFAULT_USER_SETTINGS_PATH = os.path.expanduser('~/.config/clikraken/settings.ini')
+
+# If the environment variable is set, override the default value
+USER_SETTINGS_PATH = os.getenv('CLIKRAKEN_USER_SETTINGS_PATH', DEFAULT_USER_SETTINGS_PATH)
+
+if not os.path.exists(USER_SETTINGS_PATH):
+    print("NOTICE: the user settings file {} was not found! Using hardcoded default values.".format(USER_SETTINGS_PATH))
+
 # Default settings
 DEFAULT_SETTINGS_INI = """[clikraken]
 # default currency pair when no option '-p' or '--pair' is given
+# and the environment variable CLIKRAKEN_DEFAULT_PAIR is not set
 currency_pair = XETHZEUR
 
 # Timezone for displaying date and time infos
@@ -59,7 +76,10 @@ config.read(USER_SETTINGS_PATH)
 
 conf = config['clikraken']
 
-DEFAULT_PAIR = conf.get('currency_pair')
+# Get the default currency pair from environment variable if available
+# otherwise take the value from the config file.
+DEFAULT_PAIR = os.getenv('CLIKRAKEN_DEFAULT_PAIR', conf.get('currency_pair'))
+
 TZ = conf.get('timezone')
 TRADING_AGREEMENT = conf.get('trading_agreement')
 
@@ -625,11 +645,19 @@ def parse_args():
     pairs_help = "comma delimited list of asset pairs"
     pair_help = "asset pair"
 
-    epilog_str = ("Current default currency pair: {}. Create or edit {} to change it. "
-                  "See also the subcommand 'generate_settings'.").format(DEFAULT_PAIR, USER_SETTINGS_PATH)
+    epilog_str = textwrap.dedent("""\
+        Current default currency pair: {dp}.
+        Create or edit the setting file {usp} to change it.
+        If the setting file doesn't exist yet, you can create one by doing:
+            clikraken generate_settings > {usp}
+        You can also set the CLIKRAKEN_DEFAULT_PAIR environment variable
+        which has precedence over the settings from the settings file.
+        """.format(dp=DEFAULT_PAIR, usp=USER_SETTINGS_PATH))
+
     parser = argparse.ArgumentParser(
         description='Command line client for the Kraken exchange',
-        epilog=epilog_str)
+        epilog=epilog_str,
+        formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument('-V', '--version', action='store_const', const=version, dest='main_func',
                         help='show program version')
     parser.add_argument('--raw', action='store_true', help='output raw json results from the API')
@@ -640,7 +668,7 @@ def parse_args():
     # Generate setting.ini
     parser_gen_settings = subparsers.add_parser(
         'generate_settings',
-        help='[clikraken] Output the default settings.ini file',
+        help='[clikraken] Print default settings.ini to stdout',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser_gen_settings.set_defaults(sub_func=output_default_settings_ini)
 
