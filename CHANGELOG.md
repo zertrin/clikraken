@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - New environment variable CLIKRAKEN_API_KEYFILE to override the default keyfile location.
 - New environment variable CLIKRAKEN_USER_SETTINGS_PATH to override the default user settings file location.
 - Add short alias "p" for the "place" command.
+- Do proper logging of info/warning/error messages.
+- Log lines will be colorized on terminal if colorlog is available (pip install colorlog).
 
 ## [0.1.9] - 2016-10-29
 

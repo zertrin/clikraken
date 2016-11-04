@@ -13,6 +13,7 @@ from collections import OrderedDict
 import configparser
 from decimal import Decimal
 import json
+import logging
 import os
 import socket
 import sys
@@ -23,10 +24,54 @@ import arrow
 import krakenex
 from tabulate import tabulate
 
+try:
+    import colorlog
+    have_colorlog = True
+except ImportError:
+    have_colorlog = False
+
 # local
 from . import __version__
 
+
+# -----------------------------
+# Setup logging
+# -----------------------------
+
+
+def setup_logger():
+    """Setup a colored logger if available and possible"""
+
+    logger = logging.getLogger('clikraken')
+    logger.setLevel(logging.DEBUG)
+
+    ch = logging.StreamHandler()
+    ch.setLevel(logging.DEBUG)
+
+    format_str = '{levelname:8} - {message}'
+    f = logging.Formatter(fmt=format_str, style='{')
+
+    if have_colorlog:
+        cf = colorlog.ColoredFormatter(fmt='{log_color}' + format_str, style='{')
+    else:
+        cf = f
+
+    if os.isatty(2):
+        ch.setFormatter(cf)
+    else:
+        ch.setFormatter(f)
+
+    logger.addHandler(ch)
+
+    return logger
+
+logger = setup_logger()
+
+
+# -----------------------------
 # global variables, that are later initialized
+# -----------------------------
+
 KRAKEN_API_KEYFILE = None
 KRAKEN_API = None
 USER_SETTINGS_PATH = None
@@ -69,7 +114,7 @@ def load_api_keyfile():
     KRAKEN_API_KEYFILE = os.getenv('CLIKRAKEN_API_KEYFILE', DEFAULT_KRAKEN_API_KEYFILE)
 
     if not os.path.exists(KRAKEN_API_KEYFILE):
-        print("ERROR: the API keyfile {} was not found! Aborting...".format(KRAKEN_API_KEYFILE))
+        logger.error("The API keyfile {} was not found! Aborting...".format(KRAKEN_API_KEYFILE))
         exit(2)
 
     # Instanciate the krakenex module to communicate with Kraken's API
@@ -95,8 +140,8 @@ def load_config():
     USER_SETTINGS_PATH = os.getenv('CLIKRAKEN_USER_SETTINGS_PATH', DEFAULT_USER_SETTINGS_PATH)
 
     if not os.path.exists(USER_SETTINGS_PATH):
-        print("NOTICE: the user settings file {} was not found! "
-              "Using hardcoded default values.".format(USER_SETTINGS_PATH))
+        logger.info("The user settings file {} was not found! "
+                    "Using hardcoded default values.".format(USER_SETTINGS_PATH))
 
     # Default settings
     DEFAULT_SETTINGS_INI = """[clikraken]
@@ -221,12 +266,12 @@ def asset_pair_short(ap_str):
 
 def check_trading_agreement():
     if TRADING_AGREEMENT != 'agree':
-        print('WARNING: before being able to use the Kraken API for market orders, '
-              'orders that trigger market orders, trailing stop limit orders, and margin orders, '
-              'you need to agree to the trading agreement at https://www.kraken.com/u/settings/api '
-              'and set the parameter "trading_agreement" to "agree" in the settings file '
-              '(located at ' + USER_SETTINGS_PATH + '). If the settings file does not yet exists, '
-              'you can generate one by following the instructions in the README.md file.')
+        logger.warn('Before being able to use the Kraken API for market orders, '
+                    'orders that trigger market orders, trailing stop limit orders, and margin orders, '
+                    'you need to agree to the trading agreement at https://www.kraken.com/u/settings/api '
+                    'and set the parameter "trading_agreement" to "agree" in the settings file '
+                    '(located at ' + USER_SETTINGS_PATH + '). If the settings file does not yet exists, '
+                    'you can generate one by following the instructions in the README.md file.')
 
 
 def query_api(api_type, *args):
@@ -250,12 +295,12 @@ def query_api(api_type, *args):
             # call to the krakenex API
             res = api_func[api_type](*args)
         except (socket.timeout, socket.error, ValueError) as e:
-            print('Error while querying API!')
-            print(repr(e))
+            logger.error('Error while querying API!')
+            logger.error(repr(e))
 
     err = res.get('error', [])
     for e in err:
-        print('ERROR: {}'.format(e))
+        logger.error('{}'.format(e))
 
     return res
 
@@ -575,13 +620,13 @@ def place_order(args):
 
     if args.ordertype == 'limit':
         if args.price is None:
-            print('ERROR: For limit orders, the price must be given!')
+            logger.error('For limit orders, the price must be given!')
             return
         else:
             params['price'] = args.price
     elif args.ordertype == 'market':
         if args.price is not None:
-            print('WARNING: price is ignored for market orders!')
+            logger.warn('price is ignored for market orders!')
         check_trading_agreement()
 
     oflags = []  # order flags
@@ -612,9 +657,9 @@ def place_order(args):
 
     if not txid:
         if args.validate:
-            print('NOTICE: validating inputs only. Order not submitted!')
+            logger.info('Validating inputs only. Order not submitted!')
         else:
-            print('WARNING: order was NOT successfully added!')
+            logger.warn('Order was NOT successfully added!')
     else:
         for tx in txid:
             print(txid)
@@ -642,7 +687,7 @@ def cancel_order(args):
     if count:
         print('count: {}'.format(count))
     if pending:
-        print('NOTICE: order(s) is/are pending cancellation!')
+        logger.info('order(s) is/are pending cancellation!')
 
 
 def version(args=None):
