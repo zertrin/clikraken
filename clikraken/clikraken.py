@@ -7,20 +7,23 @@ clikraken
 Command line client for the Kraken exchange
 """
 
+# stdlib
 import argparse
-import arrow
 from collections import OrderedDict
 import configparser
 from decimal import Decimal
 import json
-import krakenex
 import os
 import socket
 import sys
 import textwrap
 
+# dependancies
+import arrow
+import krakenex
 from tabulate import tabulate
 
+# local
 from . import __version__
 
 # -----------------------------
@@ -83,11 +86,6 @@ DEFAULT_PAIR = os.getenv('CLIKRAKEN_DEFAULT_PAIR', conf.get('currency_pair'))
 TZ = conf.get('timezone')
 TRADING_AGREEMENT = conf.get('trading_agreement')
 
-
-def output_default_settings_ini(args):
-    """Output the contents of the default settings.ini file"""
-    print(DEFAULT_SETTINGS_INI)
-
 # -----------------------------
 # Helpers
 # -----------------------------
@@ -105,6 +103,11 @@ date_label = {
     'canceled': 'closing_date',
     'expired': 'closing_date'
 }
+
+
+def output_default_settings_ini(args):
+    """Output the contents of the default settings.ini file"""
+    print(DEFAULT_SETTINGS_INI)
 
 
 def parse_order_res(in_ol, status_list_filter=None):
@@ -723,6 +726,7 @@ def parse_args():
     # Place an order
     parser_place = subparsers.add_parser(
         'place',
+        aliases=['p'],
         help='[private] Place an order',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser_place.add_argument('type', choices=['sell', 'buy'])
