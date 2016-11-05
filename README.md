@@ -16,9 +16,9 @@ There are probably undetected bugs left. **Use at your own risk!**
 
 ## Installation
 
-I recommend installing it in a virtualenv, but that's not mandatory.
+### Step 0: Create a virtualenv (optional)
 
-### Step 1: Create a virtualenv (optional)
+You can install it in a virtualenv if you wish to keep this program and dependencies isolated from the rest of your system, but that's not mandatory.
 
 ```
 mkdir -p ~/.venv  # or any folder of your choice
@@ -31,38 +31,15 @@ And activate it:
 source ~/.venv/clikraken/bin/activate
 ```
 
-### Step 2: Install dependencies
-
-clikraken depends on the following extra modules:
-
-* `arrow`, for better handling of date and time
-* `tabulate`, for printing results as tables
-* `python3-krakenex`, for the low-level interface with the Kraken API
-
-Somehow you need to install the dependencies manually before installing clikraken. I haven't had success in making the dependency system of pip work consistently with `python3-krakenex` being only available as a Git repository yet. It would be nicer if it were packaged for Pypi.
-
-Install arrow and tabulate in the activated virtualenv:
+### Step 1: Install clikraken
 
 ```
-pip install arrow tabulate
-```
-
-Install python3-krakenex in the activated virtualenv:
-
-```
-pip install -e "git+https://github.com/veox/python3-krakenex.git@33b758f1f56257a35da85b0b14eb9cb1afb7b045#egg=krakenex-0.0.6"
-```
-
-### Step 3: Install clikraken
-
-```
-# make sure you have installed arrow, tabulate and krakenex before! You can check with 'pip list'
 pip install clikraken
 ```
 
 If everything went well, `clikraken --version` should output the program's version without error.
 
-### Step 4: Add your API key in the file `~/.config/clikraken/kraken.key`
+### Step 2: Add your API key in the file `~/.config/clikraken/kraken.key`
 
 You will need it to perform private queries to the Kraken API.
 
@@ -75,11 +52,13 @@ secretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretse
 
 You should probably change the permissions to this file to protect it: `chmod 600 ~/.config/clikraken/kraken.key`
 
-### Step 5 (optional): Generate a settings file and adapt it to your needs
+Alternatively, you can set a path in the environment variable `CLIKRAKEN_API_KEYFILE` to override the default keyfile location.
 
-clikraken looks for settings in `~/.config/clikraken/settings.ini`. 
+### Step 3 (optional): Generate a settings file and adapt it to your needs
 
-If the settings file doesn't exist yet, default settings are assumed. You can see the default settings by calling `clikraken generate_settings`. Currently these settings are mostly useful for defining the default currency pair to assume if not provided as an option (--pair). *The current built-in default pair is XETHZEUR*. You may want to change that if you are mostly trading with another currency pair.
+clikraken looks for settings in `~/.config/clikraken/settings.ini` per default. 
+
+If the settings file doesn't exist yet, default settings are assumed. You can see the default settings by calling `clikraken generate_settings`. Currently these settings are mostly useful for defining the default currency pair to use if the option `--pair` (or `-p`) is not provided. *The current built-in default pair is XETHZEUR* (Ethereum/Euro). You may want to change that if you are mostly trading with another currency pair. Alternatively, you can set the environment variable `CLIKRAKEN_DEFAULT_PAIR` to override the default currency pair.
 
 You can generate your `settings.ini` by doing the following:
 
@@ -88,9 +67,11 @@ mkdir -p ~/.config/clikraken # only if the folder doesn't exist yet
 clikraken generate_settings > ~/.config/clikraken/settings.ini
 ```
 
+Alternatively, you can set a path in the environment variable `CLIKRAKEN_USER_SETTINGS_PATH` to override the default user settings file location.
+
 ## Usage
 
-If installed in a virtualenv, activate it first: `source ~/.venv/clikraken/bin/activate` (When you are done using clikraken, you can deactivate the virtualenv with `deactivate`.)
+If installed in a virtualenv, don't forget to activate it first: `source ~/.venv/clikraken/bin/activate` (When you are done using clikraken, you can deactivate the virtualenv with `deactivate`.)
 
 This command line client works by calling subcommands with their respective options and arguments (similar to git).
 
@@ -103,33 +84,36 @@ clikraken --help
 Output:
 
 ```
-usage: clikraken [-h] [-v] [--raw]
-                 {generate_settings,ticker,depth,last_trades,lt,balance,bal,place,cancel,olist,ol,clist,cl}
-                 ...
+usage: clikraken.py [-h] [-V] [--raw]
+                    {generate_settings,ticker,t,depth,d,last_trades,lt,balance,bal,place,p,cancel,x,olist,ol,clist,cl}
+                    ...
 
 Command line client for the Kraken exchange
 
 positional arguments:
-  {generate_settings,ticker,depth,last_trades,lt,balance,bal,place,cancel,olist,ol,clist,cl}
+  {generate_settings,ticker,t,depth,d,last_trades,lt,balance,bal,place,p,cancel,x,olist,ol,clist,cl}
                         available subcommands
-    generate_settings   [clikraken] Output the default settings.ini file
+    generate_settings   [clikraken] Print default settings.ini to stdout
     ticker (t)          [public] Get the Ticker
     depth (d)           [public] Get the current market depth data
     last_trades (lt)    [public] Get the last trades
     balance (bal)       [private] Get your current balance
-    place               [private] Place an order
+    place (p)           [private] Place an order
     cancel (x)          [private] Cancel an order
     olist (ol)          [private] Get a list of your open orders
     clist (cl)          [private] Get a list of your closed orders
 
 optional arguments:
   -h, --help            show this help message and exit
-  -v, --version         show program version
+  -V, --version         show program version
   --raw                 output raw json results from the API
 
-Current default currency pair: XETHZEUR. Create or edit
-~/.config/clikraken/settings.ini to change it. See also the
-subcommand 'generate_settings'.
+Current default currency pair: XETHZEUR.
+Create or edit the setting file /home/zertrin/.config/clikraken/settings.ini to change it.
+If the setting file doesn't exist yet, you can create one by doing:
+    clikraken generate_settings > /home/zertrin/.config/clikraken/settings.ini
+You can also set the CLIKRAKEN_DEFAULT_PAIR environment variable
+which has precedence over the settings from the settings file.
 ```
 
 Each subcommand has different optional arguments, to get information on how to use a subcommand:
@@ -138,7 +122,7 @@ Each subcommand has different optional arguments, to get information on how to u
 clikraken SUBCOMMAND --help
 ```
 
-For example, the `place` subcommand has following help:
+For example, the `place` subcommand has the following help:
 
 ```
 usage: clikraken.py place [-h] [-p PAIR] [-t {market,limit}] [-s STARTTM]
@@ -167,7 +151,7 @@ optional arguments:
 
 ### Usage examples
 
-Notice: Without the `-p` option, default currency pair is taken from the settings file, defaulting to `XETHZEUR` if the settings file does not exist.
+Notice: Without the `-p` option, default currency pair is taken from the settings file or the aforementionned environment variable, defaulting to `XETHZEUR` if neither of those exists.
 
 ```
 clikraken ticker
@@ -200,13 +184,9 @@ clikraken last_trades -p XETHXXBT
 
 ## Upgrade
 
-In the activated virtualenv:
-
 ```
-pip install -U --no-deps clikraken
+pip install -U clikraken
 ```
-
-`--no-deps` is currently needed because trying to upgrade the dependency `krakenex` fails, because it is not available on PyPi, only as a Git repository.
 
 ## Attribution
 
@@ -215,9 +195,10 @@ See the `LICENSE` file. For the full text, see [here][corelicense].
 
 ### Dependencies
 
-* [python3-krakenex][python3-krakenex] code is licensed under the LGPLv3 license.
-* [Arrow][arrow-license] code is licensed under is licensed under the Apache License, Version 2.0.
-* [tabulate][tabulate-license] code is licensed under is licensed under the MIT Licence.
+* [python3-krakenex][python3-krakenex] is licensed under the LGPLv3 license.
+* [Arrow][arrow-license] is licensed under is licensed under the Apache License, Version 2.0.
+* [tabulate][tabulate-license] is licensed under is licensed under the MIT Licence.
+* [colorlog][colorlog-license] is licensed under is licensed under the MIT Licence.
 
 ### Development dependencies
 
@@ -227,3 +208,4 @@ See the `LICENSE` file. For the full text, see [here][corelicense].
 [python3-krakenex]: https://github.com/veox/python3-krakenex
 [arrow-license]: https://github.com/crsmithdev/arrow/blob/master/LICENSE
 [tabulate-license]: https://pypi.python.org/pypi/tabulate
+[colorlog-license]: https://github.com/borntyping/python-colorlog

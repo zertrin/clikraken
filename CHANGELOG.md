@@ -15,6 +15,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Do proper logging of info/warning/error messages.
 - Log lines will be colorized on terminal if colorlog is available (pip install colorlog).
 
+### Changed
+- Remove manual steps in the README concerning manual installation of dependencies. Now that python3-krakenex is packaged on PyPI, it is not necessary anymore.
+
 ## [0.1.9] - 2016-10-29
 
 ### Added
