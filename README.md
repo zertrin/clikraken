@@ -196,9 +196,9 @@ See the `LICENSE` file. For the full text, see [here][corelicense].
 ### Dependencies
 
 * [python3-krakenex][python3-krakenex] is licensed under the LGPLv3 license.
-* [Arrow][arrow-license] is licensed under is licensed under the Apache License, Version 2.0.
-* [tabulate][tabulate-license] is licensed under is licensed under the MIT Licence.
-* [colorlog][colorlog-license] is licensed under is licensed under the MIT Licence.
+* [Arrow][arrow-license] is licensed under the Apache License, Version 2.0.
+* [tabulate][tabulate-license] is licensed under the MIT Licence.
+* [colorlog][colorlog-license] is licensed under the MIT Licence.
 
 ### Development dependencies
 
