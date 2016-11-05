@@ -29,7 +29,8 @@ setup(
     install_requires=[
         'krakenex',
         'arrow',
-        'tabulate'
+        'tabulate',
+        'colorlog',
     ],
     classifiers=[
         "Programming Language :: Python",
