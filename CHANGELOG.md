@@ -24,10 +24,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [0.1.9] - 2016-10-29
 
 ### Added
-- New setting "traging_agreement", defaulting to "not_agree".
+- New setting "trading_agreement", defaulting to "not_agree".
 
 ### Fixed
-- Fix market orders by adding "trading_agreement = agree" in the AddOrder call.
+- Fix market orders by adding "trading_agreement" in the AddOrder call.
 
 ## [0.1.8] - 2016-10-23
 
@@ -75,7 +75,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [0.1.2] - 2016-08-20
 
-## Added
+### Added
 - Implemented user settings in a INI file ("~/.config/clikraken/settings.ini")
 - New subcommand that outputs the contents of the default settings.ini file
 
