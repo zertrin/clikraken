@@ -8,6 +8,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 - placeholder
 
+## [0.2.1] - 2016-11-20
+
+### Changed
+- Big refactoring: get rid of the monolithic clikraken.py and split the code into many smaller modules.
+- Use pypandoc.convert_file() in setup.py since pypandoc.convert() is now deprecated.
+- Add a hint on how to get help about a subcommand in the main help string.
+
 ## [0.2.0] - 2016-11-05
 
 ### Added
@@ -84,7 +91,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - API key file location moved to '~/.config/clikraken/kraken.key'
 
-[Unreleased]: https://github.com/zertrin/clikraken/compare/0.2.0...HEAD
+[Unreleased]: https://github.com/zertrin/clikraken/compare/0.2.1...HEAD
+[0.2.1]: https://github.com/zertrin/clikraken/compare/0.2.0...0.2.1
 [0.2.0]: https://github.com/zertrin/clikraken/compare/0.1.9...0.2.0
 [0.1.9]: https://github.com/zertrin/clikraken/compare/0.1.8...0.1.9
 [0.1.8]: https://github.com/zertrin/clikraken/compare/0.1.7...0.1.8
