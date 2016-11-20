@@ -18,7 +18,7 @@ except (IOError, ImportError):
 setup(
     name='clikraken',
     version=clikraken.__version__,
-    packages=['clikraken'],
+    packages=['clikraken', 'clikraken.api', 'clikraken.api.private', 'clikraken.api.public'],
     author='Marc Gallet',
     author_email='zertrin@gmail.com',
     license='Apache 2.0',
