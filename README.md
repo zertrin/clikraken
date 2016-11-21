@@ -88,7 +88,7 @@ usage: clikraken.py [-h] [-V] [--raw]
                     {generate_settings,ticker,t,depth,d,last_trades,lt,balance,bal,place,p,cancel,x,olist,ol,clist,cl}
                     ...
 
-Command line client for the Kraken exchange
+clikraken - Command line client for the Kraken exchange
 
 positional arguments:
   {generate_settings,ticker,t,depth,d,last_trades,lt,balance,bal,place,p,cancel,x,olist,ol,clist,cl}
@@ -108,10 +108,16 @@ optional arguments:
   -V, --version         show program version
   --raw                 output raw json results from the API
 
+To get help about a subcommand use: clikraken SUBCOMMAND --help
+For example:
+    clikraken place --help
+
 Current default currency pair: XETHZEUR.
+
 Create or edit the setting file /home/zertrin/.config/clikraken/settings.ini to change it.
 If the setting file doesn't exist yet, you can create one by doing:
     clikraken generate_settings > /home/zertrin/.config/clikraken/settings.ini
+
 You can also set the CLIKRAKEN_DEFAULT_PAIR environment variable
 which has precedence over the settings from the settings file.
 ```
@@ -193,14 +199,27 @@ pip install -U clikraken
 clikraken code is licensed under the Apache license, Version 2.0.
 See the `LICENSE` file. For the full text, see [here][corelicense].
 
+## Requirements
+
+Python 3.4+
+
+clikraken was developped with Python 3.4, later Python versions should be compatible but haven't been tested yet.
+
+There is no plan to support Python 2 at all and it's unlikely that Python 3.0 to 3.3 will ever be supported. Sorry!
+
 ### Dependencies
 
-* [python3-krakenex][python3-krakenex] is licensed under the LGPLv3 license.
-* [Arrow][arrow-license] is licensed under the Apache License, Version 2.0.
+The dependencies should be automatically installed when installing clikraken with pip.
+But if working in a fresh environment (for example after cloning the source code to develop), you may need to install these manually with pip.
+
+* [krakenex][python3-krakenex] is licensed under the LGPLv3 license.
+* [arrow][arrow-license] is licensed under the Apache License, Version 2.0.
 * [tabulate][tabulate-license] is licensed under the MIT Licence.
 * [colorlog][colorlog-license] is licensed under the MIT Licence.
 
 ### Development dependencies
+
+Only needed for packaging clikraken.
 
 * `pip install pypandoc twine wheel`
 
