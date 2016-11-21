@@ -28,7 +28,7 @@ def main():
     # is called, then use the function given by args.main_func
     func = args.sub_func if 'sub_func' in args else args.main_func
 
-    if func is not None:
+    if callable(func):
         func(args)
 
 
