@@ -14,11 +14,13 @@ import os
 DEFAULT_KRAKEN_API_KEYFILE = os.path.expanduser('~/.config/clikraken/kraken.key')
 # If the environment variable is set, override the default value
 KRAKEN_API_KEYFILE = os.getenv('CLIKRAKEN_API_KEYFILE', DEFAULT_KRAKEN_API_KEYFILE)
+KRAKEN_API_KEYFILE = os.path.normpath(KRAKEN_API_KEYFILE)
 
 # Resolve userpath to an absolute path
 DEFAULT_USER_SETTINGS_PATH = os.path.expanduser('~/.config/clikraken/settings.ini')
 # If the environment variable is set, override the default value
 USER_SETTINGS_PATH = os.getenv('CLIKRAKEN_USER_SETTINGS_PATH', DEFAULT_USER_SETTINGS_PATH)
+USER_SETTINGS_PATH = os.path.normpath(USER_SETTINGS_PATH)
 
 # Default settings
 DEFAULT_SETTINGS_INI = """[clikraken]
