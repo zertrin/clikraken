@@ -48,19 +48,34 @@ def query_api(api_type, *args):
         'public': gv.KRAKEN_API.query_public,
         'private': gv.KRAKEN_API.query_private
     }
+    # select the appropriate method depending on the api_type string
     func = api_func.get(api_type)
 
     if func is not None:
         try:
             # call to the krakenex API
-            res = api_func[api_type](*args)
-        except (socket.timeout, socket.error, ValueError) as e:
-            logger.error('Error while querying API!')
-            logger.error(repr(e))
+            res = func(*args)
+        except (socket.timeout, socket.error, ConnectionResetError, TimeoutError) as e:
+            # if cron mode is active, tone down timeout errors in order to not raise too many
+            # cron emails when Kraken is temporarily not available
+            if gv.CRON:
+                log = logger.info
+            else:
+                log = logger.error
+            log('Error while querying Kraken API!')
+            log(repr(e))
+        except Exception:
+            logger.exception('Exception while querying Kraken API!')
 
     err = res.get('error', [])
     for e in err:
-        logger.error('{}'.format(e))
+        # if cron mode is active, tone down some Kraken errors in order to not raise too many
+        # cron emails when Kraken is temporarily not available
+        if gv.CRON and e in ['EService:Unavailable']:
+            log = logger.info
+        else:
+            log = logger.error
+        log('{}'.format(e))
 
     return res
 

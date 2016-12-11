@@ -70,6 +70,8 @@ def parse_args():
     parser.add_argument('-V', '--version', action='store_const', const=ck_utils.version, dest='main_func',
                         help='show program version')
     parser.add_argument('--raw', action='store_true', help='output raw json results from the API')
+    parser.add_argument('--cron', action='store_true',
+                        help='activate cron mode (tone down errors due to timeouts or unavailable Kraken service)')
     parser.set_defaults(main_func=None)
 
     subparsers = parser.add_subparsers(dest='subparser_name', help='available subcommands')
@@ -176,10 +178,14 @@ def parse_args():
 
     args = parser.parse_args()
 
-    # hack to work around Python bug #9351 https://bugs.python.org/issue9351
+    # make sure that either sub_func or main_func is defined
+    # otherwise just print usage and exit
+    # (this weird construction is a hack to work around Python bug #9351 https://bugs.python.org/issue9351)
     if all([vars(args).get(f, None) is None
             for f in ['sub_func', 'main_func']]):
         parser.print_usage()
         sys.exit(0)
+
+    gv.CRON = args.cron
 
     return args

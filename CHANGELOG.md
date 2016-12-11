@@ -6,7 +6,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
-- placeholder
+### Added
+- Add a `--cron` option that downgrades errors related to the communication with Kraken's API (for example TimeoutError or ConnectionResetError) from ERROR to INFO level. Together with the changed described below, this means that those errors are not sent to stdout instead of stderr when cron mode is active.
+
+### Changed
+- Logging now sends DEBUG to INFO messages to stdout, and WARNING and above to stderr (previously all was sent to stderr).
+- If available, call `win_unicode_console.enable()` to fix issues with unicode characters in Windows console.
 
 ## [0.2.1] - 2016-11-20
 

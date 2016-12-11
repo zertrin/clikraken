@@ -6,7 +6,9 @@ This command line client allows you to get useful public and private information
 from Kraken's API and displays it in formatted tables.
 
 Moreover you can place or cancel simple orders
-(only buy/sell market/limit is currently implemented).
+(only simple buy/sell market/limit orders are currently implemented).
+
+It is mainly oriented as an alternative to manually entering orders on Kraken's webpages, to save some time and eliminate mouse clicks. It is not optimized for automated use.
 
 See package on PyPI: https://pypi.python.org/pypi/clikraken
 
@@ -107,6 +109,8 @@ optional arguments:
   -h, --help            show this help message and exit
   -V, --version         show program version
   --raw                 output raw json results from the API
+  --cron                activate cron mode (tone down errors due to timeouts
+                        or unavailable Kraken service)
 
 To get help about a subcommand use: clikraken SUBCOMMAND --help
 For example:
@@ -203,9 +207,11 @@ See the `LICENSE` file. For the full text, see [here][corelicense].
 
 Python 3.4+
 
-clikraken was developped with Python 3.4, later Python versions should be compatible but haven't been tested yet.
+clikraken was developped and tested with Python 3.4, later Python versions should be compatible but haven't been tested yet.
 
 There is no plan to support Python 2 at all and it's unlikely that Python 3.0 to 3.3 will ever be supported. Sorry!
+
+clikraken has been tested on Linux (Debian Jessie) and Windows 7. I guess it should work with other systems but your mileage may vary.
 
 ### Dependencies
 

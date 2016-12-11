@@ -41,3 +41,4 @@ KRAKEN_API = None
 DEFAULT_PAIR = None
 TZ = None
 TRADING_AGREEMENT = None
+CRON = None
