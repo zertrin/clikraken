@@ -10,10 +10,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [0.2.2] - 2016-12-11
 ### Added
-- Add a `--cron` option that downgrades errors related to the communication with Kraken's API (for example TimeoutError or ConnectionResetError) from ERROR to INFO level. Together with the changed described below, this means that those errors are not sent to stdout instead of stderr when cron mode is active.
+- Add a `--cron` option that downgrades errors related to the communication with Kraken's API (for example TimeoutError or ConnectionResetError) from ERROR to INFO level. Together with the change described below, this means that those errors are now sent to stdout instead of stderr when cron mode is active. So you can use the new option together with `1>/dev/null` in a cron script and avoid being spammed when Kraken is not available.
 
 ### Changed
-- Logging now sends DEBUG to INFO messages to stdout, and WARNING and above to stderr (previously all was sent to stderr).
+- Logging now sends DEBUG and INFO messages to stdout, and WARNING and above to stderr (previously all was sent to stderr).
 - If available, call `win_unicode_console.enable()` to fix issues with unicode characters in Windows console.
 
 ## [0.2.1] - 2016-11-20
