@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+- placeholder
+
+## [0.2.2] - 2016-12-11
 ### Added
 - Add a `--cron` option that downgrades errors related to the communication with Kraken's API (for example TimeoutError or ConnectionResetError) from ERROR to INFO level. Together with the changed described below, this means that those errors are not sent to stdout instead of stderr when cron mode is active.
 
@@ -96,7 +99,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - API key file location moved to '~/.config/clikraken/kraken.key'
 
-[Unreleased]: https://github.com/zertrin/clikraken/compare/0.2.1...HEAD
+[Unreleased]: https://github.com/zertrin/clikraken/compare/0.2.2...HEAD
+[0.2.2]: https://github.com/zertrin/clikraken/compare/0.2.1...0.2.2
 [0.2.1]: https://github.com/zertrin/clikraken/compare/0.2.0...0.2.1
 [0.2.0]: https://github.com/zertrin/clikraken/compare/0.1.9...0.2.0
 [0.1.9]: https://github.com/zertrin/clikraken/compare/0.1.8...0.1.9
