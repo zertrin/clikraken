@@ -55,15 +55,20 @@ def query_api(api_type, *args):
         try:
             # call to the krakenex API
             res = func(*args)
-        except (socket.timeout, socket.error, ConnectionResetError, TimeoutError) as e:
+        except (socket.timeout, socket.error, ConnectionError, TimeoutError) as e:
             # if cron mode is active, tone down timeout errors in order to not raise too many
             # cron emails when Kraken is temporarily not available
             if gv.CRON:
                 log = logger.info
             else:
                 log = logger.error
-            log('Error while querying Kraken API!')
+            log('Network error while querying Kraken API!')
             log(repr(e))
+        except ValueError:
+            if gv.CRON:
+                pass
+            else:
+                logger.exception('ValueError while querying Kraken API!')
         except Exception:
             logger.exception('Exception while querying Kraken API!')
 
