@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 - placeholder
 
+## [0.2.4] - 2017-02-13
+### Changed
+- Catch http.client.BadStatusLine while querying Kraken's API and silence it while in cron mode.
+
 ## [0.2.3] - 2016-12-29
 ### Changed
 - Catch ValueError while querying Kraken's API and silence it while in cron mode.
@@ -103,7 +107,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - API key file location moved to '~/.config/clikraken/kraken.key'
 
-[Unreleased]: https://github.com/zertrin/clikraken/compare/0.2.3...HEAD
+[Unreleased]: https://github.com/zertrin/clikraken/compare/0.2.4...HEAD
+[0.2.4]: https://github.com/zertrin/clikraken/compare/0.2.3...0.2.4
 [0.2.3]: https://github.com/zertrin/clikraken/compare/0.2.2...0.2.3
 [0.2.2]: https://github.com/zertrin/clikraken/compare/0.2.1...0.2.2
 [0.2.1]: https://github.com/zertrin/clikraken/compare/0.2.0...0.2.1
