@@ -9,6 +9,7 @@ with or processing data from Kraken's API.
 Licensed under the Apache License, Version 2.0. See the LICENCE file.
 """
 
+import http
 import socket
 from collections import OrderedDict
 
@@ -55,9 +56,9 @@ def query_api(api_type, *args):
         try:
             # call to the krakenex API
             res = func(*args)
-        except (socket.timeout, socket.error, ConnectionError, TimeoutError) as e:
-            # if cron mode is active, tone down timeout errors in order to not raise too many
-            # cron emails when Kraken is temporarily not available
+        except (socket.timeout, socket.error, http.client.BadStatusLine) as e:
+            # if cron mode is active, tone down some connection related errors in order to
+            # not raise too many cron emails when Kraken is temporarily not available
             if gv.CRON:
                 log = logger.info
             else:
