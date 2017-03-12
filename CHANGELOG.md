@@ -6,7 +6,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
-- placeholder
+### Changed
+- Silence 'EAPI:Invalid nonce' errors while in cron mode
 
 ## [0.2.4] - 2017-02-13
 ### Changed

@@ -76,8 +76,8 @@ def query_api(api_type, *args):
     err = res.get('error', [])
     for e in err:
         # if cron mode is active, tone down some Kraken errors in order to not raise too many
-        # cron emails when Kraken is temporarily not available
-        if gv.CRON and e in ['EService:Unavailable']:
+        # cron emails when Kraken is temporarily not available, or for invalid nonces.
+        if gv.CRON and e in ['EService:Unavailable', 'EAPI:Invalid nonce']:
             log = logger.info
         else:
             log = logger.error
