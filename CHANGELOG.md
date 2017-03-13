@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 - placeholder
 
+## [0.3.0] - 2017-03-13
+### Changed
+- Include timezone in timestamp outputs.
+
 ## [0.2.5] - 2017-03-13
 ### Changed
 - Silence 'EAPI:Invalid nonce' errors while in cron mode
@@ -111,7 +115,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - API key file location moved to '~/.config/clikraken/kraken.key'
 
-[Unreleased]: https://github.com/zertrin/clikraken/compare/0.2.5...HEAD
+[Unreleased]: https://github.com/zertrin/clikraken/compare/0.3.0...HEAD
+[0.3.0]: https://github.com/zertrin/clikraken/compare/0.2.5...0.3.0
 [0.2.5]: https://github.com/zertrin/clikraken/compare/0.2.4...0.2.5
 [0.2.4]: https://github.com/zertrin/clikraken/compare/0.2.3...0.2.4
 [0.2.3]: https://github.com/zertrin/clikraken/compare/0.2.2...0.2.3
