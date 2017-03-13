@@ -52,7 +52,7 @@ def humanize_timestamp(ts):
 
 def format_timestamp(ts):
     """Format a UNIX timestamp to truncated ISO8601 format."""
-    return arrow.get(ts).to(gv.TZ).replace(microsecond=0).format('YYYY-MM-DD HH:mm:ss')
+    return arrow.get(ts).to(gv.TZ).replace(microsecond=0).format('YYYY-MM-DD HH:mm:ssZZ')
 
 
 def print_results(res):
