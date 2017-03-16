@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
-- placeholder
+- Allow 'cancel' subcommand to take many order IDs
 
 ## [0.3.0] - 2017-03-13
 ### Changed

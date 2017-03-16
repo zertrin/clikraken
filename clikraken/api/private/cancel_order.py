@@ -17,23 +17,24 @@ from clikraken.log_utils import logger
 def cancel_order(args):
     """Cancel an open order."""
 
-    # Parameters to pass to the API
-    params = {
-        'txid': args.order_id,
-    }
+    for order_id in args.order_ids:
+        # Parameters to pass to the API
+        params = {
+            'txid': order_id,
+        }
 
-    res = query_api('private', 'CancelOrder', params)
-    if args.raw:
-        print_results(res)
+        res = query_api('private', 'CancelOrder', params)
+        if args.raw:
+            print_results(res)
 
-    res = res.get('result')
-    if not res:
-        return
+        res = res.get('result')
+        if not res:
+            continue
 
-    count = res.get('count')
-    pending = res.get('pending')
+        count = res.get('count')
+        pending = res.get('pending')
 
-    if count:
-        print('count: {}'.format(count))
-    if pending:
-        logger.info('order(s) is/are pending cancellation!')
+        if count:
+            print('{} - count: {}'.format(order_id, count))
+        if pending:
+            logger.info('{} - order(s) is/are pending cancellation!'.format(order_id))

@@ -153,9 +153,9 @@ def parse_args():
     parser_cancel = subparsers.add_parser(
         'cancel',
         aliases=['x'],
-        help='[private] Cancel an order',
+        help='[private] Cancel orders',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser_cancel.add_argument('order_id', type=str, help="transaction id")
+    parser_cancel.add_argument('order_ids', type=str, nargs='+', help="transaction ids")
     parser_cancel.set_defaults(sub_func=cancel_order)
 
     # List of open orders
