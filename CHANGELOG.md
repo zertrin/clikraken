@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
-- placeholder
+- Loosen the check on the API keyfile. Allow public API queries even if no keyfile is available.
 
 ## [0.3.1] - 2017-03-16
 - Allow 'cancel' subcommand to take many order IDs

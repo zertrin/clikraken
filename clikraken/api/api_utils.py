@@ -25,14 +25,19 @@ def load_api_keyfile():
     """Load the Kraken API keyfile"""
 
     if not os.path.exists(gv.KRAKEN_API_KEYFILE):
-        logger.error("The API keyfile {} was not found! Aborting...".format(gv.KRAKEN_API_KEYFILE))
-        exit(2)
+        logger.warning("The API keyfile {} was not found!".format(gv.KRAKEN_API_KEYFILE))
+        gv.API_KEY_LOADED = False
 
     # Instanciate the krakenex module to communicate with Kraken's API
     gv.KRAKEN_API = krakenex.API()
 
-    # Load the API key of the user
-    gv.KRAKEN_API.load_key(gv.KRAKEN_API_KEYFILE)
+    if gv.API_KEY_LOADED is None:
+        # Load the API key of the user
+        gv.KRAKEN_API.load_key(gv.KRAKEN_API_KEYFILE)
+        if gv.KRAKEN_API.key and gv.KRAKEN_API.secret:
+            gv.API_KEY_LOADED = True
+        else:
+            gv.API_KEY_LOADED = False
 
 
 def query_api(api_type, *args):
@@ -40,6 +45,11 @@ def query_api(api_type, *args):
     Wrapper to query Kraken's API through krakenex
     and handle connection errors.
     """
+
+    # Abort here if the API key isn't available and we are trying to query the private API
+    if api_type == 'private' and not gv.API_KEY_LOADED:
+        logger.critical('The API key must be set for private API queries! Aborting...')
+        exit(2)
 
     # default to empty dict because that's the expected return type
     res = {}
