@@ -10,7 +10,6 @@ Licensed under the Apache License, Version 2.0. See the LICENCE file.
 """
 
 from clikraken.api.api_utils import query_api
-from clikraken.clikraken_utils import print_results
 from clikraken.log_utils import logger
 
 
@@ -19,17 +18,11 @@ def cancel_order(args):
 
     for order_id in args.order_ids:
         # Parameters to pass to the API
-        params = {
+        api_params = {
             'txid': order_id,
         }
 
-        res = query_api('private', 'CancelOrder', params)
-        if args.raw:
-            print_results(res)
-
-        res = res.get('result')
-        if not res:
-            continue
+        res = query_api('private', 'CancelOrder', api_params, args)
 
         count = res.get('count')
         pending = res.get('pending')

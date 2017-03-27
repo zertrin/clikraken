@@ -15,26 +15,19 @@ from decimal import Decimal
 from tabulate import tabulate
 
 from clikraken.api.api_utils import query_api
-from clikraken.clikraken_utils import asset_pair_short, print_results, humanize_timestamp
+from clikraken.clikraken_utils import asset_pair_short, humanize_timestamp
 
 
 def depth(args):
     """Get market depth information."""
 
     # Parameters to pass to the API
-    params = {
+    api_params = {
         'pair': args.pair,
         'count': args.count
     }
 
-    res = query_api('public', 'Depth', params)
-
-    if args.raw:
-        print_results(res)
-
-    res = res.get('result')
-    if not res:
-        return
+    res = query_api('public', 'Depth', api_params, args)
 
     depth_dict = {'asks': [], 'bids': []}
     depth_label = {'asks': "Ask", 'bids': "Bid"}

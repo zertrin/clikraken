@@ -15,24 +15,18 @@ from decimal import Decimal
 from tabulate import tabulate
 
 from clikraken.api.api_utils import query_api
-from clikraken.clikraken_utils import asset_pair_short, print_results
+from clikraken.clikraken_utils import asset_pair_short
 
 
 def ticker(args):
     """Get currency ticker information."""
 
     # Parameters to pass to the API
-    params = {
+    api_params = {
         'pair': args.pair,
     }
 
-    res = query_api('public', 'Ticker', params)
-    if args.raw:
-        print_results(res)
-
-    res = res.get('result')
-    if not res:
-        return
+    res = query_api('public', 'Ticker', api_params, args)
 
     # the list will contain one OrderedDict containing
     # the parser ticker info per asset pair

@@ -12,7 +12,7 @@ Licensed under the Apache License, Version 2.0. See the LICENCE file.
 import clikraken.global_vars as gv
 
 from clikraken.api.api_utils import query_api
-from clikraken.clikraken_utils import print_results, check_trading_agreement
+from clikraken.clikraken_utils import check_trading_agreement
 from clikraken.log_utils import logger
 
 
@@ -20,7 +20,7 @@ def place_order(args):
     """Place an order."""
 
     # Parameters to pass to the API
-    params = {
+    api_params = {
         'pair': args.pair,
         'type': args.type,
         'ordertype': args.ordertype,
@@ -30,14 +30,14 @@ def place_order(args):
     }
 
     if gv.TRADING_AGREEMENT == 'agree':
-        params['trading_agreement'] = 'agree'
+        api_params['trading_agreement'] = 'agree'
 
     if args.ordertype == 'limit':
         if args.price is None:
             logger.error('For limit orders, the price must be given!')
             return
         else:
-            params['price'] = args.price
+            api_params['price'] = args.price
     elif args.ordertype == 'market':
         if args.price is not None:
             logger.warn('price is ignored for market orders!')
@@ -50,18 +50,12 @@ def place_order(args):
     if args.viqc:
         oflags.append('viqc')
     if oflags:
-        params['oflags'] = ','.join(oflags)
+        api_params['oflags'] = ','.join(oflags)
 
     if args.validate:
-        params['validate'] = 'true'
+        api_params['validate'] = 'true'
 
-    res = query_api('private', 'AddOrder', params)
-    if args.raw:
-        print_results(res)
-
-    res = res.get('result')
-    if not res:
-        return
+    res = query_api('private', 'AddOrder', api_params, args)
 
     descr = res.get('descr')
     odesc = descr.get('order', 'No description available!')

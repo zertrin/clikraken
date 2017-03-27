@@ -14,24 +14,18 @@ from decimal import Decimal
 from tabulate import tabulate
 
 from clikraken.api.api_utils import parse_order_res, query_api
-from clikraken.clikraken_utils import asset_pair_short, print_results
+from clikraken.clikraken_utils import asset_pair_short
 
 
 def list_closed_orders(args):
     """List closed orders."""
 
     # Parameters to pass to the API
-    params = {
+    api_params = {
         # TODO
     }
 
-    res = query_api('private', 'ClosedOrders', params)
-    if args.raw:
-        print_results(res)
-
-    res = res.get('result')
-    if not res:
-        return
+    res = query_api('private', 'ClosedOrders', api_params, args)
 
     # extract list of orders from API results
     res_ol = res['closed']

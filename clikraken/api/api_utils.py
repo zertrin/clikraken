@@ -17,7 +17,7 @@ import krakenex
 import os
 
 import clikraken.global_vars as gv
-from clikraken.clikraken_utils import format_timestamp
+from clikraken.clikraken_utils import format_timestamp, print_results
 from clikraken.log_utils import logger
 
 
@@ -40,7 +40,7 @@ def load_api_keyfile():
             gv.API_KEY_LOADED = False
 
 
-def query_api(api_type, *args):
+def query_api(api_type, api_method, api_params, args):
     """
     Wrapper to query Kraken's API through krakenex
     and handle connection errors.
@@ -65,7 +65,7 @@ def query_api(api_type, *args):
     if func is not None:
         try:
             # call to the krakenex API
-            res = func(*args)
+            res = func(api_method, api_params)
         except (socket.timeout, socket.error, http.client.BadStatusLine) as e:
             # if cron mode is active, tone down some connection related errors in order to
             # not raise too many cron emails when Kraken is temporarily not available
@@ -92,6 +92,14 @@ def query_api(api_type, *args):
         else:
             log = logger.error
         log('{}'.format(e))
+
+    if args.raw:
+        print_results(res)
+        exit(0)
+
+    res = res.get('result')
+    if not res:
+        exit(0)
 
     return res
 

@@ -14,7 +14,7 @@ from collections import OrderedDict
 from tabulate import tabulate
 
 from clikraken.api.api_utils import query_api
-from clikraken.clikraken_utils import print_results, humanize_timestamp, quote_currency_from_asset_pair
+from clikraken.clikraken_utils import humanize_timestamp, quote_currency_from_asset_pair
 
 
 def last_trades(args):
@@ -23,19 +23,13 @@ def last_trades(args):
     quote_currency = quote_currency_from_asset_pair(args.pair)
 
     # Parameters to pass to the API
-    params = {
+    api_params = {
         'pair': args.pair,
     }
     if args.since:
-        params['since'] = args.since
+        api_params['since'] = args.since
 
-    res = query_api('public', 'Trades', params)
-    if args.raw:
-        print_results(res)
-
-    res = res.get('result')
-    if not res:
-        return
+    res = query_api('public', 'Trades', api_params, args)
 
     results = res[args.pair]
     last_id = res['last']

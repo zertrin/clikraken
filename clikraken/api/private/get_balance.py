@@ -14,22 +14,15 @@ from collections import OrderedDict
 from tabulate import tabulate
 
 from clikraken.api.api_utils import query_api
-from clikraken.clikraken_utils import print_results
 
 
 def get_balance(args=None):
     """Get user balance."""
 
     # Parameters to pass to the API
-    params = {}
+    api_params = {}
 
-    res = query_api('private', 'Balance', params)
-    if args.raw:
-        print_results(res)
-
-    res = res.get('result')
-    if not res:
-        return
+    res = query_api('private', 'Balance', api_params, args)
 
     bal_list = []
     for asset in res:
