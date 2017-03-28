@@ -28,3 +28,7 @@ before_cache:
 cache:
   directories:
     - $HOME/.cache/pip
+notifications:
+  email:
+    on_success: never
+    on_failure: always
