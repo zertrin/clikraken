@@ -1,12 +1,13 @@
 language: python
-python: '3.6'
+python:
+  - '3.4'
+  - '3.5'
+  - '3.6'
+matrix:
+  include:
+    - python: '3.6'
+      env: TOXENV=flake8
 sudo: false
-env:
-  matrix:
-    - TOXENV=flake8
-    - TOXENV=py34
-    - TOXENV=py35
-    - TOXENV=py36
 
 before_install:
   - uname -a
@@ -16,11 +17,11 @@ before_install:
   - easy_install --version
   - pip --version
 install:
-  - pip install tox
+  - pip install tox-travis
   - tox --version
   - python setup.py develop
 script:
-  - tox -v
+    - tox -v
 after_failure:
   - more .tox/log/* | cat
   - more .tox/*/log/* | cat
