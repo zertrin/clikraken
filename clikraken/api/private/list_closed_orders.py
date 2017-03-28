@@ -37,9 +37,9 @@ def list_closed_orders(args):
     ol = ol['buy'] + ol['sell']
 
     # filter out orders with zero volume executed
-    ol = [odict for odict in ol
-          if Decimal(odict['vol_exec']) > 0
-          and (odict['pair'] == asset_pair_short(args.pair) or args.pair == 'all')]
+    ol = [odict for odict in ol if Decimal(odict['vol_exec']) > 0]
+    if 'pair' in args and args.pair:
+        ol = [odict for odict in ol if odict['pair'] == args.pair or odict['pair'] == asset_pair_short(args.pair)]
 
     if not ol:
         return

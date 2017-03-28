@@ -164,7 +164,7 @@ def parse_args():
         aliases=['ol'],
         help='[private] Get a list of your open orders',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser_olist.add_argument('-p', '--pair', default=gv.DEFAULT_PAIR, help=pair_help)
+    parser_olist.add_argument('-p', '--pair', default=None, help=pair_help)
     parser_olist.set_defaults(sub_func=list_open_orders)
 
     # List of closed orders
@@ -173,7 +173,7 @@ def parse_args():
         aliases=['cl'],
         help='[private] Get a list of your closed orders',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser_clist.add_argument('-p', '--pair', default=gv.DEFAULT_PAIR, help=pair_help)
+    parser_clist.add_argument('-p', '--pair', default=None, help=pair_help)
     parser_clist.set_defaults(sub_func=list_closed_orders)
 
     args = parser.parse_args()
