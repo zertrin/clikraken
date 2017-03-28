@@ -38,7 +38,7 @@ def list_open_orders(args):
         # filter orders based on currency pair
         if 'pair' in args and args.pair:
             ol[otype] = [odict for odict in ol[otype]
-                         if (odict['pair'] == asset_pair_short(args.pair) or args.pair == 'all')]
+                         if (odict['pair'] in [args.pair, asset_pair_short(args.pair)] or args.pair == 'all')]
         # sort orders by price
         ol[otype] = sorted(ol[otype], key=lambda odict: Decimal(odict['price']))
 
