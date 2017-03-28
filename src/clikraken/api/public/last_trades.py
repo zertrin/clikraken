@@ -68,7 +68,7 @@ def last_trades(args):
     last_sell = sell_trades[0]
     last_buy = buy_trades[0]
     lt = [
-        ["", "Price ("+quote_currency+")", "Volume", "Age"],
+        ["", "Price (" + quote_currency + ")", "Volume", "Age"],
         ["Last Sell", last_sell["Price"], last_sell["Volume"], last_sell["Age"]],
         ["Last Buy", last_buy["Price"], last_buy["Volume"], last_buy["Age"]],
     ]
