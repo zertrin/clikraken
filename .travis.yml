@@ -9,15 +9,16 @@ env:
     - TOXENV=py36
 
 before_install:
-  - python --version
   - uname -a
   - lsb_release -a
-install:
-  - pip install tox
+  - python --version
   - virtualenv --version
   - easy_install --version
   - pip --version
+install:
+  - pip install tox
   - tox --version
+  - python setup.py develop
 script:
   - tox -v
 after_failure:
@@ -31,4 +32,4 @@ cache:
 notifications:
   email:
     on_success: never
-    on_failure: always
+    on_failure: never
