@@ -1,0 +1,30 @@
+language: python
+python: '3.6'
+sudo: false
+env:
+  matrix:
+    - TOXENV=flake8
+    - TOXENV=py34
+    - TOXENV=py35
+    - TOXENV=py36
+
+before_install:
+  - python --version
+  - uname -a
+  - lsb_release -a
+install:
+  - pip install tox
+  - virtualenv --version
+  - easy_install --version
+  - pip --version
+  - tox --version
+script:
+  - tox -v
+after_failure:
+  - more .tox/log/* | cat
+  - more .tox/*/log/* | cat
+before_cache:
+  - rm -rf $HOME/.cache/pip/log
+cache:
+  directories:
+    - $HOME/.cache/pip

@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from setuptools import setup
+from setuptools import setup, find_packages
 
-import clikraken
+import src.clikraken as clikraken
 
-# I really prefer Markdown to reStructuredText.  PyPi does not.  This allows me
+# I really prefer Markdown to reStructuredText. PyPi does not. This allows me
 # to have things how I'd like, but not throw complaints when people are trying
 # to install the package and they don't have pypandoc or the README in the
 # right place.
@@ -18,7 +18,8 @@ except (IOError, ImportError):
 setup(
     name='clikraken',
     version=clikraken.__version__,
-    packages=['clikraken', 'clikraken.api', 'clikraken.api.private', 'clikraken.api.public'],
+    packages=find_packages('src'),
+    package_dir={'': 'src'},
     author='Marc Gallet',
     author_email='zertrin@gmail.com',
     license='Apache 2.0',
@@ -27,7 +28,7 @@ setup(
     include_package_data=True,
     url='https://github.com/zertrin/clikraken',
     install_requires=[
-        'krakenex',
+        'krakenex>=0.1,<1.0',
         'arrow',
         'tabulate',
         'colorlog',
