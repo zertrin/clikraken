@@ -30,7 +30,3 @@ def main():
 
     if callable(func):
         func(args)
-
-
-if __name__ == "__main__":
-    main()
