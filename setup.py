@@ -3,8 +3,6 @@
 
 from setuptools import setup, find_packages
 
-import src.clikraken as clikraken
-
 # I really prefer Markdown to reStructuredText. PyPi does not. This allows me
 # to have things how I'd like, but not throw complaints when people are trying
 # to install the package and they don't have pypandoc or the README in the
@@ -15,18 +13,23 @@ try:
 except (IOError, ImportError):
     long_description = open('README.md').read()
 
+about = {}
+with open('src/clikraken/__about__.py') as f:
+    exec(f.read(), about)
+# now we have a about['__version__'] variable
+
 setup(
-    name='clikraken',
-    version=clikraken.__version__,
+    name=about['__title__'],
+    version=about['__version__'],
     packages=find_packages('src'),
     package_dir={'': 'src'},
-    author='Marc Gallet',
-    author_email='zertrin@gmail.com',
-    license='Apache 2.0',
-    description='Command-line client for the Kraken exchange',
+    author=about['__author__'],
+    author_email=about['__email__'],
+    license=about['__license__'],
+    description=about['__summary__'],
     long_description=long_description,
     include_package_data=True,
-    url='https://github.com/zertrin/clikraken',
+    url=about['__url__'],
     install_requires=[
         'krakenex>=0.1,<1.0',
         'arrow',
@@ -35,7 +38,7 @@ setup(
     ],
     classifiers=[
         "Programming Language :: Python",
-        "Development Status :: 3 - Alpha",
+        "Development Status :: 4 - Beta",
         "License :: OSI Approved :: Apache Software License",
         "Operating System :: OS Independent",
         "Programming Language :: Python :: 3",
