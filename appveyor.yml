@@ -2,44 +2,33 @@ version: '{branch}-{build}'
 build: off
 cache:
   - '%LOCALAPPDATA%\pip\Cache'
-matrix:
-  fast_finish: true
 environment:
   matrix:
-    - TOXPYTHON: C:\Python34\python.exe
-      PYTHON_HOME: C:\Python34
+    - PYTHON_HOME: C:\Python34
       PYTHON_VERSION: '3.4'
       PYTHON_ARCH: '32'
-    - TOXPYTHON: C:\Python34-x64\python.exe
-      WINDOWS_SDK_VERSION: v7.1
+    - WINDOWS_SDK_VERSION: v7.1
       PYTHON_HOME: C:\Python34-x64
       PYTHON_VERSION: '3.4'
       PYTHON_ARCH: '64'
-    - TOXPYTHON: C:\Python35\python.exe
-      PYTHON_HOME: C:\Python35
+    - PYTHON_HOME: C:\Python35
       PYTHON_VERSION: '3.5'
       PYTHON_ARCH: '32'
-    - TOXPYTHON: C:\Python35-x64\python.exe
-      PYTHON_HOME: C:\Python35-x64
+    - PYTHON_HOME: C:\Python35-x64
       PYTHON_VERSION: '3.5'
       PYTHON_ARCH: '64'
-    - TOXPYTHON: C:\Python36\python.exe
-      PYTHON_HOME: C:\Python36
+    - PYTHON_HOME: C:\Python36
       PYTHON_VERSION: '3.6'
       PYTHON_ARCH: '32'
-    - TOXPYTHON: C:\Python36-x64\python.exe
-      PYTHON_HOME: C:\Python36-x64
+    - PYTHON_HOME: C:\Python36-x64
       PYTHON_VERSION: '3.6'
       PYTHON_ARCH: '64'
-    - TOXPYTHON: C:\Python36-x64\python.exe
-      PYTHON_HOME: C:\Python36-x64
+    - PYTHON_HOME: C:\Python36-x64
       PYTHON_VERSION: '3.6'
       PYTHON_ARCH: '64'
 init:
   - ps: ls C:\Python*
   - set PATH=%PYTHON_HOME%;%PYTHON_HOME%\Scripts;%PATH%
-  - set CRAMSHELL=bash
-  - git config --global core.autocrlf true
 install:
   - '%PYTHON_HOME%\python -m pip install -U pip setuptools virtualenv'
   - '%PYTHON_HOME%\Scripts\virtualenv --version'
@@ -48,9 +37,7 @@ install:
   - '%PYTHON_HOME%\Scripts\pip install -r requirements_dev.txt'
   - '%PYTHON_HOME%\python setup.py install'
   - ps: ls $env:PYTHON_HOME\Scripts
+before_test:
+  - ps: dir "env:"
 test_script:
   - py.test
-
-### To enable remote debugging uncomment this (also, see: http://www.appveyor.com/docs/how-to/rdp-to-build-worker):
-# on_finish:
-#   - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
