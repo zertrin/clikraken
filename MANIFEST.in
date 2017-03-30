@@ -1,0 +1,22 @@
+include CHANGELOG.md
+include LICENSE
+include MANIFEST.in
+include README.md
+include requirements_dev.txt
+include setup.cfg
+include setup.py
+include tox.ini
+
+recursive-include tests *
+
+prune .cache
+prune .tox
+prune build
+prune dist
+prune dist_archive
+
+global-exclude __pycache__
+global-exclude .coverage
+global-exclude  *.py[co]
+global-exclude  *.db
+global-exclude .git*

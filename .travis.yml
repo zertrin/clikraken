@@ -19,9 +19,8 @@ before_install:
 install:
   - pip install tox-travis
   - tox --version
-  - python setup.py develop
 script:
-    - tox -v
+  - tox --recreate -v
 after_failure:
   - more .tox/log/* | cat
   - more .tox/*/log/* | cat
