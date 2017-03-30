@@ -5,7 +5,7 @@ clikraken.global_vars
 
 This module serves as a container for global variables.
 
-Licensed under the Apache License, Version 2.0. See the LICENCE file.
+Licensed under the Apache License, Version 2.0. See the LICENSE file.
 """
 
 import os

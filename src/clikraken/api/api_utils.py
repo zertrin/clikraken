@@ -6,7 +6,7 @@ clikraken.api.api_utils
 This module contains various functions related to interacting
 with or processing data from Kraken's API.
 
-Licensed under the Apache License, Version 2.0. See the LICENCE file.
+Licensed under the Apache License, Version 2.0. See the LICENSE file.
 """
 
 import http

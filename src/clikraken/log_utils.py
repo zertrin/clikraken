@@ -5,7 +5,7 @@ clikraken.log_utils
 
 This module sets the logger object up for use throughout clikraken's modules.
 
-Licensed under the Apache License, Version 2.0. See the LICENCE file.
+Licensed under the Apache License, Version 2.0. See the LICENSE file.
 """
 
 import logging

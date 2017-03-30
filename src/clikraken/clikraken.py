@@ -6,7 +6,7 @@ clikraken
 
 Command line client for the Kraken exchange
 
-Licensed under the Apache License, Version 2.0. See the LICENCE file.
+Licensed under the Apache License, Version 2.0. See the LICENSE file.
 """
 
 from clikraken.api.api_utils import load_api_keyfile

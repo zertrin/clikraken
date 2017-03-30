@@ -7,7 +7,7 @@ This module handles the parsing of the command line arguments
 and associates the different subcommands with the corresponding
 function to be called.
 
-Licensed under the Apache License, Version 2.0. See the LICENCE file.
+Licensed under the Apache License, Version 2.0. See the LICENSE file.
 """
 
 import argparse

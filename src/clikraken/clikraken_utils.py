@@ -6,7 +6,7 @@ clikraken.clikraken_utils
 This module contains various functions that are used throughout
 clikraken's modules.
 
-Licensed under the Apache License, Version 2.0. See the LICENCE file.
+Licensed under the Apache License, Version 2.0. See the LICENSE file.
 """
 
 import arrow

@@ -6,7 +6,7 @@ clikraken.api.private.cancel_order
 This module queries the CancelOrder method of Kraken's API
 and outputs the results in a tabular format.
 
-Licensed under the Apache License, Version 2.0. See the LICENCE file.
+Licensed under the Apache License, Version 2.0. See the LICENSE file.
 """
 
 from clikraken.api.api_utils import query_api

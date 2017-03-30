@@ -220,8 +220,8 @@ But if working in a fresh environment (for example after cloning the source code
 
 * [krakenex][python3-krakenex] is licensed under the LGPLv3 license.
 * [arrow][arrow-license] is licensed under the Apache License, Version 2.0.
-* [tabulate][tabulate-license] is licensed under the MIT Licence.
-* [colorlog][colorlog-license] is licensed under the MIT Licence.
+* [tabulate][tabulate-license] is licensed under the MIT License.
+* [colorlog][colorlog-license] is licensed under the MIT License.
 
 ### Development dependencies
 
