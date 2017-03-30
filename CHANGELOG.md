@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 - placeholder
 
+## [0.4.0] - 2017-03-30
+- Put the source under src folder and slightly restructure package to make it more stable and suitable to development and testing.
+- Introduce test framework using tox, pytest, flake8 and cram
+- Introduce CI with Travis-CI
+
 ## [0.3.2] - 2017-03-16
 - Loosen the check on the API keyfile. Allow public API queries even if no keyfile is available.
 
@@ -121,7 +126,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - API key file location moved to '~/.config/clikraken/kraken.key'
 
-[Unreleased]: https://github.com/zertrin/clikraken/compare/0.3.2...HEAD
+[Unreleased]: https://github.com/zertrin/clikraken/compare/0.4.0...HEAD
+[0.4.0]: https://github.com/zertrin/clikraken/compare/0.3.2...0.4.0
 [0.3.2]: https://github.com/zertrin/clikraken/compare/0.3.1...0.3.2
 [0.3.1]: https://github.com/zertrin/clikraken/compare/0.3.0...0.3.1
 [0.3.0]: https://github.com/zertrin/clikraken/compare/0.2.5...0.3.0
