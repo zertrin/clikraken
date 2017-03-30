@@ -207,7 +207,7 @@ See the `LICENSE` file. For the full text, see [here][corelicense].
 
 Python 3.4+
 
-clikraken was developped and tested with Python 3.4, later Python versions should be compatible but haven't been tested yet.
+clikraken was developped with Python 3.4 and is tested with Python 3.4 to 3.6. Future Python versions should be compatible but haven't been tested yet.
 
 There is no plan to support Python 2 at all and it's unlikely that Python 3.0 to 3.3 will ever be supported. Sorry!
 
@@ -225,9 +225,11 @@ But if working in a fresh environment (for example after cloning the source code
 
 ### Development dependencies
 
-Only needed for packaging clikraken.
+Only needed for developing, testing and packaging clikraken.
 
-* `pip install pypandoc twine wheel`
+* `pip install -r requirements_dev.txt`
+
+Tests can be run by calling `tox`.
 
 [corelicense]: https://www.apache.org/licenses/LICENSE-2.0
 [python3-krakenex]: https://github.com/veox/python3-krakenex
