@@ -1,8 +1,8 @@
-pypandoc
-tox
-pytest
 flake8
+pypandoc
+pytest
 pytest-cram
 pytest-flake8
+tox
 twine
 wheel
