@@ -1,0 +1,12 @@
+[clikraken]
+# default currency pair when no option '-p' or '--pair' is given
+# and the environment variable CLIKRAKEN_DEFAULT_PAIR is not set
+currency_pair = XETHZEUR
+
+# Timezone for displaying date and time infos
+timezone = Europe/Berlin
+
+# API Trading Agreement
+# (change to "agree" after reading https://www.kraken.com/u/settings/api)
+trading_agreement = not_agree
+
