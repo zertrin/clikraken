@@ -8,16 +8,21 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 - placeholder
 
+## [0.4.1] - 2017-03-31
+- Add Appveyor CI for windows testing.
+- Remove cram from the test framework since it's not usable on windows.
+- Clikraken is now officially compatible with Python 3.5 and 3.6.
+
 ## [0.4.0] - 2017-03-30
 - Put the source under src folder and slightly restructure package to make it more stable and suitable to development and testing.
-- Introduce test framework using tox, pytest, flake8 and cram
-- Introduce CI with Travis-CI
+- Introduce test framework using tox, pytest, flake8 and cram.
+- Introduce CI with Travis-CI.
 
 ## [0.3.2] - 2017-03-16
 - Loosen the check on the API keyfile. Allow public API queries even if no keyfile is available.
 
 ## [0.3.1] - 2017-03-16
-- Allow 'cancel' subcommand to take many order IDs
+- Allow 'cancel' subcommand to take many order IDs.
 
 ## [0.3.0] - 2017-03-13
 ### Changed
@@ -25,7 +30,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [0.2.5] - 2017-03-13
 ### Changed
-- Silence 'EAPI:Invalid nonce' errors while in cron mode
+- Silence 'EAPI:Invalid nonce' errors while in cron mode.
 
 ## [0.2.4] - 2017-02-13
 ### Changed
@@ -126,7 +131,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - API key file location moved to '~/.config/clikraken/kraken.key'
 
-[Unreleased]: https://github.com/zertrin/clikraken/compare/0.4.0...HEAD
+[Unreleased]: https://github.com/zertrin/clikraken/compare/0.4.1...HEAD
+[0.4.1]: https://github.com/zertrin/clikraken/compare/0.4.0...0.4.1
 [0.4.0]: https://github.com/zertrin/clikraken/compare/0.3.2...0.4.0
 [0.3.2]: https://github.com/zertrin/clikraken/compare/0.3.1...0.3.2
 [0.3.1]: https://github.com/zertrin/clikraken/compare/0.3.0...0.3.1
