@@ -1,5 +1,10 @@
-[![Build Status](https://travis-ci.org/zertrin/clikraken.svg?branch=master)](https://travis-ci.org/zertrin/clikraken)
-[![Build status](https://ci.appveyor.com/api/projects/status/jom3ee762u02q2fo/branch/master?svg=true)](https://ci.appveyor.com/project/zertrin/clikraken/branch/master)
+[![Travis-CI Build Status](https://travis-ci.org/zertrin/clikraken.svg?branch=master)](https://travis-ci.org/zertrin/clikraken)
+[![Appveyor Build status](https://ci.appveyor.com/api/projects/status/jom3ee762u02q2fo/branch/master?svg=true)](https://ci.appveyor.com/project/zertrin/clikraken/branch/master)
+[![PyPI Package latest release](https://img.shields.io/pypi/v/clikraken.svg)](https://pypi.python.org/pypi/clikraken)
+[![Wheel available](https://img.shields.io/pypi/wheel/clikraken.svg)](https://pypi.python.org/pypi/clikraken)
+[![Supported Versions](https://img.shields.io/pypi/pyversions/clikraken.svg)](https://pypi.python.org/pypi/clikraken)
+[![Supported implementations](https://img.shields.io/pypi/implementation/clikraken.svg)](https://pypi.python.org/pypi/clikraken)
+[![GitHub license](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://raw.githubusercontent.com/zertrin/clikraken/master/LICENSE)
 
 # clikraken
 
