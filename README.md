@@ -94,9 +94,9 @@ clikraken --help
 Output:
 
 ```
-usage: clikraken.py [-h] [-V] [--raw]
-                    {generate_settings,ticker,t,depth,d,last_trades,lt,balance,bal,place,p,cancel,x,olist,ol,clist,cl}
-                    ...
+usage: clikraken [-h] [-V] [--debug] [--raw] [--cron]
+                 {generate_settings,ticker,t,depth,d,last_trades,lt,balance,bal,place,p,cancel,x,olist,ol,clist,cl}
+                 ...
 
 clikraken - Command line client for the Kraken exchange
 
@@ -109,13 +109,14 @@ positional arguments:
     last_trades (lt)    [public] Get the last trades
     balance (bal)       [private] Get your current balance
     place (p)           [private] Place an order
-    cancel (x)          [private] Cancel an order
+    cancel (x)          [private] Cancel orders
     olist (ol)          [private] Get a list of your open orders
     clist (cl)          [private] Get a list of your closed orders
 
 optional arguments:
   -h, --help            show this help message and exit
   -V, --version         show program version
+  --debug               debug mode
   --raw                 output raw json results from the API
   --cron                activate cron mode (tone down errors due to timeouts
                         or unavailable Kraken service)
@@ -126,9 +127,9 @@ For example:
 
 Current default currency pair: XETHZEUR.
 
-Create or edit the setting file /home/zertrin/.config/clikraken/settings.ini to change it.
+Create or edit the setting file C:\Users\Zertrin\.config\clikraken\settings.ini to change it.
 If the setting file doesn't exist yet, you can create one by doing:
-    clikraken generate_settings > /home/zertrin/.config/clikraken/settings.ini
+    clikraken generate_settings > C:\Users\Zertrin\.config\clikraken\settings.ini
 
 You can also set the CLIKRAKEN_DEFAULT_PAIR environment variable
 which has precedence over the settings from the settings file.
@@ -143,9 +144,9 @@ clikraken SUBCOMMAND --help
 For example, the `place` subcommand has the following help:
 
 ```
-usage: clikraken.py place [-h] [-p PAIR] [-t {market,limit}] [-s STARTTM]
-                          [-e EXPIRETM] [-q] [-v]
-                          {sell,buy} volume [price]
+usage: clikraken place [-h] [-p PAIR] [-t {market,limit}] [-s STARTTM]
+                       [-e EXPIRETM] [-q] [-v]
+                       {sell,buy} volume [price]
 
 positional arguments:
   {sell,buy}
@@ -169,7 +170,7 @@ optional arguments:
 
 ### Usage examples
 
-Notice: Without the `-p` option, default currency pair is taken from the settings file or the aforementionned environment variable, defaulting to `XETHZEUR` if neither of those exists.
+Notice: Without the `-p` option, the default currency pair is taken from the settings file or the aforementionned environment variable, defaulting to `XETHZEUR` if neither of those exists.
 
 ```
 clikraken ticker
@@ -215,16 +216,18 @@ See the `LICENSE` file. For the full text, see [here][corelicense].
 
 Python 3.4+
 
-clikraken was developped with Python 3.4 and is tested with Python 3.4 to 3.6. Future Python versions should be compatible but haven't been tested yet.
+clikraken is tested with Python 3.4 to 3.6. Future Python versions should be compatible but haven't been tested yet.
 
 There is no plan to support Python 2 at all and it's unlikely that Python 3.0 to 3.3 will ever be supported. Sorry!
 
-clikraken has been tested on Linux (Debian Jessie) and Windows 7. I guess it should work with other systems but your mileage may vary.
+clikraken has been tested on Linux (Debian Jessie) and Windows. I guess it should work with other systems but your mileage may vary.
 
 ### Dependencies
 
 The dependencies should be automatically installed when installing clikraken with pip.
 But if working in a fresh environment (for example after cloning the source code to develop), you may need to install these manually with pip.
+
+* `pip install -r requirements.txt`
 
 * [krakenex][python3-krakenex] is licensed under the LGPLv3 license.
 * [arrow][arrow-license] is licensed under the Apache License, Version 2.0.
