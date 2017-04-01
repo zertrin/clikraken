@@ -69,6 +69,7 @@ def parse_args():
         formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument('-V', '--version', action='store_const', const=ck_utils.version, dest='main_func',
                         help='show program version')
+    parser.add_argument('--debug', action='store_true', help='debug mode')
     parser.add_argument('--raw', action='store_true', help='output raw json results from the API')
     parser.add_argument('--cron', action='store_true',
                         help='activate cron mode (tone down errors due to timeouts or unavailable Kraken service)')

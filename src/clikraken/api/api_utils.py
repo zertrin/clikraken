@@ -95,7 +95,8 @@ def query_api(api_type, api_method, api_params, args):
 
     if args.raw:
         print_results(res)
-        exit(0)
+        if not args.debug:
+            exit(0)
 
     res = res.get('result')
     if not res:
