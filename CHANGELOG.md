@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 - placeholder
 
+## [0.6.0] - 2017-04-28
+- Add new subcommand "asset_pairs" (alias "ap") to list the available asset pairs (thanks t0neg)
+- Add setting "ticker_currency_pairs" for the default asset pair list for the ticker subcommand. Default value is XBTUSD,XBTEUR,ETHUSD,ETHEUR
+
 ## [0.5.0] - 2017-04-01
 - List open and closed orders are not filtered automatically anymore unless explicitly specified by `--pair` parameter. (by t0neg)
 - Allow to use short version of asset pair (e.g. ETHEUR) in addition to the fully qualified version (e.g. XETHZEUR) when filtering results of list open and closed orders. (by t0neg)
@@ -140,7 +144,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - API key file location moved to '~/.config/clikraken/kraken.key'
 
-[Unreleased]: https://github.com/zertrin/clikraken/compare/0.5.0...HEAD
+[Unreleased]: https://github.com/zertrin/clikraken/compare/0.6.0...HEAD
+[0.6.0]: https://github.com/zertrin/clikraken/compare/0.5.0...0.6.0
 [0.5.0]: https://github.com/zertrin/clikraken/compare/0.4.2...0.5.0
 [0.4.2]: https://github.com/zertrin/clikraken/compare/0.4.1...0.4.2
 [0.4.1]: https://github.com/zertrin/clikraken/compare/0.4.0...0.4.1
