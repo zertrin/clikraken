@@ -103,7 +103,7 @@ def parse_args():
         aliases=['t'],
         help='[public] Get the Ticker',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser_ticker.add_argument('-p', '--pair', default=gv.DEFAULT_PAIR,
+    parser_ticker.add_argument('-p', '--pair', default=gv.TICKER_PAIRS,
                                help=pairs_help + " to get info on. ")
     parser_ticker.set_defaults(sub_func=ticker)
 

@@ -28,6 +28,11 @@ DEFAULT_SETTINGS_INI = """[clikraken]
 # and the environment variable CLIKRAKEN_DEFAULT_PAIR is not set
 currency_pair = XETHZEUR
 
+# default currency pair list for the ticker command when no
+# option '-p' or '--pair' is given and the environment variable
+# CLIKRAKEN_TICKER_PAIRS is not set
+ticker_currency_pairs = XBTUSD,XBTEUR,ETHUSD,ETHEUR
+
 # Timezone for displaying date and time infos
 timezone = Europe/Berlin
 
@@ -39,6 +44,7 @@ trading_agreement = not_agree
 # Global variables to be shared between clikraken's modules
 KRAKEN_API = None
 DEFAULT_PAIR = None
+TICKER_PAIRS = None
 TZ = None
 TRADING_AGREEMENT = None
 CRON = None

@@ -35,6 +35,7 @@ def load_config():
     # Get the default currency pair from environment variable if available
     # otherwise take the value from the config file.
     gv.DEFAULT_PAIR = os.getenv('CLIKRAKEN_DEFAULT_PAIR', conf.get('currency_pair'))
+    gv.TICKER_PAIRS = os.getenv('CLIKRAKEN_TICKER_PAIRS', conf.get('ticker_currency_pairs'))
 
     gv.TZ = conf.get('timezone')
     gv.TRADING_AGREEMENT = conf.get('trading_agreement')
