@@ -21,6 +21,7 @@ import clikraken.clikraken_utils as ck_utils
 from clikraken.api.public.depth import depth
 from clikraken.api.public.last_trades import last_trades
 from clikraken.api.public.ticker import ticker
+from clikraken.api.public.asset_pairs import asset_pairs
 
 from clikraken.api.private.cancel_order import cancel_order
 from clikraken.api.private.get_balance import get_balance
@@ -87,6 +88,14 @@ def parse_args():
     # ----------
     # Public API
     # ----------
+
+    # Asset Pairs
+    parser_asset_pairs = subparsers.add_parser(
+        'asset_pairs',
+        aliases=['ap'],
+        help='[public] Get the list of available asset pairs',
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser_asset_pairs.set_defaults(sub_func=asset_pairs)
 
     # Ticker
     parser_ticker = subparsers.add_parser(
