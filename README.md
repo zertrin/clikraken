@@ -8,7 +8,7 @@
 
 # clikraken
 
-Command-line client for the Kraken exchange
+**Command-line client for the Kraken exchange**
 
 This command line client allows you to get useful public and private information
 from Kraken's API and displays it in formatted tables.
@@ -21,8 +21,10 @@ It is mainly oriented as an alternative to manually entering orders on Kraken's 
 See package on PyPI: https://pypi.python.org/pypi/clikraken
 
 **WARNING**: This software is currently in development.
-I consider it in _alpha_ state, which means that it works well enough for me but hasn't been thoroughly tested.
+I consider it in _beta_ state, which means that it works well enough for me but hasn't been thoroughly tested.
 There are probably undetected bugs left. **Use at your own risk!**
+
+See list of changes in the [Changelog](CHANGELOG.md).
 
 ## Installation
 
@@ -94,16 +96,17 @@ clikraken --help
 Output:
 
 ```
-usage: clikraken [-h] [-V] [--debug] [--raw] [--cron]
-                 {generate_settings,ticker,t,depth,d,last_trades,lt,balance,bal,place,p,cancel,x,olist,ol,clist,cl}
-                 ...
+usage: ck [-h] [-V] [--debug] [--raw] [--cron]
+          {generate_settings,asset_pairs,ap,ticker,t,depth,d,last_trades,lt,balance,bal,place,p,cancel,x,olist,ol,clist,cl}
+          ...
 
 clikraken - Command line client for the Kraken exchange
 
 positional arguments:
-  {generate_settings,ticker,t,depth,d,last_trades,lt,balance,bal,place,p,cancel,x,olist,ol,clist,cl}
+  {generate_settings,asset_pairs,ap,ticker,t,depth,d,last_trades,lt,balance,bal,place,p,cancel,x,olist,ol,clist,cl}
                         available subcommands
     generate_settings   [clikraken] Print default settings.ini to stdout
+    asset_pairs (ap)    [public] Get the list of available asset pairs
     ticker (t)          [public] Get the Ticker
     depth (d)           [public] Get the current market depth data
     last_trades (lt)    [public] Get the last trades
@@ -229,6 +232,8 @@ But if working in a fresh environment (for example after cloning the source code
 
 * `pip install -r requirements.txt`
 
+The following modules are used by clikraken.
+
 * [krakenex][python3-krakenex] is licensed under the LGPLv3 license.
 * [arrow][arrow-license] is licensed under the Apache License, Version 2.0.
 * [tabulate][tabulate-license] is licensed under the MIT License.
@@ -236,9 +241,22 @@ But if working in a fresh environment (for example after cloning the source code
 
 ### Development dependencies
 
-Only needed for developing, testing and packaging clikraken.
+The development dependencies are only needed for developing, testing and packaging clikraken.
 
+* GNU Make if using the profided Makefile
 * `pip install -r requirements_dev.txt`
+
+## Quickstart for developping on clikraken
+
+### Setup
+
+* Clone this repository.
+* Preferably create and activate a fresh virtualenv.
+* `pip install -r requirements.txt`
+* `pip install -r requirements_dev.txt`
+* `make inst_dev`
+
+### Tests
 
 Tests can be run by calling `tox`.
 
