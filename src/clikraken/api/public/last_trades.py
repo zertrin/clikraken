@@ -11,10 +11,9 @@ Licensed under the Apache License, Version 2.0. See the LICENSE file.
 
 from collections import OrderedDict
 
-from tabulate import tabulate
-
 from clikraken.api.api_utils import query_api
 from clikraken.clikraken_utils import humanize_timestamp, quote_currency_from_asset_pair
+from clikraken.clikraken_utils import _tabulate as tabulate
 
 
 def last_trades(args):

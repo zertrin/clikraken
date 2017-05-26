@@ -13,10 +13,16 @@ import arrow
 import configparser
 import json
 import os
+from functools import partial
+
+from tabulate import tabulate
 
 import clikraken.global_vars as gv
 from clikraken import __version__
 from clikraken.log_utils import logger
+
+
+_tabulate = partial(tabulate, floatfmt='.12g')
 
 
 def load_config():

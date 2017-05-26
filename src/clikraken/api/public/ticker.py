@@ -12,10 +12,9 @@ Licensed under the Apache License, Version 2.0. See the LICENSE file.
 from collections import OrderedDict
 from decimal import Decimal
 
-from tabulate import tabulate
-
 from clikraken.api.api_utils import query_api
 from clikraken.clikraken_utils import asset_pair_short
+from clikraken.clikraken_utils import _tabulate as tabulate
 
 
 def ticker(args):
