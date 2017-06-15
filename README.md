@@ -243,18 +243,22 @@ The following modules are used by clikraken.
 
 The development dependencies are only needed for developing, testing and packaging clikraken.
 
-* GNU Make if using the profided Makefile
+* GNU Make if using the provided Makefile
 * `pip install -r requirements_dev.txt`
 
-## Quickstart for developping on clikraken
+## Quickstart for developing on clikraken
 
 ### Setup
 
-* Clone this repository.
+* Clone this repository and cd into it.
 * Preferably create and activate a fresh virtualenv.
-* `pip install -r requirements.txt`
-* `pip install -r requirements_dev.txt`
-* `make inst_dev`
+  - `python3 -m venv /path/to/your/venv`
+  - `source /path/to/your/venv/bin/activate` (for windows, omit `source`)
+* If make is available: `make setup_dev`
+* Otherwise:
+  - `pip install -r requirements.txt`
+  - `pip install -r requirements_dev.txt`
+  - `python setup.py develop`
 
 ### Tests
 
