@@ -73,9 +73,9 @@ def asset_pair_short(ap_str):
     ap_str = ap_str.upper()
     # Pair is in long format
     if len(ap_str) == 8:
-        base = ap_str[1:4] if ap_str[0] in ['Z','X'] else ap_str[:4]
-        quote = ap_str[5:] if ap_str[4] in ['Z','X'] else ap_str[4:]
-        return base+quote
+        base = ap_str[1:4] if ap_str[0] in ['Z', 'X'] else ap_str[:4]
+        quote = ap_str[5:] if ap_str[4] in ['Z', 'X'] else ap_str[4:]
+        return base + quote
     # Assuming that pair is already in short format
     return ap_str
 
