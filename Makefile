@@ -15,6 +15,14 @@ build_wheel:
 publish_to_pypi:
 	twine upload -r pypi dist/*
 
+setup_dev: inst_req_prod inst_req_dev inst_dev
+
+inst_req_prod:
+	pip install -r requirements.txt
+
+inst_req_dev:
+	pip install -r requirements_dev.txt
+
 dev: uninst_dev inst_dev
 
 uninst_dev:
@@ -22,3 +30,7 @@ uninst_dev:
 
 inst_dev:
 	python setup.py develop
+
+test:
+	tox
+
