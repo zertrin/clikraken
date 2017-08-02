@@ -28,7 +28,8 @@ def get_balance(args=None):
         # Initialize an OrderedDict to garantee the column order
         # for later use with the tabulate function
         asset_dict = OrderedDict()
-        asset_dict['asset'] = asset[1:]  # skip first char (e.g. XXBT -> XBT)
+        # Remove leading Z or X from asset pair if it is of lemgth 4
+        asset_dict['asset'] = asset[1:] if len(asset) == 4 and asset[0] in ['Z', 'X'] else asset
         asset_dict['balance'] = res[asset]
         bal_list.append(asset_dict)
 
