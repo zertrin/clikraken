@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 - placeholder
 
+## [0.6.2] - 2017-08-03
+- Fix bug in balance output for asset pairs shorter than 4 characters.
+- clikraken_utils: add base_quote_short_from_asset_pair() to handle base/quote detection from asset pair string
+
 ## [0.6.1] - 2017-06-15
 - Fix issue #6: force tabulate to represent floats with more decimals.
 - Fix issue #7: 4-letter asset pairs aren't correctly displayed
@@ -149,7 +153,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - API key file location moved to '~/.config/clikraken/kraken.key'
 
-[Unreleased]: https://github.com/zertrin/clikraken/compare/0.6.1...HEAD
+[Unreleased]: https://github.com/zertrin/clikraken/compare/0.6.2...HEAD
+[0.6.2]: https://github.com/zertrin/clikraken/compare/0.6.1...0.6.2
 [0.6.1]: https://github.com/zertrin/clikraken/compare/0.6.0...0.6.1
 [0.6.0]: https://github.com/zertrin/clikraken/compare/0.5.0...0.6.0
 [0.5.0]: https://github.com/zertrin/clikraken/compare/0.4.2...0.5.0
