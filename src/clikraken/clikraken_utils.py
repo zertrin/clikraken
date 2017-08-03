@@ -68,21 +68,41 @@ def print_results(res):
         print(json.dumps(res, indent=2))
 
 
-def asset_pair_short(ap_str):
-    """Convert XETHZEUR to ETHEUR"""
+def base_quote_short_from_asset_pair(ap_str):
+    """Try to identify the short version of the base and quote of the asset pair"""
+
     ap_str = ap_str.upper()
-    # Pair is in long format
+
     if len(ap_str) == 8:
+        # XABCZDEF
         base = ap_str[1:4] if ap_str[0] in ['Z', 'X'] else ap_str[:4]
         quote = ap_str[5:] if ap_str[4] in ['Z', 'X'] else ap_str[4:]
-        return base + quote
-    # Assuming that pair is already in short format
-    return ap_str
+    elif len(ap_str) == 6:
+        # ABCDEF
+        base = ap_str[:3]
+        quote = ap_str[3:]
+    elif len(ap_str) == 7:
+        if ap_str[-4] in ['Z', 'X']:
+            # ABCXDEF
+            base = ap_str[:3]
+            quote = ap_str[4:]
+        elif ap_str[0] in ['Z', 'X']:
+            # XABCDEF
+            base = ap_str[1:4]
+            quote = ap_str[4:]
+        else:
+            # ABCDEFG
+            # assume EFG is the quote ¯\_(ツ)_/¯
+            base = ap_str[:4]
+            quote = ap_str[4:]
+
+    return base, quote
 
 
-def quote_currency_from_asset_pair(ap_str):
-    """Extract the quote currency from the asset pair string"""
-    return ap_str[5:]
+def asset_pair_short(ap_str):
+    """Convert XETHZEUR to ETHEUR"""
+    base, quote = base_quote_short_from_asset_pair(ap_str)
+    return base + quote
 
 
 def check_trading_agreement():
