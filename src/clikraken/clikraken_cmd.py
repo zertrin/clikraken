@@ -27,6 +27,7 @@ from clikraken.api.private.cancel_order import cancel_order
 from clikraken.api.private.get_balance import get_balance
 from clikraken.api.private.list_closed_orders import list_closed_orders
 from clikraken.api.private.list_open_orders import list_open_orders
+from clikraken.api.private.list_open_positions import list_open_positions
 from clikraken.api.private.place_order import place_order
 
 
@@ -177,6 +178,14 @@ def parse_args():
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser_olist.add_argument('-p', '--pair', default=None, help=pair_help)
     parser_olist.set_defaults(sub_func=list_open_orders)
+
+    # List of open positions
+    parser_oplist = subparsers.add_parser(
+        'positions',
+        aliases=['pos'],
+        help='[private] Get a list of your open positions',
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser_oplist.set_defaults(sub_func=list_open_positions)
 
     # List of closed orders
     parser_clist = subparsers.add_parser(
