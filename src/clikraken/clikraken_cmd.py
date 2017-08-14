@@ -150,6 +150,7 @@ def parse_args():
     parser_place.add_argument('type', choices=['sell', 'buy'])
     parser_place.add_argument('volume', type=Decimal)
     parser_place.add_argument('price', default=None, nargs='?')
+    parser_place.add_argument('-l', '--leverage', default="none", help='leverage for margin trading')
     parser_place.add_argument('-p', '--pair', default=gv.DEFAULT_PAIR, help=pair_help)
     parser_place.add_argument('-t', '--ordertype', choices=['market', 'limit'], default='limit',
                               help="order type. Currently implemented: [limit, market].")
