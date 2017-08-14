@@ -25,6 +25,7 @@ from clikraken.api.public.asset_pairs import asset_pairs
 
 from clikraken.api.private.cancel_order import cancel_order
 from clikraken.api.private.get_balance import get_balance
+from clikraken.api.private.get_trade_balance import get_trade_balance
 from clikraken.api.private.list_closed_orders import list_closed_orders
 from clikraken.api.private.list_open_orders import list_open_orders
 from clikraken.api.private.list_open_positions import list_open_positions
@@ -141,6 +142,14 @@ def parse_args():
         help='[private] Get your current balance',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser_balance.set_defaults(sub_func=get_balance)
+
+    # User trade balance
+    parser_trade_balance = subparsers.add_parser(
+        'trade_balance',
+        aliases=['tbal'],
+        help='[private] Get your current trade balance',
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser_trade_balance.set_defaults(sub_func=get_trade_balance)
 
     # Place an order
     parser_place = subparsers.add_parser(
