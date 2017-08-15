@@ -25,6 +25,7 @@ from clikraken.api.public.asset_pairs import asset_pairs
 
 from clikraken.api.private.cancel_order import cancel_order
 from clikraken.api.private.get_balance import get_balance
+from clikraken.api.private.get_deposit_methods import get_deposit_methods
 from clikraken.api.private.list_closed_orders import list_closed_orders
 from clikraken.api.private.list_open_orders import list_open_orders
 from clikraken.api.private.place_order import place_order
@@ -185,6 +186,17 @@ def parse_args():
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser_clist.add_argument('-p', '--pair', default=None, help=pair_help)
     parser_clist.set_defaults(sub_func=list_closed_orders)
+
+    # User Funding
+
+    # Deposit Methods
+    parser_deposit_methods = subparsers.add_parser(
+        'deposit_methods',
+        aliases=[],
+        help='[private] Get deposit methods',
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser_deposit_methods.add_argument('-a', '--asset', default=gv.DEFAULT_ASSET, help='asset being deposited')
+    parser_deposit_methods.set_defaults(sub_func=get_deposit_methods)
 
     args = parser.parse_args()
 
