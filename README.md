@@ -11,7 +11,7 @@
 **Command-line client for the Kraken exchange**
 
 This command line client allows you to get useful public and private information
-from Kraken's API and displays it in formatted tables.
+from [Kraken's API](https://www.kraken.com/help/api) and displays it in formatted tables.
 
 Moreover you can place or cancel simple orders
 (only simple buy/sell market/limit orders are currently implemented).
