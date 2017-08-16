@@ -187,7 +187,7 @@ def parse_args():
     parser_clist.add_argument('-p', '--pair', default=None, help=pair_help)
     parser_clist.set_defaults(sub_func=list_closed_orders)
 
-    # List of closed orders
+    # Get trades info
     parser_trades = subparsers.add_parser(
         'trades',
         aliases=['tr'],
@@ -220,7 +220,6 @@ def parse_args():
         default=None,
         help='comma delimited list of transaction ids to query info about (20 maximum)')
     parser_trades.add_argument('-p', '--pair', default=None, help=pair_help)
-    # TODO: trades parameter
     parser_trades.set_defaults(sub_func=trades)
 
     args = parser.parse_args()
