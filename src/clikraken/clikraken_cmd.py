@@ -27,6 +27,7 @@ from clikraken.api.private.cancel_order import cancel_order
 from clikraken.api.private.get_balance import get_balance
 from clikraken.api.private.list_closed_orders import list_closed_orders
 from clikraken.api.private.list_open_orders import list_open_orders
+from clikraken.api.private.get_ledgers import get_ledgers
 from clikraken.api.private.place_order import place_order
 
 
@@ -185,6 +186,39 @@ def parse_args():
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser_clist.add_argument('-p', '--pair', default=None, help=pair_help)
     parser_clist.set_defaults(sub_func=list_closed_orders)
+
+    # Get ledgers info
+    parser_ledgers = subparsers.add_parser(
+        'ledgers',
+        aliases=['lg'],
+        help='[private] Get ledgers info',
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser_ledgers.add_argument(
+        '-a',
+        '--asset',
+        default=None,
+        help='comma delimited list of assets to restrict output to (optional. default = all')
+    parser_ledgers.add_argument(
+        '-t',
+        '--type',
+        default=None,
+        help='type of ledger to retrieve (optional). Possible values: all|deposit|withdrawal|trade|margin')
+    parser_ledgers.add_argument(
+        '-s',
+        '--start',
+        default=None,
+        help='starting unix timestamp or ledger id of results (optional. exclusive)')
+    parser_ledgers.add_argument(
+        '-e',
+        '--end',
+        default=None,
+        help='ending unix timestamp or ledger id of results (optional. exclusive)')
+    parser_ledgers.add_argument(
+        '-o',
+        '--ofs',
+        default=None,
+        help='result offset')
+    parser_ledgers.set_defaults(sub_func=get_ledgers)
 
     args = parser.parse_args()
 
