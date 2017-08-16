@@ -3,7 +3,7 @@
 """
 clikraken.api.private.list_list_closed_orders
 
-This module queries the ClosedOrders or QueryOrder method of Kraken's API
+This module queries the ClosedOrders method of Kraken's API
 and outputs the results in a tabular format.
 
 Licensed under the Apache License, Version 2.0. See the LICENSE file.

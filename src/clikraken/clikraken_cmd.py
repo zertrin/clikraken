@@ -175,6 +175,11 @@ def parse_args():
         help='[private] Get a list of your open orders',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser_olist.add_argument('-p', '--pair', default=None, help=pair_help)
+    parser_olist.add_argument(
+        '-i',
+        '--txid',
+        default=None,
+        help='comma delimited list of transaction ids to query info about (20 maximum)')
     parser_olist.set_defaults(sub_func=list_open_orders)
 
     # List of closed orders
