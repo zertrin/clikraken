@@ -3,7 +3,7 @@
 """
 clikraken.api.private.list_list_closed_orders
 
-This module queries the ClosedOrders method of Kraken's API
+This module queries the ClosedOrders or QueryOrder method of Kraken's API
 and outputs the results in a tabular format.
 
 Licensed under the Apache License, Version 2.0. See the LICENSE file.
@@ -23,11 +23,15 @@ def list_closed_orders(args):
     api_params = {
         # TODO
     }
-
-    res = query_api('private', 'ClosedOrders', api_params, args)
-
-    # extract list of orders from API results
-    res_ol = res['closed']
+    if args.txid:
+        api_params.update({
+            'txid': args.txid,
+        })
+        res_ol = query_api('private', 'QueryOrders', api_params, args)
+    else:
+        res = query_api('private', 'ClosedOrders', api_params, args)
+        # extract list of orders from API results
+        res_ol = res['closed']
 
     # the parsing is done in an helper function
     ol = parse_order_res(res_ol, ['closed', 'canceled'])
