@@ -14,6 +14,7 @@ from collections import OrderedDict
 from clikraken.api.api_utils import query_api
 from clikraken.clikraken_utils import humanize_timestamp, base_quote_short_from_asset_pair
 from clikraken.clikraken_utils import _tabulate as tabulate
+from clikraken.clikraken_utils import csv
 
 
 def last_trades(args):
@@ -58,20 +59,23 @@ def last_trades(args):
     # Reverse trade list to have the most recent trades at the top
     tlist = tlist[::-1]
 
-    print(tabulate(tlist[:args.count], headers="keys") + '\n')
+    if args.csv:
+        print(csv(tlist[:args.count], headers="keys"))
+    else:
+        print(tabulate(tlist[:args.count], headers="keys") + '\n')
 
-    # separate the trades based on their type
-    sell_trades = [x for x in tlist if x["Trade type"] == "sell"]
-    buy_trades = [x for x in tlist if x["Trade type"] == "buy"]
+        # separate the trades based on their type
+        sell_trades = [x for x in tlist if x["Trade type"] == "sell"]
+        buy_trades = [x for x in tlist if x["Trade type"] == "buy"]
 
-    last_sell = sell_trades[0]
-    last_buy = buy_trades[0]
-    lt = [
-        ["", "Price (" + quote_currency + ")", "Volume", "Age"],
-        ["Last Sell", last_sell["Price"], last_sell["Volume"], last_sell["Age"]],
-        ["Last Buy", last_buy["Price"], last_buy["Volume"], last_buy["Age"]],
-    ]
+        last_sell = sell_trades[0]
+        last_buy = buy_trades[0]
+        lt = [
+            ["", "Price (" + quote_currency + ")", "Volume", "Age"],
+            ["Last Sell", last_sell["Price"], last_sell["Volume"], last_sell["Age"]],
+            ["Last Buy", last_buy["Price"], last_buy["Volume"], last_buy["Age"]],
+        ]
 
-    print(tabulate(lt, headers="firstrow") + '\n')
+        print(tabulate(lt, headers="firstrow") + '\n')
 
-    print('Last ID = {}'.format(last_id))
+        print('Last ID = {}'.format(last_id))

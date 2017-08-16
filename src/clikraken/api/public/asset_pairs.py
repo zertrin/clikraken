@@ -11,6 +11,7 @@ Licensed under the Apache License, Version 2.0. See the LICENSE file.
 
 from clikraken.api.api_utils import query_api
 from clikraken.clikraken_utils import _tabulate as tabulate
+from clikraken.clikraken_utils import csv
 
 
 def asset_pairs(args):
@@ -32,5 +33,14 @@ def asset_pairs(args):
                           res[assetpair]['base'],
                           res[assetpair]['quote']])
 
-    print(tabulate(assetlist, headers=['Pair', 'Alt Name', 'Base', 'Quote']))
-    print('--- Total: {} pairs'.format(len(assetlist)))
+    if args.csv:
+        assetlist = [{
+            'Pair': o[0],
+            'Alt Name': o[1],
+            'Base': o[2],
+            'Quote': o[3],
+        } for o in assetlist]
+        print(csv(assetlist, headers="keys"))
+    else:
+        print(tabulate(assetlist, headers=['Pair', 'Alt Name', 'Base', 'Quote']))
+        print('--- Total: {} pairs'.format(len(assetlist)))

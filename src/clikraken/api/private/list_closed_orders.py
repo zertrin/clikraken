@@ -14,6 +14,7 @@ from decimal import Decimal
 from clikraken.api.api_utils import parse_order_res, query_api
 from clikraken.clikraken_utils import asset_pair_short
 from clikraken.clikraken_utils import _tabulate as tabulate
+from clikraken.clikraken_utils import csv
 
 
 def list_closed_orders(args):
@@ -46,4 +47,7 @@ def list_closed_orders(args):
     # sort by date
     ol = sorted(ol, key=lambda odict: odict['closing_date'])
 
-    print(tabulate(ol, headers="keys"))
+    if args.csv:
+        print(csv(ol, headers="keys"))
+    else:
+        print(tabulate(ol, headers="keys"))
