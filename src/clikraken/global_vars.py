@@ -28,8 +28,8 @@ DEFAULT_SETTINGS_INI = """[clikraken]
 # and the environment variable CLIKRAKEN_DEFAULT_PAIR is not set
 currency_pair = XETHZEUR
 
-# default currency pair when no option '-p' or '--pair' is given
-# and the environment variable CLIKRAKEN_DEFAULT_PAIR is not set
+# default currency pair when no option '-a' or '--asset' is given
+# and the environment variable CLIKRAKEN_DEFAULT_ASSET is not set
 asset = ETH
 
 # default currency pair list for the ticker command when no
