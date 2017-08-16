@@ -207,9 +207,17 @@ def parse_args():
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser_deposit_addresses.add_argument('-a', '--asset', default=gv.DEFAULT_ASSET, help='asset being deposited')
     parser_deposit_addresses.add_argument('-m', '--method', default=None, help='name of the deposit method')
-    parser_deposit_addresses.add_argument('-n', '--new', action='store_true', default=False,
+    parser_deposit_addresses.add_argument(
+        '-n',
+        '--new',
+        action='store_true',
+        default=False,
         help="whether or not to generate a new address")
-    parser_deposit_addresses.add_argument('-1', '--one', action='store_true', default=False,
+    parser_deposit_addresses.add_argument(
+        '-1',
+        '--one',
+        action='store_true',
+        default=False,
         help="return just one address")
     parser_deposit_addresses.set_defaults(sub_func=get_deposit_addresses)
 

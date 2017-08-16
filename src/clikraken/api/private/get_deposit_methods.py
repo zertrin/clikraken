@@ -25,7 +25,7 @@ def get_deposit_methods(args=None):
 
     res = query_api('private', 'DepositMethods', api_params, args)
 
-    method_list = []
+    m_list = []
     for method in res:
         # Initialize an OrderedDict to garantee the column order
         # for later use with the tabulate function
@@ -36,13 +36,12 @@ def get_deposit_methods(args=None):
         method_dict['fee'] = method['fee']
         method_dict['limit'] = method['limit']
         method_dict['gen-address'] = method['gen-address']
-        method_list.append(method_dict)
+        m_list.append(method_dict)
 
-    if not method_list:
+    if not m_list:
         return
 
     # Sort alphabetically
-    method_list = sorted(method_list, \
-        key=lambda method_dict: '{}{}'.format(method_dict['asset'], method_dict['method']))
+    m_list = sorted(m_list, key=lambda method_dict: '{}{}'.format(method_dict['asset'], method_dict['method']))
 
-    print(tabulate(method_list, headers="keys"))
+    print(tabulate(m_list, headers="keys"))
