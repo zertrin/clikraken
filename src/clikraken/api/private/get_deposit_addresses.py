@@ -46,7 +46,8 @@ def get_deposit_addresses(args=None):
             asset_dict['asset'] = args.asset[1:] if len(args.asset) == 4 and args.asset[0] in ['Z', 'X'] else args.asset
             asset_dict['address'] = address['address']
             asset_dict['new'] = address.get('new', False)
-            asset_dict['expiretm'] = int(address.get('expiretm', 0)) > 0 and format_timestamp(int(address.get('expiretm', 0))) or ''
+            asset_dict['expiretm'] = \
+                int(address.get('expiretm', 0)) > 0 and format_timestamp(int(address.get('expiretm', 0))) or ''
             addresses_list.append(asset_dict)
 
         if not addresses_list:

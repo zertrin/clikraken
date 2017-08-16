@@ -42,6 +42,7 @@ def get_deposit_methods(args=None):
         return
 
     # Sort alphabetically
-    method_list = sorted(method_list, key=lambda method_dict: '{}{}'.format(method_dict['asset'], method_dict['method']))
+    method_list = sorted(method_list, \
+        key=lambda method_dict: '{}{}'.format(method_dict['asset'], method_dict['method']))
 
     print(tabulate(method_list, headers="keys"))
