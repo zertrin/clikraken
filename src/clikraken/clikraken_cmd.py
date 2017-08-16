@@ -218,6 +218,11 @@ def parse_args():
         '--ofs',
         default=None,
         help='result offset')
+    parser_ledgers.add_argument(
+        '-i',
+        '--id',
+        default=None,
+        help='comma delimited list of ledger ids to query info about (20 maximum)')
     parser_ledgers.set_defaults(sub_func=get_ledgers)
 
     args = parser.parse_args()

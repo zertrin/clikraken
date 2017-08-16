@@ -3,7 +3,7 @@
 """
 clikraken.api.private.get_ledgers
 
-This module queries the Ledgers method of Kraken's API
+This module queries the Ledgers or QueryLedgers method of Kraken's API
 and outputs the results in a tabular format.
 
 Licensed under the Apache License, Version 2.0. See the LICENSE file.
@@ -21,24 +21,29 @@ from clikraken.clikraken_utils import format_timestamp
 def get_ledgers(args):
     """Get ledgers info"""
 
-    # Parameters to pass to the API
-    api_params = {
-    }
-    if args.asset:  # We do not user DEFAULT_ASSET HERE as this param is optional
-        api_params.update({'asset': args.asset})
-    if args.type:
-        api_params.update({'type': args.type})
-    if args.start:
-        api_params.update({'start': args.start})
-    if args.end:
-        api_params.update({'end': args.end})
-    if args.ofs:
-        api_params.update({'ofs': args.ofs})
-
-    res = query_api('private', 'Ledgers', api_params, args)
-
-    # extract list of ledgers from API results
-    lg = res['ledger']
+    # If id is specified, then query just that
+    if args.id:
+        api_params = {
+            'id': args.id,
+        }
+        lg = query_api('private', 'QueryLedgers', api_params, args)
+    else:
+        # Parameters to pass to the API
+        api_params = {
+        }
+        if args.asset:  # We do not user DEFAULT_ASSET HERE as this param is optional
+            api_params.update({'asset': args.asset})
+        if args.type:
+            api_params.update({'type': args.type})
+        if args.start:
+            api_params.update({'start': args.start})
+        if args.end:
+            api_params.update({'end': args.end})
+        if args.ofs:
+            api_params.update({'ofs': args.ofs})
+        res = query_api('private', 'Ledgers', api_params, args)
+        # extract list of ledgers from API results
+        lg = res['ledger']
 
     lg_list = []
     for refid, item in lg.items():
