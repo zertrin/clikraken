@@ -24,11 +24,13 @@ def list_closed_orders(args):
     api_params = {
         # TODO
     }
-
-    res = query_api('private', 'ClosedOrders', api_params, args)
-
-    # extract list of orders from API results
-    res_ol = res['closed']
+    if args.txid:
+        api_params.update({'txid': args.txid})
+        res_ol = query_api('private', 'QueryOrders', api_params, args)
+    else:
+        res = query_api('private', 'ClosedOrders', api_params, args)
+        # extract list of orders from API results
+        res_ol = res['closed']
 
     # the parsing is done in an helper function
     ol = parse_order_res(res_ol, ['closed', 'canceled'])
