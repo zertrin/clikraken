@@ -25,6 +25,8 @@ from clikraken.api.public.asset_pairs import asset_pairs
 
 from clikraken.api.private.cancel_order import cancel_order
 from clikraken.api.private.get_balance import get_balance
+from clikraken.api.private.get_deposit_methods import get_deposit_methods
+from clikraken.api.private.get_deposit_addresses import get_deposit_addresses
 from clikraken.api.private.list_closed_orders import list_closed_orders
 from clikraken.api.private.list_open_orders import list_open_orders
 from clikraken.api.private.get_ledgers import get_ledgers
@@ -250,6 +252,30 @@ def parse_args():
         help='comma delimited list of transaction ids to query info about (20 maximum)')
     parser_trades.add_argument('-p', '--pair', default=None, help=pair_help)
     parser_trades.set_defaults(sub_func=trades)
+
+    # User Funding
+
+    # Deposit Methods
+    parser_deposit_methods = subparsers.add_parser(
+        'deposit_methods',
+        aliases=[],
+        help='[private] Get deposit methods',
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser_deposit_methods.add_argument('-a', '--asset', default=gv.DEFAULT_ASSET, help='asset being deposited')
+    parser_deposit_methods.set_defaults(sub_func=get_deposit_methods)
+
+    # Deposit Addresses
+    parser_deposit_addresses = subparsers.add_parser(
+        'deposit_addresses',
+        aliases=[],
+        help='[private] Get deposit addresses',
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser_deposit_addresses.add_argument('-a', '--asset', default=gv.DEFAULT_ASSET, help='asset being deposited')
+    parser_deposit_addresses.add_argument('-m', '--method', default=None, help='name of the deposit method')
+    parser_deposit_addresses.add_argument('-n', '--new', action='store_true',
+                                          help="whether or not to generate a new address")
+    parser_deposit_addresses.add_argument('-1', '--one', action='store_true', help="return just one address")
+    parser_deposit_addresses.set_defaults(sub_func=get_deposit_addresses)
 
     args = parser.parse_args()
 
