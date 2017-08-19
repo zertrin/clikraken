@@ -24,9 +24,7 @@ def list_open_orders(args):
         # TODO
     }
     if args.txid:
-        api_params.update({
-            'txid': args.txid,
-        })
+        api_params.update({'txid': args.txid})
         res_ol = query_api('private', 'QueryOrders', api_params, args)
     else:
         res = query_api('private', 'OpenOrders', api_params, args)
