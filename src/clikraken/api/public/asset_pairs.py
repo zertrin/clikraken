@@ -9,6 +9,8 @@ and outputs the results in a tabular format.
 Licensed under the Apache License, Version 2.0. See the LICENSE file.
 """
 
+from collections import OrderedDict
+
 from clikraken.api.api_utils import query_api
 from clikraken.clikraken_utils import _tabulate as tabulate
 from clikraken.clikraken_utils import csv
@@ -28,19 +30,15 @@ def asset_pairs(args):
     for assetpair in res:
         if assetpair.endswith('.d'):
             continue
-        assetlist.append([assetpair,
-                          res[assetpair]['altname'],
-                          res[assetpair]['base'],
-                          res[assetpair]['quote']])
+        ad = OrderedDict()
+        ad['Pair'] = assetpair
+        ad['Alt Name'] = res[assetpair]['altname']
+        ad['Base'] = res[assetpair]['base']
+        ad['Quote'] = res[assetpair]['quote']
+        assetlist.append(ad)
 
     if args.csv:
-        assetlist = [{
-            'Pair': o[0],
-            'Alt Name': o[1],
-            'Base': o[2],
-            'Quote': o[3],
-        } for o in assetlist]
         print(csv(assetlist, headers="keys"))
     else:
-        print(tabulate(assetlist, headers=['Pair', 'Alt Name', 'Base', 'Quote']))
+        print(tabulate(assetlist, headers='keys'))
         print('--- Total: {} pairs'.format(len(assetlist)))

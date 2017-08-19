@@ -64,9 +64,11 @@ def depth(args):
                 it['dtype'] = dtype
                 for k, v in o.items():
                     if len(k.split(' ')) > 1:
-                        it['pair'] = k.split(' ')[0]
+                        # key has a space, this is the "price_label" column -> "XABCZDEF Ask"
+                        it['pair'] = k.split(' ')[0]  # keep only "XABCZDEF"
                         it['price'] = v
                     else:
+                        # the other columns don't contain a space
                         it[k] = v
                 output += [it]
         print(csv(output, headers="keys"))
