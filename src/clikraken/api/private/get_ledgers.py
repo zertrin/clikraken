@@ -13,8 +13,7 @@ from collections import OrderedDict
 
 from clikraken.api.api_utils import query_api
 from clikraken.clikraken_utils import _tabulate as tabulate
-# TODO: activate this if CSV PR is accepted
-# from clikraken.clikraken_utils import csv
+from clikraken.clikraken_utils import csv
 from clikraken.clikraken_utils import format_timestamp
 
 
@@ -70,8 +69,7 @@ def get_ledgers(args):
     # sort by date
     lg_list = sorted(lg_list, key=lambda odict: odict['time'])
 
-    # TODO: activate this if CSV PR is accepted
-    # if args.csv:
-    #     print(csv(lg_list, headers="keys"))
-    # else:
-    print(tabulate(lg_list, headers="keys"))
+    if args.csv:
+        print(csv(lg_list, headers="keys"))
+    else:
+        print(tabulate(lg_list, headers="keys"))
