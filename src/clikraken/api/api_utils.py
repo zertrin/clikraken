@@ -9,7 +9,7 @@ with or processing data from Kraken's API.
 Licensed under the Apache License, Version 2.0. See the LICENSE file.
 """
 
-import http
+import http.client
 import socket
 from collections import OrderedDict
 
