@@ -194,33 +194,27 @@ def parse_args():
         help='[private] Get ledgers info',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser_ledgers.add_argument(
-        '-a',
-        '--asset',
-        default=None,
-        help='comma delimited list of assets to restrict output to (optional. default = all')
+        '-a', '--asset',
+        default='all',
+        help='comma delimited list of assets to restrict output to')
     parser_ledgers.add_argument(
-        '-t',
-        '--type',
-        default=None,
-        help='type of ledger to retrieve (optional). Possible values: all|deposit|withdrawal|trade|margin')
+        '-t', '--type',
+        default='all',
+        help='type of ledger to retrieve. Possible values: all|deposit|withdrawal|trade|margin')
     parser_ledgers.add_argument(
-        '-s',
-        '--start',
+        '-s', '--start',
         default=None,
-        help='starting unix timestamp or ledger id of results (optional. exclusive)')
+        help='starting unix timestamp or ledger id of results (exclusive)')
     parser_ledgers.add_argument(
-        '-e',
-        '--end',
+        '-e', '--end',
         default=None,
-        help='ending unix timestamp or ledger id of results (optional. exclusive)')
+        help='ending unix timestamp or ledger id of results (exclusive)')
     parser_ledgers.add_argument(
-        '-o',
-        '--ofs',
+        '-o', '--ofs',
         default=None,
         help='result offset')
     parser_ledgers.add_argument(
-        '-i',
-        '--id',
+        '-i', '--id',
         default=None,
         help='comma delimited list of ledger ids to query info about (20 maximum)')
     parser_ledgers.set_defaults(sub_func=get_ledgers)

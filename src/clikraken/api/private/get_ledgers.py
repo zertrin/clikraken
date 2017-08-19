@@ -50,11 +50,11 @@ def get_ledgers(args):
         # Initialize an OrderedDict to garantee the column order
         # for later use with the tabulate function
         asset_dict = OrderedDict()
-        # Remove leading Z or X from item pair if it is of length 4
         asset_dict['id'] = refid
         asset_dict['refid'] = item['refid']
         asset_dict['time'] = format_timestamp(int(item['time']))
         asset_dict['type'] = item['type']
+        # Remove leading Z or X from item pair if it is of length 4
         asset_dict['asset'] = item['asset'][1:] \
             if len(item['asset']) == 4 and item['asset'][0] in ['Z', 'X'] else item['asset']
         asset_dict['aclass'] = item['aclass']
