@@ -262,7 +262,7 @@ def parse_args():
     # Deposit Methods
     parser_deposit_methods = subparsers.add_parser(
         'deposit_methods',
-        aliases=[],
+        aliases=['dm'],
         help='[private] Get deposit methods',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser_deposit_methods.add_argument('-a', '--asset', default=gv.DEFAULT_ASSET, help='asset being deposited')
@@ -271,7 +271,7 @@ def parse_args():
     # Deposit Addresses
     parser_deposit_addresses = subparsers.add_parser(
         'deposit_addresses',
-        aliases=[],
+        aliases=['da'],
         help='[private] Get deposit addresses',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser_deposit_addresses.add_argument('-a', '--asset', default=gv.DEFAULT_ASSET, help='asset being deposited')
