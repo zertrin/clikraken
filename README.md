@@ -14,7 +14,7 @@ This command line client allows you to get useful public and private information
 from [Kraken's API](https://www.kraken.com/help/api) and displays it in formatted tables.
 
 Moreover you can place or cancel simple orders
-(only simple buy/sell market/limit orders are currently implemented).
+(only simple or leveraged buy/sell market/limit orders are currently implemented).
 
 It is mainly oriented as an alternative to manually entering orders on Kraken's webpages, to save some time and eliminate mouse clicks. It is not optimized for automated use.
 
@@ -96,14 +96,14 @@ clikraken --help
 Output:
 
 ```
-usage: ck [-h] [-V] [--debug] [--raw] [--cron]
-          {generate_settings,asset_pairs,ap,ticker,t,depth,d,last_trades,lt,balance,bal,place,p,cancel,x,olist,ol,clist,cl}
-          ...
+usage: clikraken [-h] [-V] [--debug] [--raw] [--csv] [--cron]
+                 {generate_settings,asset_pairs,ap,ticker,t,depth,d,last_trades,lt,balance,bal,trade_balance,tbal,place,p,cancel,x,olist,ol,positions,pos,clist,cl,ledgers,lg,trades,tr,deposit_methods,dm,deposit_addresses,da}
+                 ...
 
 clikraken - Command line client for the Kraken exchange
 
 positional arguments:
-  {generate_settings,asset_pairs,ap,ticker,t,depth,d,last_trades,lt,balance,bal,place,p,cancel,x,olist,ol,clist,cl}
+  {generate_settings,asset_pairs,ap,ticker,t,depth,d,last_trades,lt,balance,bal,trade_balance,tbal,place,p,cancel,x,olist,ol,positions,pos,clist,cl,ledgers,lg,trades,tr,deposit_methods,dm,deposit_addresses,da}
                         available subcommands
     generate_settings   [clikraken] Print default settings.ini to stdout
     asset_pairs (ap)    [public] Get the list of available asset pairs
@@ -111,16 +111,26 @@ positional arguments:
     depth (d)           [public] Get the current market depth data
     last_trades (lt)    [public] Get the last trades
     balance (bal)       [private] Get your current balance
+    trade_balance (tbal)
+                        [private] Get your current trade balance
     place (p)           [private] Place an order
     cancel (x)          [private] Cancel orders
     olist (ol)          [private] Get a list of your open orders
+    positions (pos)     [private] Get a list of your open positions
     clist (cl)          [private] Get a list of your closed orders
+    ledgers (lg)        [private] Get ledgers info
+    trades (tr)         [private] Get trades history
+    deposit_methods (dm)
+                        [private] Get deposit methods
+    deposit_addresses (da)
+                        [private] Get deposit addresses
 
 optional arguments:
   -h, --help            show this help message and exit
   -V, --version         show program version
   --debug               debug mode
   --raw                 output raw json results from the API
+  --csv                 output results from the API as CSV
   --cron                activate cron mode (tone down errors due to timeouts
                         or unavailable Kraken service)
 
@@ -130,9 +140,9 @@ For example:
 
 Current default currency pair: XETHZEUR.
 
-Create or edit the setting file C:\Users\Zertrin\.config\clikraken\settings.ini to change it.
+Create or edit the setting file /home/zertrin/.config/clikraken/settings.ini to change it.
 If the setting file doesn't exist yet, you can create one by doing:
-    clikraken generate_settings > C:\Users\Zertrin\.config\clikraken\settings.ini
+    clikraken generate_settings > /home/zertrin/.config/clikraken/settings.ini
 
 You can also set the CLIKRAKEN_DEFAULT_PAIR environment variable
 which has precedence over the settings from the settings file.
@@ -147,8 +157,8 @@ clikraken SUBCOMMAND --help
 For example, the `place` subcommand has the following help:
 
 ```
-usage: clikraken place [-h] [-p PAIR] [-t {market,limit}] [-s STARTTM]
-                       [-e EXPIRETM] [-q] [-v]
+usage: clikraken place [-h] [-l LEVERAGE] [-p PAIR] [-t {market,limit}]
+                       [-s STARTTM] [-e EXPIRETM] [-q] [-v]
                        {sell,buy} volume [price]
 
 positional arguments:
@@ -158,6 +168,8 @@ positional arguments:
 
 optional arguments:
   -h, --help            show this help message and exit
+  -l LEVERAGE, --leverage LEVERAGE
+                        leverage for margin trading (default: none)
   -p PAIR, --pair PAIR  asset pair (default: XETHZEUR)
   -t {market,limit}, --ordertype {market,limit}
                         order type. Currently implemented: [limit, market].
@@ -263,6 +275,10 @@ The development dependencies are only needed for developing, testing and packagi
 ### Tests
 
 Tests can be run by calling `tox`.
+
+## Contributors
+
+Special thanks to @t0neg, @citec and @melko for their contributions to clikraken.
 
 [corelicense]: https://www.apache.org/licenses/LICENSE-2.0
 [python3-krakenex]: https://github.com/veox/python3-krakenex

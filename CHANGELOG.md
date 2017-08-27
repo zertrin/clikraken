@@ -6,7 +6,15 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
-- placeholder
+- Add margin trading support: (by melko)
+  - `leverage` argument for the place subcommand
+  - new `positions` subcommand, to let the user see his open positions
+  - new `trade_balance` subcommand, for a short summary of the trading balance
+- Add commands `deposit_methods` and `deposit_addresses` (by citec)
+- Add `ledgers` command (by citec)
+- Add QueryOrders calls by adding `--txid`/`-i` to `clist` and `olist` commands (by citec)
+- Add TradesHistory and QueryTrades call as `trades` command (by citec)
+- Add CSV output with global option `--csv` (by citec)
 
 ## [0.6.2] - 2017-08-03
 - Fix bug in balance output for asset pairs shorter than 4 characters.
