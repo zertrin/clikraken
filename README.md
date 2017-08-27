@@ -185,7 +185,7 @@ optional arguments:
 
 ### Usage examples
 
-Notice: Without the `-p` option, the default currency pair is taken from the settings file or the aforementionned environment variable, defaulting to `XETHZEUR` if neither of those exists.
+Notice: Without the `-p` option, the default currency pair is taken from the settings file or the aforementioned environment variable, defaulting to `XETHZEUR` if neither of those exists.
 
 ```
 clikraken ticker
