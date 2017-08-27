@@ -201,6 +201,19 @@ clikraken place sell 0.5 13.3701
 clikraken cancel OUQUPX-9FBMJ-DL7L6W
 ```
 
+Using leverage (maximum multiplier allowed depends on the currency pair chosen):
+
+```
+# open a short position with 5:1 leverage
+clikraken place sell 0.1 -l 5
+
+clikraken positions
+clikraken trade_balance
+
+# to close an open position the same volume and leverage should be used
+clikraken place buy -t limit 0.1 1492.0 -l 5
+```
+
 Examples in another currency pair:
 
 ```
