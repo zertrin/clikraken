@@ -18,20 +18,22 @@ import sys
 import clikraken.global_vars as gv
 import clikraken.clikraken_utils as ck_utils
 
+from clikraken.api.public.asset_pairs import asset_pairs
 from clikraken.api.public.depth import depth
 from clikraken.api.public.last_trades import last_trades
 from clikraken.api.public.ticker import ticker
-from clikraken.api.public.asset_pairs import asset_pairs
 
 from clikraken.api.private.cancel_order import cancel_order
 from clikraken.api.private.get_balance import get_balance
-from clikraken.api.private.get_deposit_methods import get_deposit_methods
 from clikraken.api.private.get_deposit_addresses import get_deposit_addresses
+from clikraken.api.private.get_deposit_methods import get_deposit_methods
+from clikraken.api.private.get_ledgers import get_ledgers
+from clikraken.api.private.get_trade_balance import get_trade_balance
 from clikraken.api.private.list_closed_orders import list_closed_orders
 from clikraken.api.private.list_open_orders import list_open_orders
-from clikraken.api.private.get_ledgers import get_ledgers
-from clikraken.api.private.trades import trades
+from clikraken.api.private.list_open_positions import list_open_positions
 from clikraken.api.private.place_order import place_order
+from clikraken.api.private.trades import trades
 
 
 def parse_args():
@@ -146,6 +148,14 @@ def parse_args():
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser_balance.set_defaults(sub_func=get_balance)
 
+    # User trade balance
+    parser_trade_balance = subparsers.add_parser(
+        'trade_balance',
+        aliases=['tbal'],
+        help='[private] Get your current trade balance',
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser_trade_balance.set_defaults(sub_func=get_trade_balance)
+
     # Place an order
     parser_place = subparsers.add_parser(
         'place',
@@ -155,6 +165,7 @@ def parse_args():
     parser_place.add_argument('type', choices=['sell', 'buy'])
     parser_place.add_argument('volume', type=Decimal)
     parser_place.add_argument('price', default=None, nargs='?')
+    parser_place.add_argument('-l', '--leverage', default="none", help='leverage for margin trading')
     parser_place.add_argument('-p', '--pair', default=gv.DEFAULT_PAIR, help=pair_help)
     parser_place.add_argument('-t', '--ordertype', choices=['market', 'limit'], default='limit',
                               help="order type. Currently implemented: [limit, market].")
@@ -183,6 +194,14 @@ def parse_args():
     parser_olist.add_argument('-i', '--txid', default=None,
                               help='comma delimited list of transaction ids to query info about (20 maximum)')
     parser_olist.set_defaults(sub_func=list_open_orders)
+
+    # List of open positions
+    parser_oplist = subparsers.add_parser(
+        'positions',
+        aliases=['pos'],
+        help='[private] Get a list of your open positions',
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser_oplist.set_defaults(sub_func=list_open_positions)
 
     # List of closed orders
     parser_clist = subparsers.add_parser(
