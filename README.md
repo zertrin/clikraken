@@ -185,7 +185,7 @@ optional arguments:
 
 ### Usage examples
 
-Notice: Without the `-p` option, the default currency pair is taken from the settings file or the aforementionned environment variable, defaulting to `XETHZEUR` if neither of those exists.
+Notice: Without the `-p` option, the default currency pair is taken from the settings file or the aforementioned environment variable, defaulting to `XETHZEUR` if neither of those exists.
 
 ```
 clikraken ticker
@@ -199,6 +199,19 @@ clikraken place buy -t market 0.1
 clikraken place sell 0.5 13.3701
 
 clikraken cancel OUQUPX-9FBMJ-DL7L6W
+```
+
+Using leverage (maximum multiplier allowed depends on the currency pair chosen):
+
+```
+# open a short position with 5:1 leverage
+clikraken place sell 0.1 -l 5
+
+clikraken positions
+clikraken trade_balance
+
+# to close an open position the same volume and leverage should be used
+clikraken place buy -t limit 0.1 1492.0 -l 5
 ```
 
 Examples in another currency pair:

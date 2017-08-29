@@ -21,20 +21,15 @@ def get_trade_balance(args=None):
 
     res = query_api('private', 'TradeBalance', api_params, args)
 
-    tb_fields = {
-        'eb': 'equivalent balance',
-        'tb': 'trade balance',
-        'm': 'margin amount of open positions',
-        'n': 'unrealized net profit/loss of open positions',
-        'c': 'cost basis of open positions',
-        'v': 'current floating valuation of open positions',
-        'e': 'equity',
-        'mf': 'free margin',
-        'ml': 'margin level',
-    }
-
-    tbal_list = []
-    for k in res:
-        if k in tb_fields:
-            tbal_list.append([tb_fields[k], res[k]])
+    tbal_list = [
+        ['equivalent balance', res['eb']],
+        ['trade balance', res['tb']],
+        ['margin amount of open positions', res['m']],
+        ['cost basis of open positions', res['c']],
+        ['current floating valuation of open positions', res['v']],
+        ['equity', res['e']],
+        ['free margin', res['mf']],
+        ['margin level', res['ml']],
+        ['unrealized net profit/loss of open positions', res['n']],
+    ]
     print(tabulate(tbal_list))
