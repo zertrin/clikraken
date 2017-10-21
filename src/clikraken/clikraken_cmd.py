@@ -147,7 +147,7 @@ def parse_args():
     parser_ohlc.add_argument(
         '-p', '--pair', default=gv.DEFAULT_PAIR, help=pair_help)
     parser_ohlc.add_argument(
-        '-i', '--interval', default=1, 
+        '-i', '--interval', default=1,
         help="return ohlc data for interval in minutes; 1 , 5, 15, 30, 60, 240, 1440, 10080, 21600.")
     parser_ohlc.add_argument('-s', '--since', default=None,
                              help="return ohlc data since given idreturn interval since given id")
