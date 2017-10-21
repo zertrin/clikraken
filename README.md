@@ -97,19 +97,20 @@ Output:
 
 ```
 usage: clikraken [-h] [-V] [--debug] [--raw] [--csv] [--cron]
-                 {generate_settings,asset_pairs,ap,ticker,t,depth,d,last_trades,lt,balance,bal,trade_balance,tbal,place,p,cancel,x,olist,ol,positions,pos,clist,cl,ledgers,lg,trades,tr,deposit_methods,dm,deposit_addresses,da}
+                 {generate_settings,asset_pairs,ap,ticker,t,depth,d,last_trades,lt,ohlc,oh,balance,bal,trade_balance,tbal,place,p,cancel,x,olist,ol,positions,pos,clist,cl,ledgers,lg,trades,tr,deposit_methods,dm,deposit_addresses,da}
                  ...
 
 clikraken - Command line client for the Kraken exchange
 
 positional arguments:
-  {generate_settings,asset_pairs,ap,ticker,t,depth,d,last_trades,lt,balance,bal,trade_balance,tbal,place,p,cancel,x,olist,ol,positions,pos,clist,cl,ledgers,lg,trades,tr,deposit_methods,dm,deposit_addresses,da}
+  {generate_settings,asset_pairs,ap,ticker,t,depth,d,last_trades,lt,ohlc,oh,balance,bal,trade_balance,tbal,place,p,cancel,x,olist,ol,positions,pos,clist,cl,ledgers,lg,trades,tr,deposit_methods,dm,deposit_addresses,da}
                         available subcommands
     generate_settings   [clikraken] Print default settings.ini to stdout
     asset_pairs (ap)    [public] Get the list of available asset pairs
     ticker (t)          [public] Get the Ticker
     depth (d)           [public] Get the current market depth data
     last_trades (lt)    [public] Get the last trades
+    ohlc (oh)           [public] Get the ohlc data
     balance (bal)       [private] Get your current balance
     trade_balance (tbal)
                         [private] Get your current trade balance
@@ -191,6 +192,7 @@ Notice: Without the `-p` option, the default currency pair is taken from the set
 clikraken ticker
 clikraken balance
 clikraken depth
+clikraken ohlc --interval 15 --since 1508513700
 
 clikraken place buy -t limit 0.42 11.1337
 clikraken place buy -t market 0.1
