@@ -65,7 +65,7 @@ def ohlc(args):
         print(csv(ohlclist[:args.count], headers="keys"))
     else:
         print('Asset pair: ' + asset_pair_short(args.pair))
-        print('Inteval: ' + str(interval) + 'm\n')
+        print('Interval: ' + str(interval) + 'm\n')
 
         print(tabulate(ohlclist[:args.count], headers="keys") + '\n')
 
