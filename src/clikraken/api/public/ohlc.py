@@ -19,7 +19,7 @@ from clikraken.clikraken_utils import csv
 
 def ohlc(args):
     """Get OHLC data for asset pairs for various minute intervals:
-    1 (default), 5, 15, 30, 60, 240, 1440, 10080, 21600."""
+    1 (default), 5, 15, 30, 60, 240, 1440, 10800, 21600."""
 
     # Parameters to pass to the API
     api_params = {

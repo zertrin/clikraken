@@ -134,7 +134,7 @@ def parse_args():
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser_last_trades.add_argument('-p', '--pair', default=gv.DEFAULT_PAIR, help=pair_help)
     parser_last_trades.add_argument('-s', '--since', default=None,
-                                    help="return trade data since given idreturn trade data since given id")
+                                    help="return trade data since given id")
     parser_last_trades.add_argument('-c', '--count', type=int, default=15, help="maximum number of trades.")
     parser_last_trades.set_defaults(sub_func=last_trades)
 
@@ -148,9 +148,9 @@ def parse_args():
         '-p', '--pair', default=gv.DEFAULT_PAIR, help=pair_help)
     parser_ohlc.add_argument(
         '-i', '--interval', default=1,
-        help="return ohlc data for interval in minutes; 1 , 5, 15, 30, 60, 240, 1440, 10080, 21600.")
+        help="return ohlc data for interval in minutes; 1, 5, 15, 30, 60, 240, 1440, 10800, 21600.")
     parser_ohlc.add_argument('-s', '--since', default=None,
-                             help="return ohlc data since given idreturn interval since given id")
+                             help="return ohlc data since given id")
     parser_ohlc.add_argument('-c', '--count', type=int,
                              default=50, help="maximum number of intervals.")
     parser_ohlc.set_defaults(sub_func=ohlc)
