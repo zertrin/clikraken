@@ -13,7 +13,7 @@ from collections import OrderedDict
 
 from clikraken.api.api_utils import query_api
 from clikraken.clikraken_utils import asset_pair_short
-from clikraken.clikraken_utils import csv, format_timestamp
+from clikraken.clikraken_utils import csv, file, format_timestamp
 from clikraken.clikraken_utils import _tabulate as tabulate
 
 
@@ -79,6 +79,11 @@ def trades(args):
         return
 
     if args.csv:
-        print(csv(tl2, headers="keys"))
+        output = csv(tl2, headers="keys")
     else:
-        print(tabulate(tl2, headers="keys"))
+        output = tabulate(tl2, headers="keys")
+
+    print(output)
+
+    if args.fileout:
+        file(output)

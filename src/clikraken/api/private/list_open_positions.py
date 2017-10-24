@@ -14,6 +14,7 @@ from collections import OrderedDict
 
 from clikraken.api.api_utils import query_api
 from clikraken.clikraken_utils import _tabulate as tabulate
+from clikraken.clikraken_utils import file
 
 
 def list_open_positions(args):
@@ -45,4 +46,8 @@ def list_open_positions(args):
 
         pos_list.append(pos)
 
-    print(tabulate(pos_list, headers="keys"))
+    output = tabulate(pos_list, headers="keys")
+    print(output)
+
+    if args.fileout:
+        file(output)

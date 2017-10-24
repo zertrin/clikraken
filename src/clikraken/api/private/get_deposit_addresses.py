@@ -12,7 +12,7 @@ Licensed under the Apache License, Version 2.0. See the LICENSE file.
 from collections import OrderedDict
 
 from clikraken.api.api_utils import query_api
-from clikraken.clikraken_utils import csv, format_timestamp
+from clikraken.clikraken_utils import csv, format_timestamp, file
 from clikraken.clikraken_utils import _tabulate as tabulate
 
 
@@ -35,7 +35,11 @@ def get_deposit_addresses(args=None):
     if args.one:
         # Get preferably not used addresses
         addresses = [a for a in res if a.get('new', False)] or res
-        print(addresses[0]['address'])
+        output = addresses[0]['address']
+        # If fileout option send output to be written to file
+        if args.fileout:
+            file(output)
+        print(output)
         return
 
     addresses_list = []
@@ -58,6 +62,11 @@ def get_deposit_addresses(args=None):
     addresses_list = sorted(addresses_list, key=lambda odict: odict['expiretm'])
 
     if args.csv:
-        print(csv(addresses_list, headers="keys"))
+        output = csv(addresses_list, headers="keys")
     else:
-        print(tabulate(addresses_list, headers="keys"))
+        output = tabulate(addresses_list, headers="keys")
+
+    print(output)
+
+    if args.fileout:
+        file(output)

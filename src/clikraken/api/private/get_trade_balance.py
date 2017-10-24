@@ -11,6 +11,7 @@ Licensed under the Apache License, Version 2.0. See the LICENSE file.
 
 from clikraken.api.api_utils import query_api
 from clikraken.clikraken_utils import _tabulate as tabulate
+from clikraken.clikraken_utils import file
 
 
 def get_trade_balance(args=None):
@@ -32,4 +33,8 @@ def get_trade_balance(args=None):
         ['margin level', res['ml']],
         ['unrealized net profit/loss of open positions', res['n']],
     ]
-    print(tabulate(tbal_list))
+    output = tabulate(tbal_list)
+    print(output)
+
+    if args.fileout:
+        file(output)

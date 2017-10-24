@@ -11,6 +11,7 @@ Licensed under the Apache License, Version 2.0. See the LICENSE file.
 
 from clikraken.api.api_utils import query_api
 from clikraken.log_utils import logger
+from clikraken.clikraken_utils import file
 
 
 def cancel_order(args):
@@ -28,6 +29,9 @@ def cancel_order(args):
         pending = res.get('pending')
 
         if count:
-            print('{} - count: {}'.format(order_id, count))
+            output = '{} - count: {}'.format(order_id, count)
+            print(output)
+            if args.fileout:
+                file(output)
         if pending:
             logger.info('{} - order(s) is/are pending cancellation!'.format(order_id))
