@@ -71,3 +71,4 @@ local/
 dist_archive/
 .idea
 .DS_Store
+.vscode

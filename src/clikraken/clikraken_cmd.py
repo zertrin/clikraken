@@ -112,7 +112,7 @@ def parse_args():
     parser_ticker = subparsers.add_parser(
         'ticker',
         aliases=['t'],
-        help='[public] Get the Ticker',
+        help='[public] Get the ticker',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser_ticker.add_argument('-p', '--pair', default=gv.TICKER_PAIRS,
                                help=pairs_help + " to get info on. ")
@@ -144,7 +144,7 @@ def parse_args():
     parser_ohlc = subparsers.add_parser(
         'ohlc',
         aliases=['oh'],
-        help='[public] Get ohlc data',
+        help='[public] Get the ohlc data',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser_ohlc.add_argument(
         '-p', '--pair', default=gv.DEFAULT_PAIR, help=pair_help)

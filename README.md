@@ -96,7 +96,8 @@ clikraken --help
 Output:
 
 ```
-usage: clikraken [-h] [-V] [--debug] [--raw] [--csv] [--cron]
+usage: clikraken [-h] [-V] [--debug] [--raw] [--csv]
+                 [--csvseparator CSVSEPARATOR] [--cron]
                  {generate_settings,asset_pairs,ap,ticker,t,depth,d,last_trades,lt,ohlc,oh,balance,bal,trade_balance,tbal,place,p,cancel,x,olist,ol,positions,pos,clist,cl,ledgers,lg,trades,tr,deposit_methods,dm,deposit_addresses,da}
                  ...
 
@@ -107,10 +108,10 @@ positional arguments:
                         available subcommands
     generate_settings   [clikraken] Print default settings.ini to stdout
     asset_pairs (ap)    [public] Get the list of available asset pairs
-    ticker (t)          [public] Get the Ticker
+    ticker (t)          [public] Get the ticker
     depth (d)           [public] Get the current market depth data
     last_trades (lt)    [public] Get the last trades
-    ohlc (oh)           [public] Get the ohlc data
+    ohlc (oh)           [public] Get ohlc data
     balance (bal)       [private] Get your current balance
     trade_balance (tbal)
                         [private] Get your current trade balance
@@ -132,6 +133,8 @@ optional arguments:
   --debug               debug mode
   --raw                 output raw json results from the API
   --csv                 output results from the API as CSV
+  --csvseparator CSVSEPARATOR
+                        separator character to use with CSV output
   --cron                activate cron mode (tone down errors due to timeouts
                         or unavailable Kraken service)
 
@@ -229,6 +232,18 @@ clikraken olist -p XXBTZEUR
 clikraken ticker -p XETHXXBT
 clikraken depth -p XETHXXBT
 clikraken last_trades -p XETHXXBT
+```
+
+Global options examples:
+
+```
+# format the output as CSV data
+clikraken --csv ohlc
+clikraken --csv --csvseparator "|" ohlc
+clikraken --csv --csvseparator "\t" ohlc
+
+# output the raw JSON output from Kraken API
+clikraken --raw ticker
 ```
 
 ## Upgrade
