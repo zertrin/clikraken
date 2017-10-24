@@ -15,7 +15,7 @@ from decimal import Decimal
 from clikraken.api.api_utils import query_api
 from clikraken.clikraken_utils import asset_pair_short, humanize_timestamp
 from clikraken.clikraken_utils import _tabulate as tabulate
-from clikraken.clikraken_utils import csv
+from clikraken.clikraken_utils import csv, file
 
 
 def depth(args):
@@ -57,7 +57,7 @@ def depth(args):
         depth_dict[dtype] = reversed(sorted(depth_dict[dtype], key=lambda dentry: Decimal(dentry[price_label])))
 
     if args.csv:
-        output = []
+        out = []
         for dtype in depth_dict.keys():
             for o in depth_dict[dtype]:
                 it = OrderedDict()
@@ -70,9 +70,14 @@ def depth(args):
                     else:
                         # the other columns don't contain a space
                         it[k] = v
-                output += [it]
-        print(csv(output, headers="keys"))
+                out += [it]
+        output = csv(out, headers="keys")
     else:
         asks_table = tabulate(depth_dict['asks'], headers="keys")
         bids_table = tabulate(depth_dict['bids'], headers="keys")
-        print("{}\n\n{}".format(asks_table, bids_table))
+        output = "{}\n\n{}".format(asks_table, bids_table)
+
+    print(output)
+
+    if args.fileout:
+        file(output)

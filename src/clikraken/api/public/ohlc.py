@@ -14,7 +14,7 @@ from collections import OrderedDict
 from clikraken.api.api_utils import query_api
 from clikraken.clikraken_utils import format_timestamp, asset_pair_short
 from clikraken.clikraken_utils import _tabulate as tabulate
-from clikraken.clikraken_utils import csv
+from clikraken.clikraken_utils import csv, file
 
 
 def ohlc(args):
@@ -62,11 +62,15 @@ def ohlc(args):
     ohlclist = ohlclist[::-1]
 
     if args.csv:
-        print(csv(ohlclist[:args.count], headers="keys"))
+        output = csv(ohlclist[:args.count], headers="keys")
     else:
-        print('Asset pair: ' + asset_pair_short(args.pair))
-        print('Interval: ' + str(interval) + 'm\n')
+        output = ('Asset pair: ' + asset_pair_short(args.pair)
+                  + '\nInterval: ' + str(interval) + 'm\n\n'
+                  + tabulate(ohlclist[:args.count], headers="keys")
+                  + '\nLast ID = {}'.format(last_id)
+                  )
 
-        print(tabulate(ohlclist[:args.count], headers="keys") + '\n')
+    print(output)
 
-        print('Last ID = {}'.format(last_id))
+    if args.fileout:
+        file(output)

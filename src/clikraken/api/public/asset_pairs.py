@@ -13,7 +13,7 @@ from collections import OrderedDict
 
 from clikraken.api.api_utils import query_api
 from clikraken.clikraken_utils import _tabulate as tabulate
-from clikraken.clikraken_utils import csv
+from clikraken.clikraken_utils import csv, file
 
 
 def asset_pairs(args):
@@ -38,7 +38,13 @@ def asset_pairs(args):
         assetlist.append(ad)
 
     if args.csv:
-        print(csv(assetlist, headers="keys"))
+        output = csv(assetlist, headers="keys")
     else:
-        print(tabulate(assetlist, headers='keys'))
-        print('--- Total: {} pairs'.format(len(assetlist)))
+        output = (tabulate(assetlist, headers='keys')
+                  + '\n--- Total: {} pairs'.format(len(assetlist))
+                  )
+
+    print(output)
+
+    if args.fileout:
+        file(output)

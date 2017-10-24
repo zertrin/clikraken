@@ -81,6 +81,8 @@ def parse_args():
     parser.add_argument('--debug', action='store_true', help='debug mode')
     parser.add_argument('--raw', action='store_true', help='output raw json results from the API')
     parser.add_argument('--csv', action='store_true', help='output results from the API as CSV')
+    parser.add_argument('--fileout', action='store_true',
+                        help='output results to a datetime named file saved in the current working directory')
     parser.add_argument('--cron', action='store_true',
                         help='activate cron mode (tone down errors due to timeouts or unavailable Kraken service)')
     parser.set_defaults(main_func=None)

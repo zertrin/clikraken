@@ -96,7 +96,7 @@ clikraken --help
 Output:
 
 ```
-usage: clikraken [-h] [-V] [--debug] [--raw] [--csv] [--cron]
+usage: clikraken [-h] [-V] [--debug] [--raw] [--csv] [--fileout] [--cron]
                  {generate_settings,asset_pairs,ap,ticker,t,depth,d,last_trades,lt,ohlc,oh,balance,bal,trade_balance,tbal,place,p,cancel,x,olist,ol,positions,pos,clist,cl,ledgers,lg,trades,tr,deposit_methods,dm,deposit_addresses,da}
                  ...
 
@@ -132,6 +132,8 @@ optional arguments:
   --debug               debug mode
   --raw                 output raw json results from the API
   --csv                 output results from the API as CSV
+  --fileout             output results to a datetime named file saved in the
+                        current working directory
   --cron                activate cron mode (tone down errors due to timeouts
                         or unavailable Kraken service)
 

@@ -136,3 +136,15 @@ def csv(items, headers=None, separator=';'):
         output += [it]
     # Render output as txt
     return '\n'.join([separator.join([str(i) for i in o]) for o in output])
+
+
+def file(output):
+    # Get current date for file name
+    now = arrow.now().format('YYYYMMDDTHHmmss')
+    # Open, write output and close file with info logging
+    f = open(now + '.txt', 'w')
+    logger.info("Outputting to file: " + f.name)
+    f.write(output + '\n')
+    f.close()
+    logger.info('File output complete.')
+    return

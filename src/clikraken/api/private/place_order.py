@@ -13,6 +13,8 @@ import clikraken.global_vars as gv
 
 from clikraken.api.api_utils import query_api
 from clikraken.clikraken_utils import check_trading_agreement
+from clikraken.clikraken_utils import _tabulate as tabulate
+from clikraken.clikraken_utils import file
 from clikraken.log_utils import logger
 
 
@@ -70,5 +72,11 @@ def place_order(args):
         else:
             logger.warn('Order was NOT successfully added!')
     else:
+        tx_list = []
         for tx in txid:
-            print(tx)
+            tx_list.append(tx)
+        print('\n'.join(tx_list))
+
+        if args.fileout:
+            output = odesc + '\n' + ('\n'.join(tx_list))
+            file(output)
