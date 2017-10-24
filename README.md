@@ -239,11 +239,20 @@ Global options examples:
 ```
 # format the output as CSV data
 clikraken --csv ohlc
+
+# change the separator character for output in CSV format
 clikraken --csv --csvseparator "|" ohlc
 clikraken --csv --csvseparator "\t" ohlc
 
 # output the raw JSON output from Kraken API
 clikraken --raw ticker
+```
+
+Store the results in a file:
+
+```
+# store the results as CSV file
+clikraken --csv ohlc > /path/to/my/results.csv
 ```
 
 ## Upgrade
