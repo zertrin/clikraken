@@ -11,6 +11,7 @@ Licensed under the Apache License, Version 2.0. See the LICENSE file.
 """
 
 import argparse
+import codecs
 import textwrap
 from decimal import Decimal
 import sys
@@ -81,6 +82,7 @@ def parse_args():
     parser.add_argument('--debug', action='store_true', help='debug mode')
     parser.add_argument('--raw', action='store_true', help='output raw json results from the API')
     parser.add_argument('--csv', action='store_true', help='output results from the API as CSV')
+    parser.add_argument('--csvseparator', default=';', help='separator character to use with CSV output')
     parser.add_argument('--cron', action='store_true',
                         help='activate cron mode (tone down errors due to timeouts or unavailable Kraken service)')
     parser.set_defaults(main_func=None)
@@ -330,5 +332,10 @@ def parse_args():
         sys.exit(0)
 
     gv.CRON = args.cron
+
+    # Trick from https://stackoverflow.com/a/37059682/862188
+    # in order to be able to parse things like "\t" or "\\" for example
+    separator = codecs.escape_decode(bytes(args.csvseparator, "utf-8"))[0].decode("utf-8")
+    gv.CSV_SEPARATOR = separator
 
     return args

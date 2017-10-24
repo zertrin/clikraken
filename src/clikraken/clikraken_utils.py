@@ -123,7 +123,7 @@ def output_default_settings_ini(args):
     print(gv.DEFAULT_SETTINGS_INI)
 
 
-def csv(items, headers=None, separator=';'):
+def csv(items, headers=None):
     output = []
     # Headers
     if headers is not None:
@@ -135,4 +135,4 @@ def csv(items, headers=None, separator=';'):
         it = [val for val in item.values()]
         output += [it]
     # Render output as txt
-    return '\n'.join([separator.join([str(i) for i in o]) for o in output])
+    return '\n'.join([(gv.CSV_SEPARATOR).join([str(i) for i in o]) for o in output])
