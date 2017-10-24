@@ -13,7 +13,6 @@ import clikraken.global_vars as gv
 
 from clikraken.api.api_utils import query_api
 from clikraken.clikraken_utils import check_trading_agreement
-from clikraken.clikraken_utils import _tabulate as tabulate
 from clikraken.clikraken_utils import file
 from clikraken.log_utils import logger
 
