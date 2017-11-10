@@ -30,6 +30,7 @@ from clikraken.api.private.get_deposit_addresses import get_deposit_addresses
 from clikraken.api.private.list_closed_orders import list_closed_orders
 from clikraken.api.private.list_open_orders import list_open_orders
 from clikraken.api.private.place_order import place_order
+from clikraken.api.private.withdraw import withdraw
 
 
 def parse_args():
@@ -220,6 +221,17 @@ def parse_args():
         default=False,
         help="return just one address")
     parser_deposit_addresses.set_defaults(sub_func=get_deposit_addresses)
+
+    # Withdraw
+    parser_withdraw = subparsers.add_parser(
+        'withdraw',
+        aliases=['wd'],
+        help='[private] Withdraw funds',
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser_withdraw.add_argument('-a', '--asset', default=gv.DEFAULT_ASSET, help='asset being withdrawn')
+    parser_withdraw.add_argument('key', type=str, nargs='+', help="withdrawal key name, as set up on your account")
+    parser_withdraw.add_argument('amount', type=Decimal, help="amount to withdraw, including fees")
+    parser_withdraw.set_defaults(sub_func=withdraw)
 
     args = parser.parse_args()
 
