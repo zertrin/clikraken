@@ -27,6 +27,7 @@ def place_order(args):
         'volume': args.volume,
         'starttm': args.starttm,
         'expiretm': args.expiretm,
+        'leverage': args.leverage,
     }
 
     if gv.TRADING_AGREEMENT == 'agree':

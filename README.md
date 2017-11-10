@@ -14,7 +14,7 @@ This command line client allows you to get useful public and private information
 from [Kraken's API](https://www.kraken.com/help/api) and displays it in formatted tables.
 
 Moreover you can place or cancel simple orders
-(only simple buy/sell market/limit orders are currently implemented).
+(only simple or leveraged buy/sell market/limit orders are currently implemented).
 
 It is mainly oriented as an alternative to manually entering orders on Kraken's webpages, to save some time and eliminate mouse clicks. It is not optimized for automated use.
 
@@ -96,31 +96,45 @@ clikraken --help
 Output:
 
 ```
-usage: ck [-h] [-V] [--debug] [--raw] [--cron]
-          {generate_settings,asset_pairs,ap,ticker,t,depth,d,last_trades,lt,balance,bal,place,p,cancel,x,olist,ol,clist,cl}
-          ...
+usage: clikraken [-h] [-V] [--debug] [--raw] [--csv]
+                 [--csvseparator CSVSEPARATOR] [--cron]
+                 {generate_settings,asset_pairs,ap,ticker,t,depth,d,last_trades,lt,ohlc,oh,balance,bal,trade_balance,tbal,place,p,cancel,x,olist,ol,positions,pos,clist,cl,ledgers,lg,trades,tr,deposit_methods,dm,deposit_addresses,da}
+                 ...
 
 clikraken - Command line client for the Kraken exchange
 
 positional arguments:
-  {generate_settings,asset_pairs,ap,ticker,t,depth,d,last_trades,lt,balance,bal,place,p,cancel,x,olist,ol,clist,cl}
+  {generate_settings,asset_pairs,ap,ticker,t,depth,d,last_trades,lt,ohlc,oh,balance,bal,trade_balance,tbal,place,p,cancel,x,olist,ol,positions,pos,clist,cl,ledgers,lg,trades,tr,deposit_methods,dm,deposit_addresses,da}
                         available subcommands
     generate_settings   [clikraken] Print default settings.ini to stdout
     asset_pairs (ap)    [public] Get the list of available asset pairs
-    ticker (t)          [public] Get the Ticker
+    ticker (t)          [public] Get the ticker
     depth (d)           [public] Get the current market depth data
     last_trades (lt)    [public] Get the last trades
+    ohlc (oh)           [public] Get ohlc data
     balance (bal)       [private] Get your current balance
+    trade_balance (tbal)
+                        [private] Get your current trade balance
     place (p)           [private] Place an order
     cancel (x)          [private] Cancel orders
     olist (ol)          [private] Get a list of your open orders
+    positions (pos)     [private] Get a list of your open positions
     clist (cl)          [private] Get a list of your closed orders
+    ledgers (lg)        [private] Get ledgers info
+    trades (tr)         [private] Get trades history
+    deposit_methods (dm)
+                        [private] Get deposit methods
+    deposit_addresses (da)
+                        [private] Get deposit addresses
 
 optional arguments:
   -h, --help            show this help message and exit
   -V, --version         show program version
   --debug               debug mode
   --raw                 output raw json results from the API
+  --csv                 output results from the API as CSV
+  --csvseparator CSVSEPARATOR
+                        separator character to use with CSV output
   --cron                activate cron mode (tone down errors due to timeouts
                         or unavailable Kraken service)
 
@@ -130,9 +144,9 @@ For example:
 
 Current default currency pair: XETHZEUR.
 
-Create or edit the setting file C:\Users\Zertrin\.config\clikraken\settings.ini to change it.
+Create or edit the setting file /home/zertrin/.config/clikraken/settings.ini to change it.
 If the setting file doesn't exist yet, you can create one by doing:
-    clikraken generate_settings > C:\Users\Zertrin\.config\clikraken\settings.ini
+    clikraken generate_settings > /home/zertrin/.config/clikraken/settings.ini
 
 You can also set the CLIKRAKEN_DEFAULT_PAIR environment variable
 which has precedence over the settings from the settings file.
@@ -147,8 +161,8 @@ clikraken SUBCOMMAND --help
 For example, the `place` subcommand has the following help:
 
 ```
-usage: clikraken place [-h] [-p PAIR] [-t {market,limit}] [-s STARTTM]
-                       [-e EXPIRETM] [-q] [-v]
+usage: clikraken place [-h] [-l LEVERAGE] [-p PAIR] [-t {market,limit}]
+                       [-s STARTTM] [-e EXPIRETM] [-q] [-v]
                        {sell,buy} volume [price]
 
 positional arguments:
@@ -158,6 +172,8 @@ positional arguments:
 
 optional arguments:
   -h, --help            show this help message and exit
+  -l LEVERAGE, --leverage LEVERAGE
+                        leverage for margin trading (default: none)
   -p PAIR, --pair PAIR  asset pair (default: XETHZEUR)
   -t {market,limit}, --ordertype {market,limit}
                         order type. Currently implemented: [limit, market].
@@ -173,12 +189,13 @@ optional arguments:
 
 ### Usage examples
 
-Notice: Without the `-p` option, the default currency pair is taken from the settings file or the aforementionned environment variable, defaulting to `XETHZEUR` if neither of those exists.
+Notice: Without the `-p` option, the default currency pair is taken from the settings file or the aforementioned environment variable, defaulting to `XETHZEUR` if neither of those exists.
 
 ```
 clikraken ticker
 clikraken balance
 clikraken depth
+clikraken ohlc --interval 15 --since 1508513700
 
 clikraken place buy -t limit 0.42 11.1337
 clikraken place buy -t market 0.1
@@ -187,6 +204,19 @@ clikraken place buy -t market 0.1
 clikraken place sell 0.5 13.3701
 
 clikraken cancel OUQUPX-9FBMJ-DL7L6W
+```
+
+Using leverage (maximum multiplier allowed depends on the currency pair chosen):
+
+```
+# open a short position with 5:1 leverage
+clikraken place sell 0.1 -l 5
+
+clikraken positions
+clikraken trade_balance
+
+# to close an open position the same volume and leverage should be used
+clikraken place buy -t limit 0.1 1492.0 -l 5
 ```
 
 Examples in another currency pair:
@@ -202,6 +232,27 @@ clikraken olist -p XXBTZEUR
 clikraken ticker -p XETHXXBT
 clikraken depth -p XETHXXBT
 clikraken last_trades -p XETHXXBT
+```
+
+Global options examples:
+
+```
+# format the output as CSV data
+clikraken --csv ohlc
+
+# change the separator character for output in CSV format
+clikraken --csv --csvseparator "|" ohlc
+clikraken --csv --csvseparator "\t" ohlc
+
+# output the raw JSON output from Kraken API
+clikraken --raw ticker
+```
+
+Store the results in a file:
+
+```
+# store the results as CSV file
+clikraken --csv ohlc > /path/to/my/results.csv
 ```
 
 ## Upgrade
@@ -263,6 +314,10 @@ The development dependencies are only needed for developing, testing and packagi
 ### Tests
 
 Tests can be run by calling `tox`.
+
+## Contributors
+
+Special thanks to @t0neg, @citec and @melko for their contributions to clikraken.
 
 [corelicense]: https://www.apache.org/licenses/LICENSE-2.0
 [python3-krakenex]: https://github.com/veox/python3-krakenex

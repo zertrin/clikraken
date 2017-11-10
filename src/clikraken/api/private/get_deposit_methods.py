@@ -12,6 +12,7 @@ Licensed under the Apache License, Version 2.0. See the LICENSE file.
 from collections import OrderedDict
 
 from clikraken.api.api_utils import query_api
+from clikraken.clikraken_utils import csv
 from clikraken.clikraken_utils import _tabulate as tabulate
 
 
@@ -44,4 +45,7 @@ def get_deposit_methods(args=None):
     # Sort alphabetically
     m_list = sorted(m_list, key=lambda method_dict: '{}{}'.format(method_dict['asset'], method_dict['method']))
 
-    print(tabulate(m_list, headers="keys"))
+    if args.csv:
+        print(csv(m_list, headers="keys"))
+    else:
+        print(tabulate(m_list, headers="keys"))

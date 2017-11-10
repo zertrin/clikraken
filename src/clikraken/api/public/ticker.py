@@ -15,6 +15,7 @@ from decimal import Decimal
 from clikraken.api.api_utils import query_api
 from clikraken.clikraken_utils import asset_pair_short
 from clikraken.clikraken_utils import _tabulate as tabulate
+from clikraken.clikraken_utils import csv
 
 
 def ticker(args):
@@ -71,4 +72,7 @@ def ticker(args):
 
     ticker_list = sorted(ticker_list, key=lambda pticker: pticker['pair'])
 
-    print(tabulate(ticker_list, headers="keys"))
+    if args.csv:
+        print(csv(ticker_list, headers="keys"))
+    else:
+        print(tabulate(ticker_list, headers="keys"))

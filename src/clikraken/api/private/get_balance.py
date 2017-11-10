@@ -13,6 +13,7 @@ from collections import OrderedDict
 
 from clikraken.api.api_utils import query_api
 from clikraken.clikraken_utils import _tabulate as tabulate
+from clikraken.clikraken_utils import csv
 
 
 def get_balance(args=None):
@@ -39,4 +40,7 @@ def get_balance(args=None):
     # Sort alphabetically
     bal_list = sorted(bal_list, key=lambda asset_dict: asset_dict['asset'])
 
-    print(tabulate(bal_list, headers="keys"))
+    if args.csv:
+        print(csv(bal_list, headers="keys"))
+    else:
+        print(tabulate(bal_list, headers="keys"))

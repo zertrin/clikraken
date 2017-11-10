@@ -121,3 +121,18 @@ def check_trading_agreement():
 def output_default_settings_ini(args):
     """Output the contents of the default settings.ini file"""
     print(gv.DEFAULT_SETTINGS_INI)
+
+
+def csv(items, headers=None):
+    output = []
+    # Headers
+    if headers is not None:
+        if headers == "keys":
+            headers = items[0].keys()
+        output += [headers]
+    # Items
+    for item in items:
+        it = [val for val in item.values()]
+        output += [it]
+    # Render output as txt
+    return '\n'.join([(gv.CSV_SEPARATOR).join([str(i) for i in o]) for o in output])

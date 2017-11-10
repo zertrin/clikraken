@@ -14,6 +14,7 @@ from decimal import Decimal
 from clikraken.api.api_utils import parse_order_res, query_api
 from clikraken.clikraken_utils import asset_pair_short
 from clikraken.clikraken_utils import _tabulate as tabulate
+from clikraken.clikraken_utils import csv
 
 
 def list_closed_orders(args):
@@ -23,11 +24,13 @@ def list_closed_orders(args):
     api_params = {
         # TODO
     }
-
-    res = query_api('private', 'ClosedOrders', api_params, args)
-
-    # extract list of orders from API results
-    res_ol = res['closed']
+    if args.txid:
+        api_params.update({'txid': args.txid})
+        res_ol = query_api('private', 'QueryOrders', api_params, args)
+    else:
+        res = query_api('private', 'ClosedOrders', api_params, args)
+        # extract list of orders from API results
+        res_ol = res['closed']
 
     # the parsing is done in an helper function
     ol = parse_order_res(res_ol, ['closed', 'canceled'])
@@ -46,4 +49,7 @@ def list_closed_orders(args):
     # sort by date
     ol = sorted(ol, key=lambda odict: odict['closing_date'])
 
-    print(tabulate(ol, headers="keys"))
+    if args.csv:
+        print(csv(ol, headers="keys"))
+    else:
+        print(tabulate(ol, headers="keys"))
