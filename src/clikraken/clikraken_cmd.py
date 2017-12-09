@@ -192,6 +192,7 @@ def parse_args():
                               help="order type. Currently implemented: [limit, market].")
     parser_place.add_argument('-s', '--starttm', default=0, help="scheduled start time")
     parser_place.add_argument('-e', '--expiretm', default=0, help="expiration time")
+    parser_place.add_argument('-r', '--userref', help="user reference id.  32-bit signed number.  (optional)")
     parser_place.add_argument('-q', '--viqc', action='store_true', help="volume in quote currency")
     parser_place.add_argument('-v', '--validate', action='store_true', help="validate inputs only. do not submit order")
     parser_place.set_defaults(sub_func=place_order)

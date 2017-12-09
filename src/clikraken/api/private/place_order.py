@@ -44,6 +44,9 @@ def place_order(args):
             logger.warn('price is ignored for market orders!')
         check_trading_agreement()
 
+    if args.userref:
+        api_params['userref'] = args.userref
+
     oflags = []  # order flags
     if args.ordertype == 'limit':
         # for limit orders, always set post only order flag
