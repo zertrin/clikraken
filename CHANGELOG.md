@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 - Placeholder
 
+## [0.8.2] - 2017-12-13
+- Add `-r`/`--userref` param to `place` command (by citec)
+- Change handling of ValueError on invalid response of the API to error log level.
+- Gracefully handle missing fields for the trade balance summary
+
 ## [0.8.1] - 2017-10-24
 - Add `--csvseparator` option (idea from B00m)
 
@@ -170,7 +175,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - API key file location moved to '~/.config/clikraken/kraken.key'
 
-[Unreleased]: https://github.com/zertrin/clikraken/compare/0.8.1...HEAD
+[Unreleased]: https://github.com/zertrin/clikraken/compare/0.8.2...HEAD
+[0.8.2]: https://github.com/zertrin/clikraken/compare/0.8.1...0.8.2
 [0.8.1]: https://github.com/zertrin/clikraken/compare/0.8.0...0.8.1
 [0.8.0]: https://github.com/zertrin/clikraken/compare/0.7.0...0.8.0
 [0.7.0]: https://github.com/zertrin/clikraken/compare/0.6.2...0.7.0
