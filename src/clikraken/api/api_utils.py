@@ -62,24 +62,25 @@ def query_api(api_type, api_method, api_params, args):
     # select the appropriate method depending on the api_type string
     func = api_func.get(api_type)
 
+    # if cron mode is active, tone down some connection related errors in order to
+    # not raise too many cron emails when Kraken is temporarily not available
+    if gv.CRON:
+        log = logger.info
+    else:
+        log = logger.error
+
     if func is not None:
         try:
             # call to the krakenex API
             res = func(api_method, api_params)
         except (socket.timeout, socket.error, http.client.BadStatusLine) as e:
-            # if cron mode is active, tone down some connection related errors in order to
-            # not raise too many cron emails when Kraken is temporarily not available
-            if gv.CRON:
-                log = logger.info
-            else:
-                log = logger.error
             log('Network error while querying Kraken API!')
-            log(repr(e))
-        except ValueError:
-            if gv.CRON:
-                pass
-            else:
-                logger.exception('ValueError while querying Kraken API!')
+            log('Error details: ' + repr(e))
+        except ValueError as e:
+            log('Invalid response from Kraken API! '
+                '(This can happen when Kraken API is overloaded. '
+                'Try your luck again later.)')
+            log('Error details: ' + repr(e))
         except Exception:
             logger.exception('Exception while querying Kraken API!')
 
