@@ -26,7 +26,7 @@ def get_balance(args=None):
 
     bal_list = []
     for asset in res:
-        # Initialize an OrderedDict to garantee the column order
+        # Initialize an OrderedDict to guarantee the column order
         # for later use with the tabulate function
         asset_dict = OrderedDict()
         # Remove leading Z or X from asset pair if it is of length 4

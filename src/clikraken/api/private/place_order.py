@@ -16,6 +16,26 @@ from clikraken.clikraken_utils import check_trading_agreement
 from clikraken.log_utils import logger
 
 
+def get_auto_volume(args):
+    desired_asset = args.pair[:3] if args.type == 'sell' else args.pair[-3:]
+    balance = None
+    # Parameters to pass to the Balance API
+    balance_api_params = {}
+
+    res = query_api('private', 'Balance', balance_api_params, args)
+    for asset in res:
+        cur_asset = asset[1:] if len(asset) == 4 and asset[0] in ['Z', 'X'] else asset
+        if cur_asset == desired_asset:
+            balance = float(res[asset])
+            break
+
+    if balance is None:
+        logger.error('Failed to get ' + desired_asset + ' balance for automatic volume calculation.')
+        exit(2)
+    else:
+        return balance if args.type == 'sell' else balance / float(args.price)
+
+
 def place_order(args):
     """Place an order."""
 
@@ -39,6 +59,8 @@ def place_order(args):
             return
         else:
             api_params['price'] = args.price
+            if args.volume == 'auto':
+                api_params['volume'] = "%.4f" % get_auto_volume(args)
     elif args.ordertype == 'market':
         if args.price is not None:
             logger.warn('price is ignored for market orders!')
