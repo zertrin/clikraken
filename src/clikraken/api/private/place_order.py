@@ -8,6 +8,7 @@ and outputs the results in a tabular format.
 
 Licensed under the Apache License, Version 2.0. See the LICENSE file.
 """
+from decimal import Decimal, ROUND_DOWN
 
 import clikraken.global_vars as gv
 
@@ -60,7 +61,7 @@ def place_order(args):
         else:
             api_params['price'] = args.price
             if args.volume == 'auto':
-                api_params['volume'] = "%.4f" % get_auto_volume(args)
+                api_params['volume'] = get_auto_volume(args)
     elif args.ordertype == 'market':
         if args.price is not None:
             logger.warn('price is ignored for market orders!')
