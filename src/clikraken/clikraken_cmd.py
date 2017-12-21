@@ -13,7 +13,6 @@ Licensed under the Apache License, Version 2.0. See the LICENSE file.
 import argparse
 import codecs
 import textwrap
-from decimal import Decimal
 import sys
 
 import clikraken.global_vars as gv
