@@ -8,7 +8,6 @@ and outputs the results in a tabular format.
 
 Licensed under the Apache License, Version 2.0. See the LICENSE file.
 """
-from decimal import Decimal, ROUND_DOWN
 
 import clikraken.global_vars as gv
 
