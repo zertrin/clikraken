@@ -49,8 +49,9 @@ def place_order(args):
 
     oflags = []  # order flags
     if args.ordertype == 'limit':
-        # for limit orders, always set post only order flag
-        oflags.append('post')
+        if not args.nopost:
+            # for limit orders, by default set post-only order flag
+            oflags.append('post')
     if args.viqc:
         oflags.append('viqc')
     if oflags:
