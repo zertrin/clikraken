@@ -162,8 +162,9 @@ For example, the `place` subcommand has the following help:
 
 ```
 usage: clikraken place [-h] [-l LEVERAGE] [-p PAIR] [-t {market,limit}]
-                       [-s STARTTM] [-e EXPIRETM] [-q] [-v]
-                       {sell,buy} volume [price]
+                         [-s STARTTM] [-e EXPIRETM] [-r USERREF] [-q] [-T]
+                         [-v]
+                         {sell,buy} volume [price]
 
 positional arguments:
   {sell,buy}
@@ -182,7 +183,12 @@ optional arguments:
                         scheduled start time (default: 0)
   -e EXPIRETM, --expiretm EXPIRETM
                         expiration time (default: 0)
+  -r USERREF, --userref USERREF
+                        user reference id. 32-bit signed number. (optional)
+                        (default: None)
   -q, --viqc            volume in quote currency (default: False)
+  -T, --nopost          disable 'post-only' option (for limit taker orders)
+                        (default: False)
   -v, --validate        validate inputs only. do not submit order (default:
                         False)
 ```

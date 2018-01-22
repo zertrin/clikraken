@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 - Placeholder
 
+## [0.8.3] - 2018-01-22
+- Add `-T`/`--nopost` option to `place` command in order to allow limit taker orders.
+
 ## [0.8.2] - 2017-12-13
 - Add `-r`/`--userref` param to `place` command (by citec)
 - Change handling of ValueError on invalid response of the API to error log level.
@@ -175,7 +178,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - API key file location moved to '~/.config/clikraken/kraken.key'
 
-[Unreleased]: https://github.com/zertrin/clikraken/compare/0.8.2...HEAD
+[Unreleased]: https://github.com/zertrin/clikraken/compare/0.8.3...HEAD
+[0.8.3]: https://github.com/zertrin/clikraken/compare/0.8.2...0.8.3
 [0.8.2]: https://github.com/zertrin/clikraken/compare/0.8.1...0.8.2
 [0.8.1]: https://github.com/zertrin/clikraken/compare/0.8.0...0.8.1
 [0.8.0]: https://github.com/zertrin/clikraken/compare/0.7.0...0.8.0
