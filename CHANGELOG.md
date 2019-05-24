@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 - Placeholder
 
-## [0.8.3.1] - 2018-07-07
+## 0.8.3.1 - 2018-07-07
 - No code changes, fix release issue only.
 
 ## [0.8.3] - 2018-01-22
