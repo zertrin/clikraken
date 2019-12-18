@@ -1,3 +1,5 @@
+![Maintenance](https://img.shields.io/maintenance/no/2019)
+
 [![Travis-CI Build Status](https://travis-ci.org/zertrin/clikraken.svg?branch=master)](https://travis-ci.org/zertrin/clikraken)
 [![Appveyor Build status](https://ci.appveyor.com/api/projects/status/jom3ee762u02q2fo/branch/master?svg=true)](https://ci.appveyor.com/project/zertrin/clikraken/branch/master)
 [![PyPI Package latest release](https://img.shields.io/pypi/v/clikraken.svg)](https://pypi.python.org/pypi/clikraken)
@@ -7,6 +9,8 @@
 [![GitHub license](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://raw.githubusercontent.com/zertrin/clikraken/master/LICENSE)
 
 # clikraken
+
+_Note: As of 2019, I do not intend to maintain this tool further myself. Feel free to fork it if you want. If a well maintained fork appears, let me know so I can link to it from here._
 
 **Command-line client for the Kraken exchange**
 
