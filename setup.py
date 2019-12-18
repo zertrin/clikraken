@@ -32,7 +32,7 @@ setup(
     url=about['__url__'],
     install_requires=[
         'krakenex>=0.1,<1.0',
-        'arrow',
+        'arrow<0.14',
         'tabulate',
         'colorlog',
     ],
