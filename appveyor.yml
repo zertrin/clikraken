@@ -1,43 +1,12 @@
 version: '{branch}-{build}'
 build: off
-cache:
-  - '%LOCALAPPDATA%\pip\Cache'
 environment:
   matrix:
-    - PYTHON_HOME: C:\Python34
-      PYTHON_VERSION: '3.4'
-      PYTHON_ARCH: '32'
-    - WINDOWS_SDK_VERSION: v7.1
-      PYTHON_HOME: C:\Python34-x64
-      PYTHON_VERSION: '3.4'
-      PYTHON_ARCH: '64'
-    - PYTHON_HOME: C:\Python35
-      PYTHON_VERSION: '3.5'
-      PYTHON_ARCH: '32'
-    - PYTHON_HOME: C:\Python35-x64
-      PYTHON_VERSION: '3.5'
-      PYTHON_ARCH: '64'
-    - PYTHON_HOME: C:\Python36
-      PYTHON_VERSION: '3.6'
-      PYTHON_ARCH: '32'
-    - PYTHON_HOME: C:\Python36-x64
-      PYTHON_VERSION: '3.6'
-      PYTHON_ARCH: '64'
-    - PYTHON_HOME: C:\Python36-x64
-      PYTHON_VERSION: '3.6'
-      PYTHON_ARCH: '64'
-init:
-  - ps: ls C:\Python*
-  - set PATH=%PYTHON_HOME%;%PYTHON_HOME%\Scripts;%PATH%
+    - TOXENV: py35
+    - TOXENV: py36
+    - TOXENV: py37
+    - TOXENV: py38
 install:
-  - '%PYTHON_HOME%\python -m pip install -U pip setuptools virtualenv'
-  - '%PYTHON_HOME%\Scripts\virtualenv --version'
-  - '%PYTHON_HOME%\Scripts\easy_install --version'
-  - '%PYTHON_HOME%\Scripts\pip --version'
-  - '%PYTHON_HOME%\Scripts\pip install -r requirements_dev.txt'
-  - '%PYTHON_HOME%\python setup.py install'
-  - ps: ls $env:PYTHON_HOME\Scripts
-before_test:
-  - ps: dir "env:"
+  - pip install tox
 test_script:
-  - py.test
+  - tox
