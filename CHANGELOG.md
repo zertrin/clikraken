@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 - Placeholder
 
+## 0.8.3.2 - 2020-02-16
+- No code changes, update CI only, remove py3.4, add py3.7 and py3.8.
+
 ## 0.8.3.1 - 2018-07-07
 - No code changes, fix release issue only.
 
