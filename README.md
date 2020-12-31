@@ -30,6 +30,32 @@ There are probably undetected bugs left. **Use at your own risk!**
 
 See list of changes in the [Changelog](CHANGELOG.md).
 
+## List of supported Kraken API endpoints
+
+| API Type | [API Endpoint](https://www.kraken.com/features/api) | used by clikraken command |
+|----------|----------|-------------------|
+| public | `AssetPairs` | asset_pairs (ap) |
+| public | `Depth` | depth (d) |
+| public | `OHLC` | ohlc (oh) |
+| public | `Ticker` | ticker (t) |
+| public | `Trades` | last_trades (lt) |
+| private | `AddOrder` | place (p) |
+| private | `Balance` | balance (bal) |
+| private | `CancelOrder` | cancel (x) |
+| private | `ClosedOrders` | clist (cl) |
+| private | `DepositAddresses` | deposit_addresses (da) |
+| private | `DepositMethods` | deposit_methods (dm) |
+| private | `Ledgers` | ledgers (lg) |
+| private | `OpenOrders` | olist (ol) |
+| private | `OpenPositions` | positions (pos) |
+| private | `QueryLedgers` | ledgers (lg) |
+| private | `QueryOrders` | olist (ol) / clist (cl) |
+| private | `QueryTrades` | trades (tr) |
+| private | `TradeBalance` | trade_balance (tbal) |
+| private | `TradesHistory` | trades (tr) |
+
+Note: any API endpoint listed at <https://www.kraken.com/features/api> but not in the above list has not been implemented in clikraken (yet).
+
 ## Installation
 
 ### Step 0: Create a virtualenv (optional)
