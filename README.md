@@ -124,22 +124,22 @@ clikraken --help
 Output:
 
 ```
-usage: clikraken [-h] [-V] [--debug] [--raw] [--csv]
+usage: clikraken [-h] [-V] [--debug] [--raw] [--json] [--csv]
                  [--csvseparator CSVSEPARATOR] [--cron]
-                 {generate_settings,asset_pairs,ap,ticker,t,depth,d,last_trades,lt,ohlc,oh,balance,bal,trade_balance,tbal,place,p,cancel,x,olist,ol,positions,pos,clist,cl,ledgers,lg,trades,tr,deposit_methods,dm,deposit_addresses,da}
+                 {generate_settings,asset_pairs,ap,ticker,t,depth,d,last_trades,lt,ohlc,oh,balance,bal,trade_balance,tbal,place,p,cancel,x,olist,ol,positions,pos,clist,cl,ledgers,lg,trades,tr,deposit_methods,dm,deposit_addresses,da,list_withdrawals,lw}
                  ...
 
 clikraken - Command line client for the Kraken exchange
 
 positional arguments:
-  {generate_settings,asset_pairs,ap,ticker,t,depth,d,last_trades,lt,ohlc,oh,balance,bal,trade_balance,tbal,place,p,cancel,x,olist,ol,positions,pos,clist,cl,ledgers,lg,trades,tr,deposit_methods,dm,deposit_addresses,da}
+  {generate_settings,asset_pairs,ap,ticker,t,depth,d,last_trades,lt,ohlc,oh,balance,bal,trade_balance,tbal,place,p,cancel,x,olist,ol,positions,pos,clist,cl,ledgers,lg,trades,tr,deposit_methods,dm,deposit_addresses,da,list_withdrawals,lw}
                         available subcommands
     generate_settings   [clikraken] Print default settings.ini to stdout
     asset_pairs (ap)    [public] Get the list of available asset pairs
     ticker (t)          [public] Get the ticker
     depth (d)           [public] Get the current market depth data
     last_trades (lt)    [public] Get the last trades
-    ohlc (oh)           [public] Get ohlc data
+    ohlc (oh)           [public] Get the ohlc data
     balance (bal)       [private] Get your current balance
     trade_balance (tbal)
                         [private] Get your current trade balance
@@ -154,12 +154,15 @@ positional arguments:
                         [private] Get deposit methods
     deposit_addresses (da)
                         [private] Get deposit addresses
+    list_withdrawals (lw)
+                        [private] List withdrawals
 
 optional arguments:
   -h, --help            show this help message and exit
   -V, --version         show program version
   --debug               debug mode
   --raw                 output raw json results from the API
+  --json                output json results from the API
   --csv                 output results from the API as CSV
   --csvseparator CSVSEPARATOR
                         separator character to use with CSV output
