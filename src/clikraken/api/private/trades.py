@@ -9,6 +9,7 @@ and outputs the results in a tabular format.
 Licensed under the Apache License, Version 2.0. See the LICENSE file.
 """
 
+import argparse
 from collections import OrderedDict
 
 from clikraken.api.api_utils import query_api
@@ -94,3 +95,41 @@ def trades(args):
         print(csv(tl2, headers="keys"))
     else:
         print(tabulate(tl2, headers="keys"))
+
+
+def init(subparsers):
+    pair_help = "asset pair"
+    parser_trades = subparsers.add_parser(
+        "trades",
+        aliases=["tr"],
+        help="[private] Get trades history",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
+    parser_trades.add_argument(
+        "-t",
+        "--type",
+        default="all",
+        help="type of trade. Values: all|any position|closed position|closing position|no position",
+    )
+    # TODO: trades parameter
+    parser_trades.add_argument(
+        "-s",
+        "--start",
+        default=None,
+        help="starting unix timestamp or trade tx id of results (exclusive)",
+    )
+    parser_trades.add_argument(
+        "-e",
+        "--end",
+        default=None,
+        help="ending unix timestamp or trade tx id of results (exclusive)",
+    )
+    parser_trades.add_argument("-o", "--ofs", default=None, help="result offset")
+    parser_trades.add_argument(
+        "-i",
+        "--id",
+        default=None,
+        help="comma delimited list of transaction ids to query info about (20 maximum)",
+    )
+    parser_trades.add_argument("-p", "--pair", default=None, help=pair_help)
+    parser_trades.set_defaults(sub_func=trades)

@@ -9,6 +9,8 @@ and outputs the results in a tabular format.
 Licensed under the Apache License, Version 2.0. See the LICENSE file.
 """
 
+import argparse
+
 from clikraken.api.api_utils import query_api
 from clikraken.log_utils import logger
 
@@ -31,3 +33,14 @@ def cancel_order(args):
             print("{} - count: {}".format(order_id, count))
         if pending:
             logger.info("{} - order(s) is/are pending cancellation!".format(order_id))
+
+
+def init(subparsers):
+    parser_cancel = subparsers.add_parser(
+        "cancel",
+        aliases=["x"],
+        help="[private] Cancel orders",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
+    parser_cancel.add_argument("order_ids", type=str, nargs="+", help="transaction ids")
+    parser_cancel.set_defaults(sub_func=cancel_order)

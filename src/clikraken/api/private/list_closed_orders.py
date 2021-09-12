@@ -9,6 +9,7 @@ and outputs the results in a tabular format.
 Licensed under the Apache License, Version 2.0. See the LICENSE file.
 """
 
+import argparse
 from decimal import Decimal
 
 from clikraken.api.api_utils import parse_order_res, query_api
@@ -57,3 +58,21 @@ def list_closed_orders(args):
         print(csv(ol, headers="keys"))
     else:
         print(tabulate(ol, headers="keys"))
+
+
+def init(subparsers):
+    pair_help = "asset pair"
+    parser_clist = subparsers.add_parser(
+        "clist",
+        aliases=["cl"],
+        help="[private] Get a list of your closed orders",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
+    parser_clist.add_argument("-p", "--pair", default=None, help=pair_help)
+    parser_clist.add_argument(
+        "-i",
+        "--txid",
+        default=None,
+        help="comma delimited list of transaction ids to query info about (20 maximum)",
+    )
+    parser_clist.set_defaults(sub_func=list_closed_orders)

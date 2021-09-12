@@ -9,6 +9,9 @@ and outputs the results in a tabular format.
 Licensed under the Apache License, Version 2.0. See the LICENSE file.
 """
 
+import argparse
+from decimal import Decimal
+
 import clikraken.global_vars as gv
 
 from clikraken.api.api_utils import query_api
@@ -76,3 +79,48 @@ def place_order(args):
     else:
         for tx in txid:
             print(tx)
+
+
+def init(subparsers):
+    pair_help = "asset pair"
+    parser_place = subparsers.add_parser(
+        "place",
+        aliases=["p"],
+        help="[private] Place an order",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
+    parser_place.add_argument("type", choices=["sell", "buy"])
+    parser_place.add_argument("volume", type=Decimal)
+    parser_place.add_argument("price", default=None, nargs="?")
+    parser_place.add_argument(
+        "-l", "--leverage", default="none", help="leverage for margin trading"
+    )
+    parser_place.add_argument("-p", "--pair", default=gv.DEFAULT_PAIR, help=pair_help)
+    parser_place.add_argument(
+        "-t",
+        "--ordertype",
+        choices=["market", "limit"],
+        default="limit",
+        help="order type. Currently implemented: [limit, market].",
+    )
+    parser_place.add_argument("-s", "--starttm", default=0, help="scheduled start time")
+    parser_place.add_argument("-e", "--expiretm", default=0, help="expiration time")
+    parser_place.add_argument(
+        "-r", "--userref", help="user reference id.  32-bit signed number.  (optional)"
+    )
+    parser_place.add_argument(
+        "-q", "--viqc", action="store_true", help="volume in quote currency"
+    )
+    parser_place.add_argument(
+        "-T",
+        "--nopost",
+        action="store_true",
+        help="disable 'post-only' option (for limit taker orders)",
+    )
+    parser_place.add_argument(
+        "-v",
+        "--validate",
+        action="store_true",
+        help="validate inputs only. do not submit order",
+    )
+    parser_place.set_defaults(sub_func=place_order)

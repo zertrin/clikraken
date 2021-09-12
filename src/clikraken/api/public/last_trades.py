@@ -9,7 +9,10 @@ and outputs the results in a tabular format.
 Licensed under the Apache License, Version 2.0. See the LICENSE file.
 """
 
+import argparse
 from collections import OrderedDict
+
+import clikraken.global_vars as gv
 
 from clikraken.api.api_utils import query_api
 from clikraken.clikraken_utils import (
@@ -82,3 +85,23 @@ def last_trades(args):
         print(tabulate(lt, headers="firstrow") + "\n")
 
         print("Last ID = {}".format(last_id))
+
+
+def init(subparsers):
+    pair_help = "asset pair"
+    parser_last_trades = subparsers.add_parser(
+        "last_trades",
+        aliases=["lt"],
+        help="[public] Get the last trades",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
+    parser_last_trades.add_argument(
+        "-p", "--pair", default=gv.DEFAULT_PAIR, help=pair_help
+    )
+    parser_last_trades.add_argument(
+        "-s", "--since", default=None, help="return trade data since given id"
+    )
+    parser_last_trades.add_argument(
+        "-c", "--count", type=int, default=15, help="maximum number of trades."
+    )
+    parser_last_trades.set_defaults(sub_func=last_trades)

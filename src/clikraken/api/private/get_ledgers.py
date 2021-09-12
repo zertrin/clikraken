@@ -9,6 +9,7 @@ and outputs the results in a tabular format.
 Licensed under the Apache License, Version 2.0. See the LICENSE file.
 """
 
+import argparse
 from collections import OrderedDict
 
 from clikraken.api.api_utils import query_api
@@ -75,3 +76,44 @@ def get_ledgers(args):
         print(csv(lg_list, headers="keys"))
     else:
         print(tabulate(lg_list, headers="keys"))
+
+
+def init(subparsers):
+    parser_ledgers = subparsers.add_parser(
+        "ledgers",
+        aliases=["lg"],
+        help="[private] Get ledgers info",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
+    parser_ledgers.add_argument(
+        "-a",
+        "--asset",
+        default="all",
+        help="comma delimited list of assets to restrict output to",
+    )
+    parser_ledgers.add_argument(
+        "-t",
+        "--type",
+        default="all",
+        help="type of ledger to retrieve. Possible values: all|deposit|withdrawal|trade|margin",
+    )
+    parser_ledgers.add_argument(
+        "-s",
+        "--start",
+        default=None,
+        help="starting unix timestamp or ledger id of results (exclusive)",
+    )
+    parser_ledgers.add_argument(
+        "-e",
+        "--end",
+        default=None,
+        help="ending unix timestamp or ledger id of results (exclusive)",
+    )
+    parser_ledgers.add_argument("-o", "--ofs", default=None, help="result offset")
+    parser_ledgers.add_argument(
+        "-i",
+        "--id",
+        default=None,
+        help="comma delimited list of ledger ids to query info about (20 maximum)",
+    )
+    parser_ledgers.set_defaults(sub_func=get_ledgers)

@@ -9,6 +9,7 @@ and outputs the results in a tabular format.
 Licensed under the Apache License, Version 2.0. See the LICENSE file.
 """
 
+import argparse
 from collections import OrderedDict
 
 from clikraken.api.api_utils import query_api
@@ -42,3 +43,13 @@ def asset_pairs(args):
     else:
         print(tabulate(assetlist, headers="keys"))
         print("--- Total: {} pairs".format(len(assetlist)))
+
+
+def init(subparsers):
+    parser_asset_pairs = subparsers.add_parser(
+        "asset_pairs",
+        aliases=["ap"],
+        help="[public] Get the list of available asset pairs",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
+    parser_asset_pairs.set_defaults(sub_func=asset_pairs)

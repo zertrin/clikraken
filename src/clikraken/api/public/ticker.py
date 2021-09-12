@@ -9,12 +9,15 @@ and outputs the results in a tabular format.
 Licensed under the Apache License, Version 2.0. See the LICENSE file.
 """
 
+import argparse
 from collections import OrderedDict
 from decimal import Decimal
 
+import clikraken.global_vars as gv
+
 from clikraken.api.api_utils import query_api
-from clikraken.clikraken_utils import asset_pair_short
 from clikraken.clikraken_utils import _tabulate as tabulate
+from clikraken.clikraken_utils import asset_pair_short
 from clikraken.clikraken_utils import csv
 
 
@@ -78,3 +81,17 @@ def ticker(args):
         print(csv(ticker_list, headers="keys"))
     else:
         print(tabulate(ticker_list, headers="keys"))
+
+
+def init(subparsers):
+    pairs_help = "comma delimited list of asset pairs"
+    parser_ticker = subparsers.add_parser(
+        "ticker",
+        aliases=["t"],
+        help="[public] Get the ticker",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
+    parser_ticker.add_argument(
+        "-p", "--pair", default=gv.TICKER_PAIRS, help=pairs_help + " to get info on. "
+    )
+    parser_ticker.set_defaults(sub_func=ticker)

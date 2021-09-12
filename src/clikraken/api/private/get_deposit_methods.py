@@ -9,8 +9,10 @@ and outputs the results in a tabular format.
 Licensed under the Apache License, Version 2.0. See the LICENSE file.
 """
 
+import argparse
 from collections import OrderedDict
 
+import clikraken.global_vars as gv
 from clikraken.api.api_utils import query_api
 from clikraken.clikraken_utils import csv
 from clikraken.clikraken_utils import _tabulate as tabulate
@@ -58,3 +60,16 @@ def get_deposit_methods(args=None):
         print(csv(m_list, headers="keys"))
     else:
         print(tabulate(m_list, headers="keys"))
+
+
+def init(subparsers):
+    parser_deposit_methods = subparsers.add_parser(
+        "deposit_methods",
+        aliases=["dm"],
+        help="[private] Get deposit methods",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
+    parser_deposit_methods.add_argument(
+        "-a", "--asset", default=gv.DEFAULT_ASSET, help="asset being deposited"
+    )
+    parser_deposit_methods.set_defaults(sub_func=get_deposit_methods)

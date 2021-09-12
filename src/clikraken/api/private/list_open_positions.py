@@ -9,6 +9,7 @@ and outputs the results in a tabular format.
 Licensed under the Apache License, Version 2.0. See the LICENSE file.
 """
 
+import argparse
 from datetime import datetime
 from collections import OrderedDict
 
@@ -46,3 +47,13 @@ def list_open_positions(args):
         pos_list.append(pos)
 
     print(tabulate(pos_list, headers="keys"))
+
+
+def init(subparsers):
+    parser_oplist = subparsers.add_parser(
+        "positions",
+        aliases=["pos"],
+        help="[private] Get a list of your open positions",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
+    parser_oplist.set_defaults(sub_func=list_open_positions)

@@ -9,6 +9,7 @@ and outputs the results in a tabular format.
 Licensed under the Apache License, Version 2.0. See the LICENSE file.
 """
 
+import argparse
 from collections import OrderedDict
 
 from clikraken.api.api_utils import query_api
@@ -46,3 +47,13 @@ def get_balance(args=None):
         print(csv(bal_list, headers="keys"))
     else:
         print(tabulate(bal_list, headers="keys"))
+
+
+def init(subparsers):
+    parser_balance = subparsers.add_parser(
+        "balance",
+        aliases=["bal"],
+        help="[private] Get your current balance",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
+    parser_balance.set_defaults(sub_func=get_balance)

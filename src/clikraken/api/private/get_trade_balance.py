@@ -9,6 +9,8 @@ and outputs the results.
 Licensed under the Apache License, Version 2.0. See the LICENSE file.
 """
 
+import argparse
+
 from clikraken.api.api_utils import query_api
 from clikraken.clikraken_utils import _tabulate as tabulate
 
@@ -33,3 +35,13 @@ def get_trade_balance(args=None):
         ["unrealized net profit/loss of open positions", res.get("n", "n/a")],
     ]
     print(tabulate(tbal_list))
+
+
+def init(subparsers):
+    parser_trade_balance = subparsers.add_parser(
+        "trade_balance",
+        aliases=["tbal"],
+        help="[private] Get your current trade balance",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
+    parser_trade_balance.set_defaults(sub_func=get_trade_balance)

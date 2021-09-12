@@ -9,8 +9,10 @@ and outputs the results in a tabular format.
 Licensed under the Apache License, Version 2.0. See the LICENSE file.
 """
 
+import argparse
 from collections import OrderedDict
 
+import clikraken.global_vars as gv
 from clikraken.api.api_utils import query_api
 from clikraken.clikraken_utils import csv, format_timestamp
 from clikraken.clikraken_utils import _tabulate as tabulate
@@ -68,3 +70,28 @@ def get_deposit_addresses(args=None):
         print(csv(addresses_list, headers="keys"))
     else:
         print(tabulate(addresses_list, headers="keys"))
+
+
+def init(subparsers):
+    parser_deposit_addresses = subparsers.add_parser(
+        "deposit_addresses",
+        aliases=["da"],
+        help="[private] Get deposit addresses",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
+    parser_deposit_addresses.add_argument(
+        "-a", "--asset", default=gv.DEFAULT_ASSET, help="asset being deposited"
+    )
+    parser_deposit_addresses.add_argument(
+        "-m", "--method", default=None, help="name of the deposit method"
+    )
+    parser_deposit_addresses.add_argument(
+        "-n",
+        "--new",
+        action="store_true",
+        help="whether or not to generate a new address",
+    )
+    parser_deposit_addresses.add_argument(
+        "-1", "--one", action="store_true", help="return just one address"
+    )
+    parser_deposit_addresses.set_defaults(sub_func=get_deposit_addresses)

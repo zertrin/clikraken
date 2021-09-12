@@ -9,8 +9,11 @@ and outputs the results in a tabular format.
 Licensed under the Apache License, Version 2.0. See the LICENSE file.
 """
 
+import argparse
 from collections import OrderedDict
 from decimal import Decimal
+
+import clikraken.global_vars as gv
 
 from clikraken.api.api_utils import query_api
 from clikraken.clikraken_utils import asset_pair_short, humanize_timestamp
@@ -75,3 +78,18 @@ def depth(args):
         asks_table = tabulate(depth_dict["asks"], headers="keys")
         bids_table = tabulate(depth_dict["bids"], headers="keys")
         print("{}\n\n{}".format(asks_table, bids_table))
+
+
+def init(subparsers):
+    pair_help = "asset pair"
+    parser_depth = subparsers.add_parser(
+        "depth",
+        aliases=["d"],
+        help="[public] Get the current market depth data",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
+    parser_depth.add_argument("-p", "--pair", default=gv.DEFAULT_PAIR, help=pair_help)
+    parser_depth.add_argument(
+        "-c", "--count", type=int, default=7, help="maximum number of asks/bids."
+    )
+    parser_depth.set_defaults(sub_func=depth)
