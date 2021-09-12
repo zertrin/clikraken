@@ -12,6 +12,7 @@ Licensed under the Apache License, Version 2.0. See the LICENSE file.
 
 import argparse
 import codecs
+import os
 import textwrap
 from decimal import Decimal
 import sys
@@ -93,6 +94,9 @@ def parse_args():
     parser.add_argument("--debug", action="store_true", help="debug mode")
     parser.add_argument(
         "--raw", action="store_true", help="output raw json results from the API"
+    )
+    parser.add_argument(
+        "--json", action="store_true", help="output json results from the API"
     )
     parser.add_argument(
         "--csv", action="store_true", help="output results from the API as CSV"
@@ -434,7 +438,7 @@ def parse_args():
     # (this weird construction is a hack to work around Python bug #9351 https://bugs.python.org/issue9351)
     if all([vars(args).get(f, None) is None for f in ["sub_func", "main_func"]]):
         parser.print_usage()
-        sys.exit(0)
+        sys.exit(os.EX_OK)
 
     gv.CRON = args.cron
 

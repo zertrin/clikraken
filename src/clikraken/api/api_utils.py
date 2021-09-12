@@ -17,7 +17,7 @@ import krakenex
 import os
 
 import clikraken.global_vars as gv
-from clikraken.clikraken_utils import format_timestamp, print_results
+from clikraken.clikraken_utils import format_timestamp, print_results, print_json
 from clikraken.log_utils import logger
 
 
@@ -51,7 +51,7 @@ def query_api(api_type, api_method, api_params, args):
     # Abort here if the API key isn't available and we are trying to query the private API
     if api_type == "private" and not gv.API_KEY_LOADED:
         logger.critical("The API key must be set for private API queries! Aborting...")
-        exit(2)
+        exit(os.EX_DATAERR)
 
     # default to empty dict because that's the expected return type
     res = {}
@@ -98,14 +98,22 @@ def query_api(api_type, api_method, api_params, args):
             log = logger.error
         log("{}".format(e))
 
+    if err != [] and log == logger.error:
+        exit(os.EX_PROTOCOL)
+
     if args.raw:
         print_results(res)
         if not args.debug:
-            exit(0)
+            exit(os.EX_OK)
+
+    if args.json:
+        print_json(res)
+        if not args.debug:
+            exit(os.EX_OK)
 
     res = res.get("result")
     if not res:
-        exit(0)
+        exit(os.EX_OK)
 
     return res
 

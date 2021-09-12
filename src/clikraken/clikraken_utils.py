@@ -77,6 +77,12 @@ def print_results(res):
         print(json.dumps(res, indent=2))
 
 
+def print_json(res):
+    """Pretty-print the JSON result from the API."""
+    if res is not None and "result" in res:
+        print(json.dumps(res["result"], indent=2))
+
+
 def base_quote_short_from_asset_pair(ap_str):
     """Try to identify the short version of the base and quote of the asset pair"""
 
