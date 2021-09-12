@@ -2,8 +2,7 @@ name: PR validation
 on: pull_request
 
 jobs:
-  tox:
-    if: github.repository_owner == 'flepied'
+  python:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
@@ -22,7 +21,13 @@ jobs:
           pip install tox
 
       - name: Test with tox
-        run: tox
+        run: tox -epy39
+
+      - name: Install pandoc
+        run: sudo apt-get install pandoc
+
+      - name: Test python module build
+        run: ". .tox/py39/bin/activate; make"
 
   docker:
     runs-on: ubuntu-latest
