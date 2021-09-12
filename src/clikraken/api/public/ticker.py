@@ -23,10 +23,10 @@ def ticker(args):
 
     # Parameters to pass to the API
     api_params = {
-        'pair': args.pair,
+        "pair": args.pair,
     }
 
-    res = query_api('public', 'Ticker', api_params, args)
+    res = query_api("public", "Ticker", api_params, args)
 
     # the list will contain one OrderedDict containing
     # the parser ticker info per asset pair
@@ -40,37 +40,39 @@ def ticker(args):
         # for later use with the tabulate function
         pticker = OrderedDict()
 
-        pticker['pair'] = asset_pair_short(pair)
-        pticker['last'] = pair_res['c'][0]  # price only
-        pticker['high'] = pair_res['h'][1]  # last 24h
-        pticker['low'] = pair_res['l'][1]   # last 24h
-        pticker['vol'] = pair_res['v'][1]   # last 24h
-        pticker['wavg'] = pair_res['p'][1]  # last 24h
+        pticker["pair"] = asset_pair_short(pair)
+        pticker["last"] = pair_res["c"][0]  # price only
+        pticker["high"] = pair_res["h"][1]  # last 24h
+        pticker["low"] = pair_res["l"][1]  # last 24h
+        pticker["vol"] = pair_res["v"][1]  # last 24h
+        pticker["wavg"] = pair_res["p"][1]  # last 24h
 
         # calculate an estimate of the traded volume in quoted currency
         # for the last 24h: Volume x Average price
-        quote_val = Decimal(pticker['vol']) * Decimal(pticker['wavg'])
+        quote_val = Decimal(pticker["vol"]) * Decimal(pticker["wavg"])
 
-        unit_prefix = ''
+        unit_prefix = ""
         if quote_val >= 10e6:
             quote_val = quote_val / Decimal(1e6)
-            unit_prefix = 'M'
+            unit_prefix = "M"
         elif quote_val >= 10e3:
             quote_val = quote_val / Decimal(1e3)
-            unit_prefix = 'k'
+            unit_prefix = "k"
 
-        pticker['vol value'] = str(round(quote_val)) + ' ' + unit_prefix + pticker['pair'][-3:]
+        pticker["vol value"] = (
+            str(round(quote_val)) + " " + unit_prefix + pticker["pair"][-3:]
+        )
 
         # get the price only
-        pticker['ask'] = pair_res['a'][0]
-        pticker['bid'] = pair_res['b'][0]
+        pticker["ask"] = pair_res["a"][0]
+        pticker["bid"] = pair_res["b"][0]
 
         ticker_list.append(pticker)
 
     if not ticker_list:
         return
 
-    ticker_list = sorted(ticker_list, key=lambda pticker: pticker['pair'])
+    ticker_list = sorted(ticker_list, key=lambda pticker: pticker["pair"])
 
     if args.csv:
         print(csv(ticker_list, headers="keys"))

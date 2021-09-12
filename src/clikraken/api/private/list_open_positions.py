@@ -21,27 +21,27 @@ def list_open_positions(args):
 
     # Parameters to pass to the API
     api_params = {
-        'docalcs': 'true',
+        "docalcs": "true",
     }
 
-    res = query_api('private', 'OpenPositions', api_params, args)
+    res = query_api("private", "OpenPositions", api_params, args)
 
     pos_list = []
     for order in res.values():
         pos = OrderedDict()
-        pos['ordertxid'] = order['ordertxid']
-        pos['opening time'] = datetime.fromtimestamp(order['time'])
-        pos['type'] = order['type']
-        pos['volume'] = order['vol']
-        pos['pair'] = order['pair']
-        pos['ordertype'] = order['ordertype']
-        pos['cost'] = order['cost']
-        pos['fee'] = order['fee']
-        pos['margin'] = order['margin']
-        pos['value'] = order['value']
-        pos['profit/loss'] = order['net']
-        pos['rollover time'] = datetime.fromtimestamp(int(order['rollovertm']))
-        pos['rollover terms'] = order['terms']
+        pos["ordertxid"] = order["ordertxid"]
+        pos["opening time"] = datetime.fromtimestamp(order["time"])
+        pos["type"] = order["type"]
+        pos["volume"] = order["vol"]
+        pos["pair"] = order["pair"]
+        pos["ordertype"] = order["ordertype"]
+        pos["cost"] = order["cost"]
+        pos["fee"] = order["fee"]
+        pos["margin"] = order["margin"]
+        pos["value"] = order["value"]
+        pos["profit/loss"] = order["net"]
+        pos["rollover time"] = datetime.fromtimestamp(int(order["rollovertm"]))
+        pos["rollover terms"] = order["terms"]
 
         pos_list.append(pos)
 

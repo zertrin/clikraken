@@ -19,15 +19,15 @@ def cancel_order(args):
     for order_id in args.order_ids:
         # Parameters to pass to the API
         api_params = {
-            'txid': order_id,
+            "txid": order_id,
         }
 
-        res = query_api('private', 'CancelOrder', api_params, args)
+        res = query_api("private", "CancelOrder", api_params, args)
 
-        count = res.get('count')
-        pending = res.get('pending')
+        count = res.get("count")
+        pending = res.get("pending")
 
         if count:
-            print('{} - count: {}'.format(order_id, count))
+            print("{} - count: {}".format(order_id, count))
         if pending:
-            logger.info('{} - order(s) is/are pending cancellation!'.format(order_id))
+            logger.info("{} - order(s) is/are pending cancellation!".format(order_id))

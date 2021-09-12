@@ -23,20 +23,20 @@ def ohlc(args):
 
     # Parameters to pass to the API
     api_params = {
-        'pair': args.pair,
+        "pair": args.pair,
     }
     if args.since:
-        api_params['since'] = args.since
+        api_params["since"] = args.since
 
     if args.interval:
-        api_params['interval'] = interval = args.interval
+        api_params["interval"] = interval = args.interval
     else:
         interval = 1
 
-    res = query_api('public', 'OHLC', api_params, args)
+    res = query_api("public", "OHLC", api_params, args)
 
     results = res[args.pair]
-    last_id = res['last']
+    last_id = res["last"]
 
     # initialize a list to store the parsed ohlc data
     ohlclist = []
@@ -62,11 +62,11 @@ def ohlc(args):
     ohlclist = ohlclist[::-1]
 
     if args.csv:
-        print(csv(ohlclist[:args.count], headers="keys"))
+        print(csv(ohlclist[: args.count], headers="keys"))
     else:
-        print('Asset pair: ' + asset_pair_short(args.pair))
-        print('Interval: ' + str(interval) + 'm\n')
+        print("Asset pair: " + asset_pair_short(args.pair))
+        print("Interval: " + str(interval) + "m\n")
 
-        print(tabulate(ohlclist[:args.count], headers="keys") + '\n')
+        print(tabulate(ohlclist[: args.count], headers="keys") + "\n")
 
-        print('Last ID = {}'.format(last_id))
+        print("Last ID = {}".format(last_id))

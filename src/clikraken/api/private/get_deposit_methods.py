@@ -21,10 +21,10 @@ def get_deposit_methods(args=None):
 
     # Parameters to pass to the API
     api_params = {
-        'asset': args.asset,
+        "asset": args.asset,
     }
 
-    res = query_api('private', 'DepositMethods', api_params, args)
+    res = query_api("private", "DepositMethods", api_params, args)
 
     m_list = []
     for method in res:
@@ -32,18 +32,27 @@ def get_deposit_methods(args=None):
         # for later use with the tabulate function
         method_dict = OrderedDict()
         # Remove leading Z or X from asset pair if it is of length 4
-        method_dict['asset'] = args.asset[1:] if len(args.asset) == 4 and args.asset[0] in ['Z', 'X'] else args.asset
-        method_dict['method'] = method['method']
-        method_dict['fee'] = method['fee']
-        method_dict['limit'] = method['limit']
-        method_dict['gen-address'] = method['gen-address']
+        method_dict["asset"] = (
+            args.asset[1:]
+            if len(args.asset) == 4 and args.asset[0] in ["Z", "X"]
+            else args.asset
+        )
+        method_dict["method"] = method["method"]
+        method_dict["fee"] = method["fee"]
+        method_dict["limit"] = method["limit"]
+        method_dict["gen-address"] = method["gen-address"]
         m_list.append(method_dict)
 
     if not m_list:
         return
 
     # Sort alphabetically
-    m_list = sorted(m_list, key=lambda method_dict: '{}{}'.format(method_dict['asset'], method_dict['method']))
+    m_list = sorted(
+        m_list,
+        key=lambda method_dict: "{}{}".format(
+            method_dict["asset"], method_dict["method"]
+        ),
+    )
 
     if args.csv:
         print(csv(m_list, headers="keys"))

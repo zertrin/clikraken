@@ -22,6 +22,7 @@ else:
 
 try:
     import colorlog
+
     have_colorlog = True
 except ImportError:
     colorlog = None
@@ -43,7 +44,7 @@ class LessThanFilter(logging.Filter):
 def setup_logger():
     """Setup a colored logger if available and possible"""
 
-    logger = logging.getLogger('clikraken')
+    logger = logging.getLogger("clikraken")
     logger.setLevel(logging.DEBUG)
 
     # log to stdout from DEBUG to INFO
@@ -55,14 +56,14 @@ def setup_logger():
     ch_err = logging.StreamHandler(sys.stderr)
     ch_err.setLevel(logging.WARNING)
 
-    format_str = '{levelname:8} - {message}'
+    format_str = "{levelname:8} - {message}"
 
     # basic formatter
-    f = logging.Formatter(fmt=format_str, style='{')
+    f = logging.Formatter(fmt=format_str, style="{")
 
     # colored formatted
     if have_colorlog:
-        cf = colorlog.ColoredFormatter(fmt='{log_color}' + format_str, style='{')
+        cf = colorlog.ColoredFormatter(fmt="{log_color}" + format_str, style="{")
     else:
         cf = f
 

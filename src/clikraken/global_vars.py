@@ -11,15 +11,17 @@ Licensed under the Apache License, Version 2.0. See the LICENSE file.
 import os
 
 # Resolve userpath to an absolute path
-DEFAULT_KRAKEN_API_KEYFILE = os.path.expanduser('~/.config/clikraken/kraken.key')
+DEFAULT_KRAKEN_API_KEYFILE = os.path.expanduser("~/.config/clikraken/kraken.key")
 # If the environment variable is set, override the default value
-KRAKEN_API_KEYFILE = os.getenv('CLIKRAKEN_API_KEYFILE', DEFAULT_KRAKEN_API_KEYFILE)
+KRAKEN_API_KEYFILE = os.getenv("CLIKRAKEN_API_KEYFILE", DEFAULT_KRAKEN_API_KEYFILE)
 KRAKEN_API_KEYFILE = os.path.normpath(KRAKEN_API_KEYFILE)
 
 # Resolve userpath to an absolute path
-DEFAULT_USER_SETTINGS_PATH = os.path.expanduser('~/.config/clikraken/settings.ini')
+DEFAULT_USER_SETTINGS_PATH = os.path.expanduser("~/.config/clikraken/settings.ini")
 # If the environment variable is set, override the default value
-USER_SETTINGS_PATH = os.getenv('CLIKRAKEN_USER_SETTINGS_PATH', DEFAULT_USER_SETTINGS_PATH)
+USER_SETTINGS_PATH = os.getenv(
+    "CLIKRAKEN_USER_SETTINGS_PATH", DEFAULT_USER_SETTINGS_PATH
+)
 USER_SETTINGS_PATH = os.path.normpath(USER_SETTINGS_PATH)
 
 # Default settings

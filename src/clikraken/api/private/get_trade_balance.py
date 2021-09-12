@@ -19,17 +19,17 @@ def get_trade_balance(args=None):
     # Parameters to pass to the API
     api_params = {}
 
-    res = query_api('private', 'TradeBalance', api_params, args)
+    res = query_api("private", "TradeBalance", api_params, args)
 
     tbal_list = [
-        ['equivalent balance', res.get('eb', 'n/a')],
-        ['trade balance', res.get('tb', 'n/a')],
-        ['margin amount of open positions', res.get('m', 'n/a')],
-        ['cost basis of open positions', res.get('c', 'n/a')],
-        ['current floating valuation of open positions', res.get('v', 'n/a')],
-        ['equity', res.get('e', 'n/a')],
-        ['free margin', res.get('mf', 'n/a')],
-        ['margin level', res.get('ml', 'n/a')],
-        ['unrealized net profit/loss of open positions', res.get('n', 'n/a')],
+        ["equivalent balance", res.get("eb", "n/a")],
+        ["trade balance", res.get("tb", "n/a")],
+        ["margin amount of open positions", res.get("m", "n/a")],
+        ["cost basis of open positions", res.get("c", "n/a")],
+        ["current floating valuation of open positions", res.get("v", "n/a")],
+        ["equity", res.get("e", "n/a")],
+        ["free margin", res.get("mf", "n/a")],
+        ["margin level", res.get("ml", "n/a")],
+        ["unrealized net profit/loss of open positions", res.get("n", "n/a")],
     ]
     print(tabulate(tbal_list))

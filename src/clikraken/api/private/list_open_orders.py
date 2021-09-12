@@ -25,27 +25,33 @@ def list_open_orders(args):
         # TODO
     }
     if args.txid:
-        api_params.update({'txid': args.txid})
-        res_ol = query_api('private', 'QueryOrders', api_params, args)
+        api_params.update({"txid": args.txid})
+        res_ol = query_api("private", "QueryOrders", api_params, args)
     else:
-        res = query_api('private', 'OpenOrders', api_params, args)
+        res = query_api("private", "OpenOrders", api_params, args)
         # extract list of orders from API results
-        res_ol = res['open']
+        res_ol = res["open"]
 
     # the parsing is done in an helper function
-    ol = parse_order_res(res_ol, ['open'])
+    ol = parse_order_res(res_ol, ["open"])
 
     # filter and sort orders by price in each category
     for otype in ol:
         # filter orders based on currency pair
-        if 'pair' in args and args.pair:
-            ol[otype] = [odict for odict in ol[otype]
-                         if (odict['pair'] in [args.pair, asset_pair_short(args.pair)] or args.pair == 'all')]
+        if "pair" in args and args.pair:
+            ol[otype] = [
+                odict
+                for odict in ol[otype]
+                if (
+                    odict["pair"] in [args.pair, asset_pair_short(args.pair)]
+                    or args.pair == "all"
+                )
+            ]
         # sort orders by price
-        ol[otype] = sorted(ol[otype], key=lambda odict: Decimal(odict['price']))
+        ol[otype] = sorted(ol[otype], key=lambda odict: Decimal(odict["price"]))
 
     # final list is concatenation of buy orders followed by sell orders
-    ol_all = ol['buy'] + ol['sell']
+    ol_all = ol["buy"] + ol["sell"]
 
     if not ol_all:
         return

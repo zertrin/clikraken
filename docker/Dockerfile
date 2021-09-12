@@ -1,8 +1,8 @@
-FROM python:3.8-alpine
+FROM python:3.9-alpine
 ARG CLIKRAKEN_VERSION
 
-RUN adduser -D marcel
-USER marcel
+RUN adduser -D clikraken
+USER clikraken
 
 RUN mkdir -p ~/.venv && \
     python3 -m venv ~/.venv/clikraken && \
@@ -10,7 +10,7 @@ RUN mkdir -p ~/.venv && \
     pip --no-cache-dir install clikraken==$CLIKRAKEN_VERSION && \
     mkdir -p ~/.config/clikraken
 
-WORKDIR /home/marcel
-VOLUME ["/home/marcel/.config/clikraken"]
-ENTRYPOINT ["/home/marcel/.venv/clikraken/bin/clikraken"]
+WORKDIR /home/clikraken
+VOLUME ["/home/clikraken/.config/clikraken"]
+ENTRYPOINT ["/home/clikraken/.venv/clikraken/bin/clikraken"]
 CMD ["--help"]

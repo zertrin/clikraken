@@ -9,32 +9,33 @@ from setuptools import setup, find_packages
 # right place.
 try:
     import pypandoc
-    long_description = pypandoc.convert_file('README.md', 'rst')
+
+    long_description = pypandoc.convert_file("README.md", "rst")
 except (IOError, ImportError):
-    long_description = open('README.md').read()
+    long_description = open("README.md").read()
 
 about = {}
-with open('src/clikraken/__about__.py') as f:
+with open("src/clikraken/__about__.py") as f:
     exec(f.read(), about)
 # now we have a about['__version__'] variable
 
 setup(
-    name=about['__title__'],
-    version=about['__version__'],
-    packages=find_packages('src'),
-    package_dir={'': 'src'},
-    author=about['__author__'],
-    author_email=about['__email__'],
-    license=about['__license__'],
-    description=about['__summary__'],
+    name=about["__title__"],
+    version=about["__version__"],
+    packages=find_packages("src"),
+    package_dir={"": "src"},
+    author=about["__author__"],
+    author_email=about["__email__"],
+    license=about["__license__"],
+    description=about["__summary__"],
     long_description=long_description,
     include_package_data=True,
-    url=about['__url__'],
+    url=about["__url__"],
     install_requires=[
-        'krakenex>=0.1,<1.0',
-        'arrow<0.14',
-        'tabulate',
-        'colorlog',
+        "krakenex>=0.1,<1.0",
+        "arrow<0.14",
+        "tabulate",
+        "colorlog",
     ],
     classifiers=[
         "Programming Language :: Python",
@@ -46,12 +47,13 @@ setup(
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
         "Topic :: Office/Business :: Financial",
         "Topic :: Office/Business :: Financial :: Investment",
     ],
     entry_points={
-        'console_scripts': [
-            'clikraken=clikraken.clikraken:main',
+        "console_scripts": [
+            "clikraken=clikraken.clikraken:main",
         ],
     },
 )

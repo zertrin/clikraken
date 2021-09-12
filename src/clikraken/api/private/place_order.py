@@ -21,58 +21,58 @@ def place_order(args):
 
     # Parameters to pass to the API
     api_params = {
-        'pair': args.pair,
-        'type': args.type,
-        'ordertype': args.ordertype,
-        'volume': args.volume,
-        'starttm': args.starttm,
-        'expiretm': args.expiretm,
-        'leverage': args.leverage,
+        "pair": args.pair,
+        "type": args.type,
+        "ordertype": args.ordertype,
+        "volume": args.volume,
+        "starttm": args.starttm,
+        "expiretm": args.expiretm,
+        "leverage": args.leverage,
     }
 
-    if gv.TRADING_AGREEMENT == 'agree':
-        api_params['trading_agreement'] = 'agree'
+    if gv.TRADING_AGREEMENT == "agree":
+        api_params["trading_agreement"] = "agree"
 
-    if args.ordertype == 'limit':
+    if args.ordertype == "limit":
         if args.price is None:
-            logger.error('For limit orders, the price must be given!')
+            logger.error("For limit orders, the price must be given!")
             return
         else:
-            api_params['price'] = args.price
-    elif args.ordertype == 'market':
+            api_params["price"] = args.price
+    elif args.ordertype == "market":
         if args.price is not None:
-            logger.warn('price is ignored for market orders!')
+            logger.warn("price is ignored for market orders!")
         check_trading_agreement()
 
     if args.userref:
-        api_params['userref'] = args.userref
+        api_params["userref"] = args.userref
 
     oflags = []  # order flags
-    if args.ordertype == 'limit':
+    if args.ordertype == "limit":
         if not args.nopost:
             # for limit orders, by default set post-only order flag
-            oflags.append('post')
+            oflags.append("post")
     if args.viqc:
-        oflags.append('viqc')
+        oflags.append("viqc")
     if oflags:
-        api_params['oflags'] = ','.join(oflags)
+        api_params["oflags"] = ",".join(oflags)
 
     if args.validate:
-        api_params['validate'] = 'true'
+        api_params["validate"] = "true"
 
-    res = query_api('private', 'AddOrder', api_params, args)
+    res = query_api("private", "AddOrder", api_params, args)
 
-    descr = res.get('descr')
-    odesc = descr.get('order', 'No description available!')
+    descr = res.get("descr")
+    odesc = descr.get("order", "No description available!")
     print(odesc)
 
-    txid = res.get('txid')
+    txid = res.get("txid")
 
     if not txid:
         if args.validate:
-            logger.info('Validating inputs only. Order not submitted!')
+            logger.info("Validating inputs only. Order not submitted!")
         else:
-            logger.warn('Order was NOT successfully added!')
+            logger.warn("Order was NOT successfully added!")
     else:
         for tx in txid:
             print(tx)

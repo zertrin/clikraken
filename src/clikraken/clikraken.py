@@ -26,7 +26,7 @@ def main():
     # args.sub_func contains the function to be called
     # depending on the chosen subcommand. If no subcomand
     # is called, then use the function given by args.main_func
-    func = args.sub_func if 'sub_func' in args else args.main_func
+    func = args.sub_func if "sub_func" in args else args.main_func
 
     if callable(func):
         func(args)

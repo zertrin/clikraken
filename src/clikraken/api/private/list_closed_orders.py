@@ -25,29 +25,33 @@ def list_closed_orders(args):
         # TODO
     }
     if args.txid:
-        api_params.update({'txid': args.txid})
-        res_ol = query_api('private', 'QueryOrders', api_params, args)
+        api_params.update({"txid": args.txid})
+        res_ol = query_api("private", "QueryOrders", api_params, args)
     else:
-        res = query_api('private', 'ClosedOrders', api_params, args)
+        res = query_api("private", "ClosedOrders", api_params, args)
         # extract list of orders from API results
-        res_ol = res['closed']
+        res_ol = res["closed"]
 
     # the parsing is done in an helper function
-    ol = parse_order_res(res_ol, ['closed', 'canceled'])
+    ol = parse_order_res(res_ol, ["closed", "canceled"])
 
     # merge order types in one list
-    ol = ol['buy'] + ol['sell']
+    ol = ol["buy"] + ol["sell"]
 
     # filter out orders with zero volume executed
-    ol = [odict for odict in ol if Decimal(odict['vol_exec']) > 0]
-    if 'pair' in args and args.pair:
-        ol = [odict for odict in ol if odict['pair'] in [args.pair, asset_pair_short(args.pair)]]
+    ol = [odict for odict in ol if Decimal(odict["vol_exec"]) > 0]
+    if "pair" in args and args.pair:
+        ol = [
+            odict
+            for odict in ol
+            if odict["pair"] in [args.pair, asset_pair_short(args.pair)]
+        ]
 
     if not ol:
         return
 
     # sort by date
-    ol = sorted(ol, key=lambda odict: odict['closing_date'])
+    ol = sorted(ol, key=lambda odict: odict["closing_date"])
 
     if args.csv:
         print(csv(ol, headers="keys"))

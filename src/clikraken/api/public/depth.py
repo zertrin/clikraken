@@ -22,15 +22,12 @@ def depth(args):
     """Get market depth information."""
 
     # Parameters to pass to the API
-    api_params = {
-        'pair': args.pair,
-        'count': args.count
-    }
+    api_params = {"pair": args.pair, "count": args.count}
 
-    res = query_api('public', 'Depth', api_params, args)
+    res = query_api("public", "Depth", api_params, args)
 
-    depth_dict = {'asks': [], 'bids': []}
-    depth_label = {'asks': "Ask", 'bids': "Bid"}
+    depth_dict = {"asks": [], "bids": []}
+    depth_label = {"asks": "Ask", "bids": "Bid"}
 
     shortpair = asset_pair_short(args.pair)
 
@@ -54,25 +51,27 @@ def depth(args):
             continue
 
         # sort by price descending
-        depth_dict[dtype] = reversed(sorted(depth_dict[dtype], key=lambda dentry: Decimal(dentry[price_label])))
+        depth_dict[dtype] = reversed(
+            sorted(depth_dict[dtype], key=lambda dentry: Decimal(dentry[price_label]))
+        )
 
     if args.csv:
         output = []
         for dtype in depth_dict.keys():
             for o in depth_dict[dtype]:
                 it = OrderedDict()
-                it['dtype'] = dtype
+                it["dtype"] = dtype
                 for k, v in o.items():
-                    if len(k.split(' ')) > 1:
+                    if len(k.split(" ")) > 1:
                         # key has a space, this is the "price_label" column -> "XABCZDEF Ask"
-                        it['pair'] = k.split(' ')[0]  # keep only "XABCZDEF"
-                        it['price'] = v
+                        it["pair"] = k.split(" ")[0]  # keep only "XABCZDEF"
+                        it["price"] = v
                     else:
                         # the other columns don't contain a space
                         it[k] = v
                 output += [it]
         print(csv(output, headers="keys"))
     else:
-        asks_table = tabulate(depth_dict['asks'], headers="keys")
-        bids_table = tabulate(depth_dict['bids'], headers="keys")
+        asks_table = tabulate(depth_dict["asks"], headers="keys")
+        bids_table = tabulate(depth_dict["bids"], headers="keys")
         print("{}\n\n{}".format(asks_table, bids_table))

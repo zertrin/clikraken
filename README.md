@@ -174,9 +174,9 @@ For example:
 
 Current default currency pair: XETHZEUR.
 
-Create or edit the setting file /home/zertrin/.config/clikraken/settings.ini to change it.
+Create or edit the setting file ~/.config/clikraken/settings.ini to change it.
 If the setting file doesn't exist yet, you can create one by doing:
-    clikraken generate_settings > /home/zertrin/.config/clikraken/settings.ini
+    clikraken generate_settings > ~/.config/clikraken/settings.ini
 
 You can also set the CLIKRAKEN_DEFAULT_PAIR environment variable
 which has precedence over the settings from the settings file.
