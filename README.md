@@ -1,7 +1,7 @@
 ![Actively Maintained](https://img.shields.io/badge/Maintenance%20Level-Actively%20Maintained-green.svg)
 
-[![Travis-CI Build Status](https://travis-ci.org/zertrin/clikraken.svg?branch=master)](https://travis-ci.org/zertrin/clikraken)
-[![Appveyor Build status](https://ci.appveyor.com/api/projects/status/jom3ee762u02q2fo/branch/master?svg=true)](https://ci.appveyor.com/project/zertrin/clikraken/branch/master)
+[![GitHub Actions](https://github.com/flepied/clikraken/actions/workflows/validate-pr.yaml/badge.svg)](https://github.com/flepied/clikraken/actions)
+
 [![PyPI Package latest release](https://img.shields.io/pypi/v/clikraken.svg)](https://pypi.python.org/pypi/clikraken)
 [![Wheel available](https://img.shields.io/pypi/wheel/clikraken.svg)](https://pypi.python.org/pypi/clikraken)
 [![Supported Versions](https://img.shields.io/pypi/pyversions/clikraken.svg)](https://pypi.python.org/pypi/clikraken)
@@ -302,11 +302,11 @@ See the `LICENSE` file. For the full text, see [here][corelicense].
 
 ## Requirements
 
-Python 3.4+
+Python 3.6+
 
-clikraken is tested with Python 3.4 to 3.6. Future Python versions should be compatible but haven't been tested yet.
+clikraken is tested with Python 3.6 to 3.9. Future Python versions should be compatible but haven't been tested yet.
 
-There is no plan to support Python 2 at all and it's unlikely that Python 3.0 to 3.3 will ever be supported. Sorry!
+There is no plan to support Python 2 at all and it's unlikely that Python 3.0 to 3.5 will ever be supported. Sorry!
 
 clikraken has been tested on Linux (Debian Jessie) and Windows. I guess it should work with other systems but your mileage may vary.
 
