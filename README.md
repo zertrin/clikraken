@@ -51,6 +51,7 @@ See list of changes in the [Changelog](CHANGELOG.md).
 | private | `QueryTrades` | trades (tr) |
 | private | `TradeBalance` | trade_balance (tbal) |
 | private | `TradesHistory` | trades (tr) |
+| private | `WithdrawStatus` | list_withdrawals (lw) |
 
 Note: any API endpoint listed at <https://www.kraken.com/features/api> but not in the above list has not been implemented in clikraken (yet).
 
