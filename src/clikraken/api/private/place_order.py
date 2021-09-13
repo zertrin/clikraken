@@ -24,12 +24,20 @@ OPTIONS = (
     (("type",), {"choices": ["sell", "buy"]}),
     (("volume",), {"type": Decimal}),
     (("price",), {"default": None, "nargs": "?"}),
+    (("price2",), {"default": None, "nargs": "?"}),
     (("-l", "--leverage"), {"default": "none", "help": "leverage for margin trading"}),
     (("-p", "--pair"), {"default": gv.DEFAULT_PAIR, "help": pair_help}),
     (
         ("-t", "--ordertype"),
         {
-            "choices": ["market", "limit"],
+            "choices": [
+                "market",
+                "limit",
+                "stop-loss",
+                "take-profit",
+                "stop-loss-limit",
+                "take-profit-limit",
+            ],
             "default": "limit",
             "help": "order type. Currently implemented: [limit, market].",
         },
@@ -80,12 +88,34 @@ def place_order_api(args):
     if gv.TRADING_AGREEMENT == "agree":
         api_params["trading_agreement"] = "agree"
 
-    if args.ordertype == "limit":
+    if args.ordertype in (
+        "limit",
+        "stop-loss",
+        "take-profit",
+        "stop-loss-limit",
+        "take-profit-limit",
+    ):
         if args.price is None:
-            logger.error("For limit orders, the price must be given!")
+            logger.error("For {} orders, price must be given!".format(args.ordertype))
             return
         else:
             api_params["price"] = args.price
+        if args.ordertype in (
+            "stop-loss-limit",
+            "take-profit-limit",
+        ):
+            if args.price2 is None:
+                logger.error(
+                    "For {} orders, price2 must be given!".format(args.ordertype)
+                )
+                return
+            else:
+                api_params["price2"] = args.price2
+        elif args.price2:
+            logger.error(
+                "For {} orders, price2 must not be given!".format(args.ordertype)
+            )
+            return
     elif args.ordertype == "market":
         if args.price is not None:
             logger.warn("price is ignored for market orders!")

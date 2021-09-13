@@ -36,7 +36,7 @@ See list of changes in the [Changelog](CHANGELOG.md).
 | public | `Depth` | depth (d) |
 | public | `OHLC` | ohlc (oh) |
 | public | `Ticker` | ticker (t) |
-| public | `Trades` | last_trades (lt) |
+| public | `Trades` | last\_trades (lt) |
 | private | `AddOrder` | place (p) |
 | private | `Balance` | balance (bal) |
 | private | `CancelOrder` | cancel (x) |
@@ -49,7 +49,7 @@ See list of changes in the [Changelog](CHANGELOG.md).
 | private | `QueryLedgers` | ledgers (lg) |
 | private | `QueryOrders` | olist (ol) / clist (cl) |
 | private | `QueryTrades` | trades (tr) |
-| private | `TradeBalance` | trade_balance (tbal) |
+| private | `TradeBalance` | trade\_balance (tbal) |
 | private | `TradesHistory` | trades (tr) |
 | private | `WithdrawStatus` | list\_withdrawals (lw) |
 
@@ -127,36 +127,39 @@ Output:
 ```
 usage: clikraken [-h] [-V] [--debug] [--raw] [--json] [--csv]
                  [--csvseparator CSVSEPARATOR] [--cron]
-                 {generate_settings,asset_pairs,ap,ticker,t,depth,d,last_trades,lt,ohlc,oh,balance,bal,trade_balance,tbal,place,p,cancel,x,olist,ol,positions,pos,clist,cl,ledgers,lg,trades,tr,deposit_methods,dm,deposit_addresses,da,list_withdrawals,lw}
+                 {generate_settings,asset_pairs,ap,depth,d,last_trades,lt,ohlc,oh,ticker,t,cancel,x,balance,bal,deposit_addresses,da,deposit_methods,dm,ledgers,lg,trade_balance,tbal,clist,cl,olist,ol,positions,pos,list_withdraw_information,lwi,list_withdrawals,lw,place,p,trades,tr,withdraw,wd}
                  ...
 
 clikraken - Command line client for the Kraken exchange
 
 positional arguments:
-  {generate_settings,asset_pairs,ap,ticker,t,depth,d,last_trades,lt,ohlc,oh,balance,bal,trade_balance,tbal,place,p,cancel,x,olist,ol,positions,pos,clist,cl,ledgers,lg,trades,tr,deposit_methods,dm,deposit_addresses,da,list_withdrawals,lw}
+  {generate_settings,asset_pairs,ap,depth,d,last_trades,lt,ohlc,oh,ticker,t,cancel,x,balance,bal,deposit_addresses,da,deposit_methods,dm,ledgers,lg,trade_balance,tbal,clist,cl,olist,ol,positions,pos,list_withdraw_information,lwi,list_withdrawals,lw,place,p,trades,tr,withdraw,wd}
                         available subcommands
     generate_settings   [clikraken] Print default settings.ini to stdout
     asset_pairs (ap)    [public] Get the list of available asset pairs
-    ticker (t)          [public] Get the ticker
     depth (d)           [public] Get the current market depth data
     last_trades (lt)    [public] Get the last trades
     ohlc (oh)           [public] Get the ohlc data
-    balance (bal)       [private] Get your current balance
-    trade_balance (tbal)
-                        [private] Get your current trade balance
-    place (p)           [private] Place an order
+    ticker (t)          [public] Get the ticker
     cancel (x)          [private] Cancel orders
-    olist (ol)          [private] Get a list of your open orders
-    positions (pos)     [private] Get a list of your open positions
-    clist (cl)          [private] Get a list of your closed orders
-    ledgers (lg)        [private] Get ledgers info
-    trades (tr)         [private] Get trades history
-    deposit_methods (dm)
-                        [private] Get deposit methods
+    balance (bal)       [private] Get your current balance
     deposit_addresses (da)
                         [private] Get deposit addresses
+    deposit_methods (dm)
+                        [private] Get deposit methods
+    ledgers (lg)        [private] Get ledgers info
+    trade_balance (tbal)
+                        [private] Get your current trade balance
+    clist (cl)          [private] Get a list of your closed orders
+    olist (ol)          [private] Get a list of your open orders
+    positions (pos)     [private] Get a list of your open positions
+    list_withdraw_information (lwi)
+                        [private] List withdraw information
     list_withdrawals (lw)
                         [private] List withdrawals
+    place (p)           [private] Place an order
+    trades (tr)         [private] Get trades history
+    withdraw (wd)       [private] Withdraw funds.
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -174,7 +177,7 @@ To get help about a subcommand use: clikraken SUBCOMMAND --help
 For example:
     clikraken place --help
 
-Current default currency pair: XETHZEUR.
+Current default currency pair: XXBTZEUR.
 
 Create or edit the setting file ~/.config/clikraken/settings.ini to change it.
 If the setting file doesn't exist yet, you can create one by doing:
@@ -193,22 +196,23 @@ clikraken SUBCOMMAND --help
 For example, the `place` subcommand has the following help:
 
 ```
-usage: clikraken place [-h] [-l LEVERAGE] [-p PAIR] [-t {market,limit}]
-                         [-s STARTTM] [-e EXPIRETM] [-r USERREF] [-q] [-T]
-                         [-v]
-                         {sell,buy} volume [price]
+usage: clikraken place [-h] [-l LEVERAGE] [-p PAIR]
+                       [-t {market,limit,stop-loss,take-profit,stop-loss-limit,take-profit-limit}]
+                       [-s STARTTM] [-e EXPIRETM] [-r USERREF] [-q] [-T] [-v]
+                       {sell,buy} volume [price] [price2]
 
 positional arguments:
   {sell,buy}
   volume
   price
+  price2
 
 optional arguments:
   -h, --help            show this help message and exit
   -l LEVERAGE, --leverage LEVERAGE
                         leverage for margin trading (default: none)
-  -p PAIR, --pair PAIR  asset pair (default: XETHZEUR)
-  -t {market,limit}, --ordertype {market,limit}
+  -p PAIR, --pair PAIR  asset pair (default: XXBTZEUR)
+  -t {market,limit,stop-loss,take-profit,stop-loss-limit,take-profit-limit}, --ordertype {market,limit,stop-loss,take-profit,stop-loss-limit,take-profit-limit}
                         order type. Currently implemented: [limit, market].
                         (default: limit)
   -s STARTTM, --starttm STARTTM
