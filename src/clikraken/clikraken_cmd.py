@@ -103,20 +103,21 @@ def parse_args():
     parser_gen_settings.set_defaults(sub_func=ck_utils.output_default_settings_ini)
 
     topdir = os.path.dirname(__file__)
-
-    # load sub-commands dynamically by loading the module and calling
-    # their init method passing the subparsers variable
+    FUNC = "init"
+    # load sub-commands dynamically by loading the modules in the
+    # api/public and api/private directories calling their init method
+    # passing the subparsers variable
     for subdir in ("public", "private"):
         moddir = os.path.join(topdir, "api", subdir)
         for (_, name, _) in pkgutil.iter_modules([moddir]):
             if not name.startswith("_"):
                 imported_module = importlib.import_module("clikraken.api.{}.{}".format(subdir, name))
-                if "init" not in dir(
+                if FUNC not in dir(
                     imported_module
                 ):
-                    sys.stderr.write("Invalid sub-command file {}\n".format(name))
+                    print("Invalid sub-command module {}\n".format(name), file=sys.stderr)
                     continue
-                getattr(imported_module, "init")(subparsers)
+                getattr(imported_module, FUNC)(subparsers)
 
     args = parser.parse_args()
 

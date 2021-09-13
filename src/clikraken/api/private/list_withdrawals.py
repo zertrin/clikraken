@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 """
-clikraken.api.private.list_open_orders
+clikraken.api.private.list_withdrawals
 
-This module queries the OpenOrders method of Kraken's API
+This module queries the WithdrawStatus method of Kraken's API
 and outputs the results in a tabular format.
 
 Licensed under the Apache License, Version 2.0. See the LICENSE file.

@@ -32,7 +32,7 @@ See list of changes in the [Changelog](CHANGELOG.md).
 
 | API Type | [API Endpoint](https://www.kraken.com/features/api) | used by clikraken command |
 |----------|----------|-------------------|
-| public | `AssetPairs` | asset_pairs (ap) |
+| public | `AssetPairs` | asset\_pairs (ap) |
 | public | `Depth` | depth (d) |
 | public | `OHLC` | ohlc (oh) |
 | public | `Ticker` | ticker (t) |
@@ -41,8 +41,8 @@ See list of changes in the [Changelog](CHANGELOG.md).
 | private | `Balance` | balance (bal) |
 | private | `CancelOrder` | cancel (x) |
 | private | `ClosedOrders` | clist (cl) |
-| private | `DepositAddresses` | deposit_addresses (da) |
-| private | `DepositMethods` | deposit_methods (dm) |
+| private | `DepositAddresses` | deposit\_addresses (da) |
+| private | `DepositMethods` | deposit\_methods (dm) |
 | private | `Ledgers` | ledgers (lg) |
 | private | `OpenOrders` | olist (ol) |
 | private | `OpenPositions` | positions (pos) |
@@ -51,7 +51,7 @@ See list of changes in the [Changelog](CHANGELOG.md).
 | private | `QueryTrades` | trades (tr) |
 | private | `TradeBalance` | trade_balance (tbal) |
 | private | `TradesHistory` | trades (tr) |
-| private | `WithdrawStatus` | list_withdrawals (lw) |
+| private | `WithdrawStatus` | list\_withdrawals (lw) |
 
 Note: any API endpoint listed at <https://www.kraken.com/features/api> but not in the above list has not been implemented in clikraken (yet).
 
