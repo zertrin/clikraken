@@ -111,11 +111,13 @@ def parse_args():
         moddir = os.path.join(topdir, "api", subdir)
         for (_, name, _) in pkgutil.iter_modules([moddir]):
             if not name.startswith("_"):
-                imported_module = importlib.import_module("clikraken.api.{}.{}".format(subdir, name))
-                if FUNC not in dir(
-                    imported_module
-                ):
-                    print("Invalid sub-command module {}\n".format(name), file=sys.stderr)
+                imported_module = importlib.import_module(
+                    "clikraken.api.{}.{}".format(subdir, name)
+                )
+                if FUNC not in dir(imported_module):
+                    print(
+                        "Invalid sub-command module {}\n".format(name), file=sys.stderr
+                    )
                     continue
                 getattr(imported_module, FUNC)(subparsers)
 
