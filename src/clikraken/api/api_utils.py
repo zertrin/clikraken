@@ -73,6 +73,8 @@ def query_api(api_type, api_method, api_params, args):
 
     if func is not None:
         try:
+            if args.debug:
+                logger.debug("{} {} {}".format(api_type, api_method, api_params))
             # call to the krakenex API
             res = func(api_method, api_params)
         except (socket.timeout, socket.error, http.client.BadStatusLine) as e:
