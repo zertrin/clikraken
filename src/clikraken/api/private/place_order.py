@@ -10,6 +10,7 @@ Licensed under the Apache License, Version 2.0. See the LICENSE file.
 """
 
 import argparse
+from collections import namedtuple
 from decimal import Decimal
 
 import clikraken.global_vars as gv
@@ -19,7 +20,20 @@ from clikraken.clikraken_utils import check_trading_agreement
 from clikraken.log_utils import logger
 
 
-def place_order(args):
+def place_order(type, pair, ordertype, volume, price=None, price2=None, validate=False, starttm=0, expiretm=0,
+                leverage="none", viqc=False, userref=False):
+    Args = namedtuple("Args", ["debug", "raw", "json", "csv", "pair", "type", "ordertype", "volume",
+                               "price", "price2", "validate", "starttm", "expiretm", "leverage",
+                               "viqc", "userref"])
+    args = Args(False, False, False, False,
+                type=type, pair=pair, ordertype=ordertype, volume=volume, price=price, price2=price2,
+                validate=validate, starttm=starttm, expiretm=expiretm, leverage=leverage, viqc=viqc,
+                userref=userref)
+
+    return place_order_api(args)
+
+
+def place_order_api(args):
     """Place an order."""
 
     # Parameters to pass to the API
@@ -64,6 +78,13 @@ def place_order(args):
         api_params["validate"] = "true"
 
     res = query_api("private", "AddOrder", api_params, args)
+    return res
+
+
+def place_order_cmd(args):
+    """Place an order."""
+
+    res = place_order_api(args)
 
     descr = res.get("descr")
     odesc = descr.get("order", "No description available!")
@@ -123,4 +144,4 @@ def init(subparsers):
         action="store_true",
         help="validate inputs only. do not submit order",
     )
-    parser_place.set_defaults(sub_func=place_order)
+    parser_place.set_defaults(sub_func=place_order_cmd)
