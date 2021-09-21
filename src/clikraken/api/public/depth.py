@@ -10,7 +10,7 @@ Licensed under the Apache License, Version 2.0. See the LICENSE file.
 """
 
 import argparse
-from collections import OrderedDict
+from collections import OrderedDict, namedtuple
 from decimal import Decimal
 
 import clikraken.global_vars as gv
@@ -21,13 +21,25 @@ from clikraken.clikraken_utils import _tabulate as tabulate
 from clikraken.clikraken_utils import csv
 
 
-def depth(args):
+def depth(pair, count=7):
+    Args = namedtuple('Args', ['debug', 'raw', 'json', 'csv', 'pair', 'count'])
+    args = Args(False, False, False, False, pair, count)
+    return depth_api(args)
+
+
+def depth_api(args):
     """Get market depth information."""
 
     # Parameters to pass to the API
     api_params = {"pair": args.pair, "count": args.count}
 
     res = query_api("public", "Depth", api_params, args)
+
+    return res
+
+
+def depth_cmd(args):
+    res = depth_api(args)
 
     depth_dict = {"asks": [], "bids": []}
     depth_label = {"asks": "Ask", "bids": "Bid"}
@@ -92,4 +104,4 @@ def init(subparsers):
     parser_depth.add_argument(
         "-c", "--count", type=int, default=7, help="maximum number of asks/bids."
     )
-    parser_depth.set_defaults(sub_func=depth)
+    parser_depth.set_defaults(sub_func=depth_cmd)

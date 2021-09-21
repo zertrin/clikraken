@@ -10,20 +10,40 @@ Licensed under the Apache License, Version 2.0. See the LICENSE file.
 """
 
 import argparse
-from collections import OrderedDict
+from collections import OrderedDict, namedtuple
+from decimal import Decimal
 
 from clikraken.api.api_utils import query_api
 from clikraken.clikraken_utils import _tabulate as tabulate
 from clikraken.clikraken_utils import csv
 
 
-def get_balance(args=None):
-    """Get user balance."""
+def get_balance():
+    """Get user balance function to use in python scripts."""
+    Args = namedtuple('Args', ['debug', 'raw', 'json', 'csv'],
+                      defaults=[False, False, False, False])
+    args = Args()
+    res = get_balance_api(args)
+    copy = {}
+    for asset in res:
+        val = Decimal(res[asset])
+        if len(asset) == 4 and asset[0] in ["Z", "X"]:
+            copy[asset[1:]] = val
+        else:
+            copy[asset] = val
+    return copy
 
-    # Parameters to pass to the API
-    api_params = {}
 
-    res = query_api("private", "Balance", api_params, args)
+def get_balance_api(args):
+    """Get user balance API call."""
+    res = query_api("private", "Balance", {}, args)
+    return res
+
+
+def get_balance_cmd(args=None):
+    """Get user balance CLI cmd."""
+
+    res = get_balance_api(args)
 
     bal_list = []
     for asset in res:
@@ -56,4 +76,4 @@ def init(subparsers):
         help="[private] Get your current balance",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
-    parser_balance.set_defaults(sub_func=get_balance)
+    parser_balance.set_defaults(sub_func=get_balance_cmd)
