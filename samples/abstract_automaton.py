@@ -51,4 +51,5 @@ class AbstractAutomaton(ABC):
             )
         self.execute_state()
 
+
 # abstract_automaton.py ends here

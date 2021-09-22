@@ -10,69 +10,55 @@ Licensed under the Apache License, Version 2.0. See the LICENSE file.
 """
 
 import argparse
-from collections import namedtuple
 from decimal import Decimal
 
 import clikraken.global_vars as gv
 
 from clikraken.api.api_utils import query_api
-from clikraken.clikraken_utils import check_trading_agreement
+from clikraken.clikraken_utils import check_trading_agreement, process_options
 from clikraken.log_utils import logger
 
+pair_help = "asset pair"
 
-def place_order(
-    type,
-    pair,
-    ordertype,
-    volume,
-    price=None,
-    price2=None,
-    validate=False,
-    starttm=0,
-    expiretm=0,
-    leverage="none",
-    viqc=False,
-    userref=False,
-):
-    Args = namedtuple(
-        "Args",
-        [
-            "debug",
-            "raw",
-            "json",
-            "csv",
-            "pair",
-            "type",
-            "ordertype",
-            "volume",
-            "price",
-            "price2",
-            "validate",
-            "starttm",
-            "expiretm",
-            "leverage",
-            "viqc",
-            "userref",
-        ],
-    )
-    args = Args(
-        False,
-        False,
-        False,
-        False,
-        type=type,
-        pair=pair,
-        ordertype=ordertype,
-        volume=volume,
-        price=price,
-        price2=price2,
-        validate=validate,
-        starttm=starttm,
-        expiretm=expiretm,
-        leverage=leverage,
-        viqc=viqc,
-        userref=userref,
-    )
+OPTIONS = (
+    (("type",), {"choices": ["sell", "buy"]}),
+    (("volume",), {"type": Decimal}),
+    (("price",), {"default": None, "nargs": "?"}),
+    (("-l", "--leverage"), {"default": "none", "help": "leverage for margin trading"}),
+    (("-p", "--pair"), {"default": gv.DEFAULT_PAIR, "help": pair_help}),
+    (
+        ("-t", "--ordertype"),
+        {
+            "choices": ["market", "limit"],
+            "default": "limit",
+            "help": "order type. Currently implemented: [limit, market].",
+        },
+    ),
+    (("-s", "--starttm"), {"default": 0, "help": "scheduled start time"}),
+    (("-e", "--expiretm"), {"default": 0, "help": "expiration time"}),
+    (
+        ("-r", "--userref"),
+        {"help": "user reference id.  32-bit signed number.  (optional)"},
+    ),
+    (("-q", "--viqc"), {"action": "store_true", "help": "volume in quote currency"}),
+    (
+        ("-T", "--nopost"),
+        {
+            "action": "store_true",
+            "help": "disable 'post-only' option (for limit taker orders)",
+        },
+    ),
+    (
+        ("-v", "--validate"),
+        {"action": "store_true", "help": "validate inputs only. do not submit order"},
+    ),
+)
+
+MANDATORY_OPTIONS = ("type", "pair", "ordertype", "volume")
+
+
+def place_order(**kwargs):
+    args = process_options(kwargs, OPTIONS, MANDATORY_OPTIONS)
 
     return place_order_api(args)
 
@@ -147,45 +133,12 @@ def place_order_cmd(args):
 
 
 def init(subparsers):
-    pair_help = "asset pair"
     parser_place = subparsers.add_parser(
         "place",
         aliases=["p"],
         help="[private] Place an order",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
-    parser_place.add_argument("type", choices=["sell", "buy"])
-    parser_place.add_argument("volume", type=Decimal)
-    parser_place.add_argument("price", default=None, nargs="?")
-    parser_place.add_argument(
-        "-l", "--leverage", default="none", help="leverage for margin trading"
-    )
-    parser_place.add_argument("-p", "--pair", default=gv.DEFAULT_PAIR, help=pair_help)
-    parser_place.add_argument(
-        "-t",
-        "--ordertype",
-        choices=["market", "limit"],
-        default="limit",
-        help="order type. Currently implemented: [limit, market].",
-    )
-    parser_place.add_argument("-s", "--starttm", default=0, help="scheduled start time")
-    parser_place.add_argument("-e", "--expiretm", default=0, help="expiration time")
-    parser_place.add_argument(
-        "-r", "--userref", help="user reference id.  32-bit signed number.  (optional)"
-    )
-    parser_place.add_argument(
-        "-q", "--viqc", action="store_true", help="volume in quote currency"
-    )
-    parser_place.add_argument(
-        "-T",
-        "--nopost",
-        action="store_true",
-        help="disable 'post-only' option (for limit taker orders)",
-    )
-    parser_place.add_argument(
-        "-v",
-        "--validate",
-        action="store_true",
-        help="validate inputs only. do not submit order",
-    )
+    for (args, kwargs) in OPTIONS:
+        parser_place.add_argument(*args, **kwargs)
     parser_place.set_defaults(sub_func=place_order_cmd)

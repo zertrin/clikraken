@@ -10,34 +10,32 @@ Licensed under the Apache License, Version 2.0. See the LICENSE file.
 """
 
 import argparse
-from collections import namedtuple
 from decimal import Decimal
 
 from clikraken.api.api_utils import parse_order_res, query_api
 from clikraken.clikraken_utils import asset_pair_short
 from clikraken.clikraken_utils import _tabulate as tabulate
 from clikraken.clikraken_utils import csv
+from clikraken.clikraken_utils import process_options
 
 
-def list_open_orders(txid=None):
+pair_help = "asset pair"
+
+OPTIONS = (
+    (("-p", "--pair"), {"default": None, "help": pair_help}),
+    (
+        ("-i", "--txid"),
+        {
+            "default": None,
+            "help": "comma delimited list of transaction ids to query info about (20 maximum)",
+        },
+    ),
+)
+
+
+def list_open_orders(**kwargs):
     """List open orders."""
-    Args = namedtuple(
-        "Args",
-        [
-            "debug",
-            "raw",
-            "json",
-            "csv",
-            "txid",
-        ],
-    )
-    args = Args(
-        False,
-        False,
-        False,
-        False,
-        txid=txid,
-    )
+    args = process_options(kwargs, OPTIONS)
     return list_open_orders_api(args)
 
 
@@ -93,18 +91,12 @@ def list_open_orders_cmd(args):
 
 
 def init(subparsers):
-    pair_help = "asset pair"
     parser_olist = subparsers.add_parser(
         "olist",
         aliases=["ol"],
         help="[private] Get a list of your open orders",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
-    parser_olist.add_argument("-p", "--pair", default=None, help=pair_help)
-    parser_olist.add_argument(
-        "-i",
-        "--txid",
-        default=None,
-        help="comma delimited list of transaction ids to query info about (20 maximum)",
-    )
+    for (args, kwargs) in OPTIONS:
+        parser_olist.add_argument(*args, **kwargs)
     parser_olist.set_defaults(sub_func=list_open_orders_cmd)
