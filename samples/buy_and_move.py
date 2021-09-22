@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 """Script to buy a crypto from another currency and then move the
 crypto to a known address. Used to do DCA (Dollar Cost Averaging).
@@ -47,7 +48,6 @@ class DollarCostAveragingAutomaton(AbstractAutomaton):
             self.execute_state()
 
     def init(self, data):
-        print("init")
         data["frm"] = self.frm
         data["amount"] = self.amount
         data["to"] = self.to

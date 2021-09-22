@@ -1,4 +1,4 @@
-#
+# -*- coding: utf-8 -*-
 
 """
 """
@@ -7,7 +7,6 @@ from abc import ABC
 from decimal import Decimal
 import json
 import os
-import sys
 
 
 class DecimalEncoder(json.JSONEncoder):
@@ -40,10 +39,10 @@ class AbstractAutomaton(ABC):
             self._data = {}
 
     def execute_state(self):
+        print("Executing state {}".format(self.state))
         getattr(self, self.state)(self._data)
 
     def set_state(self, new_state, data):
-        print("going to state {}".format(new_state), file=sys.stderr)
         self._data = data
         self.state = new_state
         with open(self.get_state_file(), "w") as fdoutput:
@@ -51,6 +50,5 @@ class AbstractAutomaton(ABC):
                 {"state": self.state, "data": self._data}, fdoutput, cls=DecimalEncoder
             )
         self.execute_state()
-
 
 # abstract_automaton.py ends here
