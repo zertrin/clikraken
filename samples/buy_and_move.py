@@ -17,10 +17,17 @@ from clikraken.api.api_utils import load_api_keyfile
 from clikraken.api.private.get_balance import get_balance
 from clikraken.api.private.list_open_orders import list_open_orders
 from clikraken.api.private.place_order import place_order
+from clikraken.api.private.withdraw import withdraw
 from clikraken.api.public.depth import depth
 from clikraken.clikraken_utils import load_config
 
 from abstract_automaton import AbstractAutomaton
+
+FEE = Decimal("0.0018")
+
+TRANSFER_FEES = {
+    "XBT": Decimal("0.00015"),
+}
 
 
 class DollarCostAveragingAutomaton(AbstractAutomaton):
@@ -99,7 +106,19 @@ class DollarCostAveragingAutomaton(AbstractAutomaton):
         if bal[data["to"]] < data["target_amount"]:
             print("not enough", data["to"], "=>", bal[data["to"]])
         else:
-            print(bal)
+            try:
+                fee = TRANSFER_FEES[data["to"]]
+                res = withdraw(bal[data["to"]] - fee, data["to"], data["addr"])
+                if "refid" in res:
+                    data["refid"] = res["refid"]
+                    self.set_state("wait_for_transfer", data)
+                else:
+                    print(res)
+            except KeyError:
+                print("Unkown fee for {}. Aborting.".format(data["to"]))
+
+    def wait_for_transfer(self, data):
+        pass
 
 
 def main(argv):
