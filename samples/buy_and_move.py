@@ -15,6 +15,7 @@ import sys
 
 from clikraken.api.api_utils import load_api_keyfile
 from clikraken.api.private.get_balance import get_balance
+from clikraken.api.private.list_open_orders import list_open_orders
 from clikraken.api.private.place_order import place_order
 from clikraken.api.public.depth import depth
 from clikraken.clikraken_utils import load_config
@@ -24,7 +25,7 @@ from abstract_automaton import AbstractAutomaton
 
 class DollarCostAveragingAutomaton(AbstractAutomaton):
     state_file = "dca.json"
-    decimal_fields = ["amount"]
+    decimal_fields = ["amount", "target_amount"]
     seconds_to_wait = 60
 
     def __init__(self, amount, frm, to, addr):
@@ -69,14 +70,36 @@ class DollarCostAveragingAutomaton(AbstractAutomaton):
         for price, vol, _ in asks:
             sum += Decimal(price) * Decimal(vol)
             volume += Decimal(vol)
+            if sum > data["amount"]:
+                break
         price = sum / volume
         # compute the amount from the current market asks
         # todo(fl) need to take the fees into account
         target_amount = data["amount"] / price
         res = place_order("buy", data["pair"], "market", target_amount)
-        print(res)
-        # todo(fl) wait for the order to be fulfilled and transfer
-        # the crypto to the wallet
+        txid = res.get("txid")
+
+        if txid:
+            data["txid"] = txid[0]
+            self.set_state("wait_for_transaction", data)
+        else:
+            print(res, file=sys.stderr)
+
+    def wait_for_transaction(self, data):
+        res = list_open_orders(data["txid"])
+        if len(res) == 0:
+            self.set_state("transfer", data)
+        else:
+            print(res, file=sys.stderr)
+
+    def transfer(self, data):
+        bal = get_balance()
+        if data["to"] not in bal:
+            print("no", data["to"], "to send")
+        if bal[data["to"]] < data["target_amount"]:
+            print("not enough", data["to"], "=>", bal[data["to"]])
+        else:
+            print(bal)
 
 
 def main(argv):
