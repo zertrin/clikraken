@@ -20,15 +20,59 @@ from clikraken.clikraken_utils import check_trading_agreement
 from clikraken.log_utils import logger
 
 
-def place_order(type, pair, ordertype, volume, price=None, price2=None, validate=False, starttm=0, expiretm=0,
-                leverage="none", viqc=False, userref=False):
-    Args = namedtuple("Args", ["debug", "raw", "json", "csv", "pair", "type", "ordertype", "volume",
-                               "price", "price2", "validate", "starttm", "expiretm", "leverage",
-                               "viqc", "userref"])
-    args = Args(False, False, False, False,
-                type=type, pair=pair, ordertype=ordertype, volume=volume, price=price, price2=price2,
-                validate=validate, starttm=starttm, expiretm=expiretm, leverage=leverage, viqc=viqc,
-                userref=userref)
+def place_order(
+    type,
+    pair,
+    ordertype,
+    volume,
+    price=None,
+    price2=None,
+    validate=False,
+    starttm=0,
+    expiretm=0,
+    leverage="none",
+    viqc=False,
+    userref=False,
+):
+    Args = namedtuple(
+        "Args",
+        [
+            "debug",
+            "raw",
+            "json",
+            "csv",
+            "pair",
+            "type",
+            "ordertype",
+            "volume",
+            "price",
+            "price2",
+            "validate",
+            "starttm",
+            "expiretm",
+            "leverage",
+            "viqc",
+            "userref",
+        ],
+    )
+    args = Args(
+        False,
+        False,
+        False,
+        False,
+        type=type,
+        pair=pair,
+        ordertype=ordertype,
+        volume=volume,
+        price=price,
+        price2=price2,
+        validate=validate,
+        starttm=starttm,
+        expiretm=expiretm,
+        leverage=leverage,
+        viqc=viqc,
+        userref=userref,
+    )
 
     return place_order_api(args)
 

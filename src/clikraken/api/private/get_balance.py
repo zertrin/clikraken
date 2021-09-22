@@ -20,8 +20,9 @@ from clikraken.clikraken_utils import csv
 
 def get_balance():
     """Get user balance function to use in python scripts."""
-    Args = namedtuple('Args', ['debug', 'raw', 'json', 'csv'],
-                      defaults=[False, False, False, False])
+    Args = namedtuple(
+        "Args", ["debug", "raw", "json", "csv"], defaults=[False, False, False, False]
+    )
     args = Args()
     res = get_balance_api(args)
     copy = {}
