@@ -19,14 +19,13 @@ from clikraken.api.api_utils import load_api_keyfile
 from clikraken.api.private.get_balance import get_balance
 from clikraken.api.private.list_open_orders import list_open_orders
 from clikraken.api.private.list_withdrawals import list_withdrawals
+from clikraken.api.private.list_withdraw_information import list_withdraw_information
 from clikraken.api.private.place_order import place_order
 from clikraken.api.private.withdraw import withdraw
 from clikraken.api.public.depth import depth
 from clikraken.clikraken_utils import load_config
 
 from abstract_automaton import AbstractAutomaton
-
-FEE = Decimal("0.0018")
 
 
 class DollarCostAveragingAutomaton(AbstractAutomaton):
@@ -73,7 +72,15 @@ class DollarCostAveragingAutomaton(AbstractAutomaton):
         asks = d[data["pair"]]["asks"]
         volume = 0
         sum = 0
-        amount = data["amount"] * (1 - FEE)
+        res = list_withdraw_information(
+            asset=data["to"], amount=data["amount"], key=data["addr"]
+        )
+        if "fee" not in res:
+            print("Unable to get fees for {}".format(data["to"]))
+            sys.exit(1)
+        fee = Decimal(res["fee"])
+        print("fee {}%".format(float(fee * 100)))
+        amount = data["amount"] * (1 - fee)
         for price, vol, _ in asks:
             sum += Decimal(price) * Decimal(vol)
             volume += Decimal(vol)
