@@ -69,7 +69,7 @@ class DollarCostAveragingAutomaton(AbstractAutomaton):
             self.set_state("buy", data)
 
     def buy(self, data):
-        d = depth(data["pair"], 10)
+        d = depth(pair=data["pair"], count=10)
         asks = d[data["pair"]]["asks"]
         volume = 0
         sum = 0
@@ -82,7 +82,12 @@ class DollarCostAveragingAutomaton(AbstractAutomaton):
         price = sum / volume
         # compute the amount from the current market asks
         data["target_amount"] = amount / price
-        res = place_order("buy", data["pair"], "market", data["target_amount"])
+        res = place_order(
+            type="buy",
+            pair=data["pair"],
+            ordertype="market",
+            volume=data["target_amount"],
+        )
         txid = res.get("txid")
 
         if txid:
@@ -92,7 +97,7 @@ class DollarCostAveragingAutomaton(AbstractAutomaton):
             print(res)
 
     def wait_for_transaction(self, data):
-        res = list_open_orders(data["txid"])
+        res = list_open_orders(txid=data["txid"])
         if len(res) == 0:
             self.set_state("transfer", data)
         else:
@@ -106,7 +111,9 @@ class DollarCostAveragingAutomaton(AbstractAutomaton):
             print("not enough", data["to"], "=>", bal[data["to"]])
         else:
             try:
-                res = withdraw(bal[data["to"]], data["to"], data["addr"])
+                res = withdraw(
+                    amount=bal[data["to"]], asset=data["to"], key=data["addr"]
+                )
                 if "refid" in res:
                     data["refid"] = res["refid"]
                     self.set_state("wait_for_transfer", data)
@@ -116,7 +123,7 @@ class DollarCostAveragingAutomaton(AbstractAutomaton):
                 print("Unkown fee for {}. Aborting.".format(data["to"]))
 
     def wait_for_transfer(self, data):
-        for entry in list_withdrawals(data["to"]):
+        for entry in list_withdrawals(asset=data["to"]):
             if entry["refid"] == data["refid"]:
                 if entry["status"] == "Success":
                     self.set_state("done", data)

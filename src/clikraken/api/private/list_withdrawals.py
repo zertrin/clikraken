@@ -10,34 +10,23 @@ Licensed under the Apache License, Version 2.0. See the LICENSE file.
 """
 
 import argparse
-from collections import namedtuple
 
 import clikraken.global_vars as gv
 
 from clikraken.api.api_utils import query_api
 from clikraken.clikraken_utils import _tabulate as tabulate
 from clikraken.clikraken_utils import csv
+from clikraken.clikraken_utils import process_options
+
+OPTIONS = ((("-a", "--asset"), {"default": gv.DEFAULT_ASSET, "help": "asset to list"}),)
+
+MANDATORY_OPTIONS = ("asset",)
 
 
-def list_withdrawals(asset):
+def list_withdrawals(**kwargs):
     """List withdrawals."""
-    Args = namedtuple(
-        "Args",
-        [
-            "debug",
-            "raw",
-            "json",
-            "csv",
-            "asset",
-        ],
-    )
-    args = Args(
-        False,
-        False,
-        False,
-        False,
-        asset,
-    )
+
+    args = process_options(kwargs, OPTIONS, MANDATORY_OPTIONS)
 
     return list_withdrawals_api(args)
 
@@ -69,7 +58,6 @@ def init(subparsers):
         help="[private] List withdrawals",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
-    parser_list_withdrawal.add_argument(
-        "-a", "--asset", default=gv.DEFAULT_ASSET, help="asset to list"
-    )
+    for (args, kwargs) in OPTIONS:
+        parser_list_withdrawal.add_argument(*args, **kwargs)
     parser_list_withdrawal.set_defaults(sub_func=list_withdrawals_cmd)

@@ -10,6 +10,7 @@ Licensed under the Apache License, Version 2.0. See the LICENSE file.
 """
 
 import arrow
+from collections import namedtuple
 import configparser
 import json
 import os
@@ -152,3 +153,35 @@ def csv(items, headers=None):
         output += [it]
     # Render output as txt
     return "\n".join([(gv.CSV_SEPARATOR).join([str(i) for i in o]) for o in output])
+
+
+def process_options(kwargs, options, mandatory_options=[]):
+    """create a fake args onject to be used by functions instead of commands"""
+    field_names = ["debug", "raw", "json", "csv"]
+    values = {}
+    for opt in mandatory_options:
+        if opt not in kwargs:
+            raise TypeError("missing 1 required keyword argument: '{}'".format(opt))
+        values[opt] = kwargs[opt]
+    for (params, kwparams) in options:
+        if len(params) == 1:
+            param = params[0]
+        else:
+            param = params[1][2:]
+        field_names.append(param)
+        if param in mandatory_options:
+            continue
+        if param in kwargs:
+            values[param] = kwargs[param]
+        else:
+            if "default" in kwparams:
+                values[param] = kwparams["default"]
+            elif "action" in kwparams and kwparams["action"] == "store_true":
+                values[param] = False
+            else:
+                values[param] = None
+    for key in kwargs:
+        if key not in field_names:
+            raise TypeError("unknown keyword argument: '{}'".format(key))
+    Args = namedtuple("Args", field_names)
+    return Args(False, False, False, False, **values)

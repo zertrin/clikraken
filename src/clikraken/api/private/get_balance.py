@@ -10,20 +10,18 @@ Licensed under the Apache License, Version 2.0. See the LICENSE file.
 """
 
 import argparse
-from collections import OrderedDict, namedtuple
+from collections import OrderedDict
 from decimal import Decimal
 
 from clikraken.api.api_utils import query_api
 from clikraken.clikraken_utils import _tabulate as tabulate
 from clikraken.clikraken_utils import csv
+from clikraken.clikraken_utils import process_options
 
 
 def get_balance():
     """Get user balance function to use in python scripts."""
-    Args = namedtuple(
-        "Args", ["debug", "raw", "json", "csv"], defaults=[False, False, False, False]
-    )
-    args = Args()
+    args = process_options({}, {})
     res = get_balance_api(args)
     copy = {}
     for asset in res:

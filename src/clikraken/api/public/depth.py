@@ -10,7 +10,7 @@ Licensed under the Apache License, Version 2.0. See the LICENSE file.
 """
 
 import argparse
-from collections import OrderedDict, namedtuple
+from collections import OrderedDict
 from decimal import Decimal
 
 import clikraken.global_vars as gv
@@ -19,11 +19,22 @@ from clikraken.api.api_utils import query_api
 from clikraken.clikraken_utils import asset_pair_short, humanize_timestamp
 from clikraken.clikraken_utils import _tabulate as tabulate
 from clikraken.clikraken_utils import csv
+from clikraken.clikraken_utils import process_options
+
+pair_help = "asset pair"
+
+OPTIONS = (
+    (("-p", "--pair"), {"default": gv.DEFAULT_PAIR, "help": pair_help}),
+    (
+        ("-c", "--count"),
+        {"type": int, "default": 7, "help": "maximum number of asks/bids."},
+    ),
+)
+MANDATORY_OPTIONS = ("pair",)
 
 
-def depth(pair, count=7):
-    Args = namedtuple("Args", ["debug", "raw", "json", "csv", "pair", "count"])
-    args = Args(False, False, False, False, pair, count)
+def depth(**kwargs):
+    args = process_options(kwargs, OPTIONS, MANDATORY_OPTIONS)
     return depth_api(args)
 
 
@@ -93,15 +104,12 @@ def depth_cmd(args):
 
 
 def init(subparsers):
-    pair_help = "asset pair"
     parser_depth = subparsers.add_parser(
         "depth",
         aliases=["d"],
         help="[public] Get the current market depth data",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
-    parser_depth.add_argument("-p", "--pair", default=gv.DEFAULT_PAIR, help=pair_help)
-    parser_depth.add_argument(
-        "-c", "--count", type=int, default=7, help="maximum number of asks/bids."
-    )
+    for (args, kwargs) in OPTIONS:
+        parser_depth.add_argument(*args, **kwargs)
     parser_depth.set_defaults(sub_func=depth_cmd)

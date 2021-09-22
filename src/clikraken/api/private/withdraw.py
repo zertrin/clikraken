@@ -10,38 +10,27 @@ Licensed under the Apache License, Version 2.0. See the LICENSE file.
 """
 
 import argparse
-from collections import namedtuple
 from decimal import Decimal
 
 import clikraken.global_vars as gv
 from clikraken.api.api_utils import query_api
 from clikraken.clikraken_utils import _tabulate as tabulate
-from clikraken.clikraken_utils import csv
+from clikraken.clikraken_utils import csv, process_options
+
+OPTIONS = (
+    (("-a", "--asset"), {"default": gv.DEFAULT_ASSET, "help": "asset being withdrawn"}),
+    (("amount",), {"type": Decimal, "help": "Amount to be withdrawn"}),
+    (("key",), {"type": str, "help": "Withdrawal key name, as set up on the account"}),
+)
+
+MANDATORY_OPTIONS = ("amount", "asset", "key")
 
 
-def withdraw(amount, asset, key):
+def withdraw(**kwargs):
     """Withdraw an asset."""
-    Args = namedtuple(
-        "Args",
-        [
-            "debug",
-            "raw",
-            "json",
-            "csv",
-            "amount",
-            "asset",
-            "key",
-        ],
-    )
-    args = Args(
-        False,
-        False,
-        False,
-        False,
-        amount,
-        asset,
-        key,
-    )
+
+    args = process_options(kwargs, OPTIONS, MANDATORY_OPTIONS)
+
     return withdraw_api(args)
 
 
@@ -78,11 +67,6 @@ def init(subparsers):
         help="[private] Withdraw funds.",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
-    parser_withdraw.add_argument(
-        "-a", "--asset", default=gv.DEFAULT_ASSET, help="asset being withdrawn"
-    )
-    parser_withdraw.add_argument("amount", type=Decimal, help="Amount to be withdrawn")
-    parser_withdraw.add_argument(
-        "key", type=str, help="Withdrawal key name, as set up on the account"
-    )
+    for (args, kwargs) in OPTIONS:
+        parser_withdraw.add_argument(*args, **kwargs)
     parser_withdraw.set_defaults(sub_func=withdraw_cmd)
