@@ -27,10 +27,6 @@ from abstract_automaton import AbstractAutomaton
 
 FEE = Decimal("0.0018")
 
-TRANSFER_FEES = {
-    "XBT": Decimal("0.00015"),
-}
-
 
 class DollarCostAveragingAutomaton(AbstractAutomaton):
     state_file = "dca.json"
@@ -51,6 +47,7 @@ class DollarCostAveragingAutomaton(AbstractAutomaton):
             self.execute_state()
 
     def init(self, data):
+        print("init")
         data["frm"] = self.frm
         data["amount"] = self.amount
         data["to"] = self.to
@@ -76,30 +73,30 @@ class DollarCostAveragingAutomaton(AbstractAutomaton):
         asks = d[data["pair"]]["asks"]
         volume = 0
         sum = 0
+        amount = data["amount"] * (1 - FEE)
         for price, vol, _ in asks:
             sum += Decimal(price) * Decimal(vol)
             volume += Decimal(vol)
-            if sum > data["amount"]:
+            if sum > amount:
                 break
         price = sum / volume
         # compute the amount from the current market asks
-        # todo(fl) need to take the fees into account
-        target_amount = data["amount"] / price
-        res = place_order("buy", data["pair"], "market", target_amount)
+        data["target_amount"] = amount / price
+        res = place_order("buy", data["pair"], "market", data["target_amount"])
         txid = res.get("txid")
 
         if txid:
             data["txid"] = txid[0]
             self.set_state("wait_for_transaction", data)
         else:
-            print(res, file=sys.stderr)
+            print(res)
 
     def wait_for_transaction(self, data):
         res = list_open_orders(data["txid"])
         if len(res) == 0:
             self.set_state("transfer", data)
         else:
-            print(res, file=sys.stderr)
+            print(res)
 
     def transfer(self, data):
         bal = get_balance()
@@ -109,8 +106,7 @@ class DollarCostAveragingAutomaton(AbstractAutomaton):
             print("not enough", data["to"], "=>", bal[data["to"]])
         else:
             try:
-                fee = TRANSFER_FEES[data["to"]]
-                res = withdraw(bal[data["to"]] - fee, data["to"], data["addr"])
+                res = withdraw(bal[data["to"]], data["to"], data["addr"])
                 if "refid" in res:
                     data["refid"] = res["refid"]
                     self.set_state("wait_for_transfer", data)
