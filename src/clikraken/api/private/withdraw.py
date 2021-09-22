@@ -10,6 +10,7 @@ Licensed under the Apache License, Version 2.0. See the LICENSE file.
 """
 
 import argparse
+from collections import namedtuple
 from decimal import Decimal
 
 import clikraken.global_vars as gv
@@ -18,7 +19,33 @@ from clikraken.clikraken_utils import _tabulate as tabulate
 from clikraken.clikraken_utils import csv
 
 
-def withdraw(args):
+def withdraw(amount, asset, key):
+    """Withdraw an asset."""
+    Args = namedtuple(
+        "Args",
+        [
+            "debug",
+            "raw",
+            "json",
+            "csv",
+            "amount",
+            "asset",
+            "key",
+        ],
+    )
+    args = Args(
+        False,
+        False,
+        False,
+        False,
+        amount,
+        asset,
+        key,
+    )
+    return withdraw_api(args)
+
+
+def withdraw_api(args):
     """Withdraw an asset."""
 
     # Parameters to pass to the API
@@ -29,6 +56,14 @@ def withdraw(args):
     }
 
     res = query_api("private", "Withdraw", api_params, args)
+
+    return res
+
+
+def withdraw_cmd(args):
+    """Withdraw an asset."""
+
+    res = withdraw_api(args)
 
     if args.csv:
         print(csv(res, headers="keys"))
@@ -50,4 +85,4 @@ def init(subparsers):
     parser_withdraw.add_argument(
         "key", type=str, help="Withdrawal key name, as set up on the account"
     )
-    parser_withdraw.set_defaults(sub_func=withdraw)
+    parser_withdraw.set_defaults(sub_func=withdraw_cmd)
