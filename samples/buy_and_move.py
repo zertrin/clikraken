@@ -10,12 +10,14 @@ $ ./buy_and_move.py 1000 EUR XBT hw_wallet
 """
 
 from decimal import Decimal
+import os
 import time
 import sys
 
 from clikraken.api.api_utils import load_api_keyfile
 from clikraken.api.private.get_balance import get_balance
 from clikraken.api.private.list_open_orders import list_open_orders
+from clikraken.api.private.list_withdrawals import list_withdrawals
 from clikraken.api.private.place_order import place_order
 from clikraken.api.private.withdraw import withdraw
 from clikraken.api.public.depth import depth
@@ -118,7 +120,17 @@ class DollarCostAveragingAutomaton(AbstractAutomaton):
                 print("Unkown fee for {}. Aborting.".format(data["to"]))
 
     def wait_for_transfer(self, data):
-        pass
+        for entry in list_withdrawals(data["to"]):
+            if entry["refid"] == data["refid"]:
+                if entry["status"] == "Success":
+                    self.set_state("done", data)
+                print(entry)
+                break
+        else:
+            print("transfer {} not found".format(data["refid"]))
+
+    def done(self, data):
+        os.unlink(self.get_state_file())
 
 
 def main(argv):
