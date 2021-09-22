@@ -22,7 +22,7 @@ from clikraken.clikraken_utils import csv
 
 
 def depth(pair, count=7):
-    Args = namedtuple('Args', ['debug', 'raw', 'json', 'csv', 'pair', 'count'])
+    Args = namedtuple("Args", ["debug", "raw", "json", "csv", "pair", "count"])
     args = Args(False, False, False, False, pair, count)
     return depth_api(args)
 

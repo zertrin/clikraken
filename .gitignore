@@ -72,3 +72,5 @@ dist_archive/
 .idea
 .DS_Store
 .vscode
+
+*.json
