@@ -10,6 +10,7 @@ Licensed under the Apache License, Version 2.0. See the LICENSE file.
 """
 
 import argparse
+from collections import namedtuple
 from decimal import Decimal
 
 from clikraken.api.api_utils import parse_order_res, query_api
@@ -18,7 +19,29 @@ from clikraken.clikraken_utils import _tabulate as tabulate
 from clikraken.clikraken_utils import csv
 
 
-def list_open_orders(args):
+def list_open_orders(txid=None):
+    """List open orders."""
+    Args = namedtuple(
+        "Args",
+        [
+            "debug",
+            "raw",
+            "json",
+            "csv",
+            "txid",
+        ],
+    )
+    args = Args(
+        False,
+        False,
+        False,
+        False,
+        txid=txid,
+    )
+    return list_open_orders_api(args)
+
+
+def list_open_orders_api(args):
     """List open orders."""
 
     # Parameters to pass to the API
@@ -53,6 +76,12 @@ def list_open_orders(args):
 
     # final list is concatenation of buy orders followed by sell orders
     ol_all = ol["buy"] + ol["sell"]
+    return ol_all
+
+
+def list_open_orders_cmd(args):
+    """List open orders."""
+    ol_all = list_open_orders_api(args)
 
     if not ol_all:
         return
@@ -78,4 +107,4 @@ def init(subparsers):
         default=None,
         help="comma delimited list of transaction ids to query info about (20 maximum)",
     )
-    parser_olist.set_defaults(sub_func=list_open_orders)
+    parser_olist.set_defaults(sub_func=list_open_orders_cmd)
