@@ -11,7 +11,7 @@ jobs:
           fetch-depth: 0
 
       - name: Set up Python 3.9
-        uses: actions/setup-python@v1
+        uses: actions/setup-python@v2
         with:
           python-version: 3.9
 
@@ -28,6 +28,17 @@ jobs:
 
       - name: Test python module build
         run: ". .tox/py39/bin/activate; make"
+
+      - name: Test clikraken
+        run: |
+          set -ex
+          . .tox/py39/bin/activate
+          python setup.py develop
+          clikraken depth
+          clikraken asset_pairs
+          clikraken last_trades
+          clikraken ohlc
+          clikraken ticker
 
   docker:
     runs-on: ubuntu-latest
