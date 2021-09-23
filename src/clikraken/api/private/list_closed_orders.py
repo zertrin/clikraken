@@ -16,9 +16,30 @@ from clikraken.api.api_utils import parse_order_res, query_api
 from clikraken.clikraken_utils import asset_pair_short
 from clikraken.clikraken_utils import _tabulate as tabulate
 from clikraken.clikraken_utils import csv
+from clikraken.clikraken_utils import process_options
 
 
-def list_closed_orders(args):
+pair_help = "asset pair"
+
+OPTIONS = (
+    (("-p", "--pair"), {"default": None, "help": pair_help}),
+    (
+        ("-i", "--txid"),
+        {
+            "default": None,
+            "help": "comma delimited list of transaction ids to query info about (20 maximum)",
+        },
+    ),
+)
+
+
+def list_closed_orders(**kwargs):
+    """List closed orders."""
+    args = process_options(kwargs, OPTIONS)
+    return list_closed_orders_api(args)
+
+
+def list_closed_orders_api(args):
     """List closed orders."""
 
     # Parameters to pass to the API
@@ -32,6 +53,13 @@ def list_closed_orders(args):
         res = query_api("private", "ClosedOrders", api_params, args)
         # extract list of orders from API results
         res_ol = res["closed"]
+
+    return res_ol
+
+
+def list_closed_orders_cmd(args):
+    """List closed orders."""
+    res_ol = list_closed_orders_api(args)
 
     # the parsing is done in an helper function
     ol = parse_order_res(res_ol, ["closed", "canceled"])
@@ -61,18 +89,12 @@ def list_closed_orders(args):
 
 
 def init(subparsers):
-    pair_help = "asset pair"
     parser_clist = subparsers.add_parser(
         "clist",
         aliases=["cl"],
         help="[private] Get a list of your closed orders",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
-    parser_clist.add_argument("-p", "--pair", default=None, help=pair_help)
-    parser_clist.add_argument(
-        "-i",
-        "--txid",
-        default=None,
-        help="comma delimited list of transaction ids to query info about (20 maximum)",
-    )
-    parser_clist.set_defaults(sub_func=list_closed_orders)
+    for (args, kwargs) in OPTIONS:
+        parser_clist.add_argument(*args, **kwargs)
+    parser_clist.set_defaults(sub_func=list_closed_orders_cmd)

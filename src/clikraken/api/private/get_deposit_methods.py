@@ -16,9 +16,24 @@ import clikraken.global_vars as gv
 from clikraken.api.api_utils import query_api
 from clikraken.clikraken_utils import csv
 from clikraken.clikraken_utils import _tabulate as tabulate
+from clikraken.clikraken_utils import process_options
+
+OPTIONS = (
+    (("-a", "--asset"), {"default": gv.DEFAULT_ASSET, "help": "asset being deposited"}),
+)
+
+MANDATORY_OPTIONS = ("asset",)
 
 
-def get_deposit_methods(args=None):
+def get_deposit_methods(**kwargs):
+    """Get deposit methods."""
+
+    args = process_options(kwargs, OPTIONS, MANDATORY_OPTIONS)
+
+    return get_deposit_methods_api(args)
+
+
+def get_deposit_methods_api(args):
     """Get deposit methods."""
 
     # Parameters to pass to the API
@@ -28,6 +43,12 @@ def get_deposit_methods(args=None):
 
     res = query_api("private", "DepositMethods", api_params, args)
 
+    return res
+
+
+def get_deposit_methods_cmd(args=None):
+    """Get deposit methods."""
+    res = get_deposit_methods_api(args)
     m_list = []
     for method in res:
         # Initialize an OrderedDict to garantee the column order
@@ -69,7 +90,6 @@ def init(subparsers):
         help="[private] Get deposit methods",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
-    parser_deposit_methods.add_argument(
-        "-a", "--asset", default=gv.DEFAULT_ASSET, help="asset being deposited"
-    )
-    parser_deposit_methods.set_defaults(sub_func=get_deposit_methods)
+    for (args, kwargs) in OPTIONS:
+        parser_deposit_methods.add_argument(*args, **kwargs)
+    parser_deposit_methods.set_defaults(sub_func=get_deposit_methods_cmd)

@@ -16,9 +16,29 @@ import clikraken.global_vars as gv
 from clikraken.api.api_utils import query_api
 from clikraken.clikraken_utils import csv, format_timestamp
 from clikraken.clikraken_utils import _tabulate as tabulate
+from clikraken.clikraken_utils import process_options
+
+OPTIONS = (
+    (("-a", "--asset"), {"default": gv.DEFAULT_ASSET, "help": "asset being deposited"}),
+    (("-m", "--method"), {"default": None, "help": "name of the deposit method"}),
+    (
+        ("-n", "--new"),
+        {"action": "store_true", "help": "whether or not to generate a new address"},
+    ),
+    (("-1", "--one"), {"action": "store_true", "help": "return just one address"}),
+)
+
+MANDATORY_OPTIONS = ("asset",)
 
 
-def get_deposit_addresses(args=None):
+def get_deposit_addresses(**kwargs):
+    """Get deposit addresses."""
+    args = process_options(kwargs, OPTIONS, MANDATORY_OPTIONS)
+
+    return get_deposit_addresses_api(args)
+
+
+def get_deposit_addresses_api(args):
     """Get deposit addresses."""
 
     # Parameters to pass to the API
@@ -31,6 +51,13 @@ def get_deposit_addresses(args=None):
 
     res = query_api("private", "DepositAddresses", api_params, args)
 
+    return res
+
+
+def get_deposit_addresses_cmd(args):
+    """Get deposit addresses."""
+
+    res = get_deposit_addresses_api(args)
     if not res:
         return
 
@@ -79,19 +106,6 @@ def init(subparsers):
         help="[private] Get deposit addresses",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
-    parser_deposit_addresses.add_argument(
-        "-a", "--asset", default=gv.DEFAULT_ASSET, help="asset being deposited"
-    )
-    parser_deposit_addresses.add_argument(
-        "-m", "--method", default=None, help="name of the deposit method"
-    )
-    parser_deposit_addresses.add_argument(
-        "-n",
-        "--new",
-        action="store_true",
-        help="whether or not to generate a new address",
-    )
-    parser_deposit_addresses.add_argument(
-        "-1", "--one", action="store_true", help="return just one address"
-    )
-    parser_deposit_addresses.set_defaults(sub_func=get_deposit_addresses)
+    for (args, kwargs) in OPTIONS:
+        parser_deposit_addresses.add_argument(*args, **kwargs)
+    parser_deposit_addresses.set_defaults(sub_func=get_deposit_addresses_cmd)

@@ -16,9 +16,56 @@ from clikraken.api.api_utils import query_api
 from clikraken.clikraken_utils import _tabulate as tabulate
 from clikraken.clikraken_utils import csv
 from clikraken.clikraken_utils import format_timestamp
+from clikraken.clikraken_utils import process_options
+
+OPTIONS = (
+    (
+        ("-a", "--asset"),
+        {
+            "default": "all",
+            "help": "comma delimited list of assets to restrict output to",
+        },
+    ),
+    (
+        ("-t", "--type"),
+        {
+            "default": "all",
+            "help": "type of ledger to retrieve. Possible values: all|deposit|withdrawal|trade|margin",
+        },
+    ),
+    (
+        ("-s", "--start"),
+        {
+            "default": None,
+            "help": "starting unix timestamp or ledger id of results (exclusive)",
+        },
+    ),
+    (
+        ("-e", "--end"),
+        {
+            "default": None,
+            "help": "ending unix timestamp or ledger id of results (exclusive)",
+        },
+    ),
+    (("-o", "--ofs"), {"default": None, "help": "result offset"}),
+    (
+        ("-i", "--id"),
+        {
+            "default": None,
+            "help": "comma delimited list of ledger ids to query info about (20 maximum)",
+        },
+    ),
+)
 
 
-def get_ledgers(args):
+def get_ledgers(**kwargs):
+    """Get ledgers info"""
+    args = process_options(kwargs, OPTIONS)
+
+    return get_ledgers_api(args)
+
+
+def get_ledgers_api(args):
     """Get ledgers info"""
 
     # If id is specified, then query just that
@@ -44,6 +91,13 @@ def get_ledgers(args):
         # extract list of ledgers from API results
         lg = res["ledger"]
 
+    return lg
+
+
+def get_ledgers_cmd(args):
+    """Get ledgers info"""
+
+    lg = get_ledgers_api(args)
     lg_list = []
     for refid, item in lg.items():
         # Initialize an OrderedDict to garantee the column order
@@ -85,35 +139,6 @@ def init(subparsers):
         help="[private] Get ledgers info",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
-    parser_ledgers.add_argument(
-        "-a",
-        "--asset",
-        default="all",
-        help="comma delimited list of assets to restrict output to",
-    )
-    parser_ledgers.add_argument(
-        "-t",
-        "--type",
-        default="all",
-        help="type of ledger to retrieve. Possible values: all|deposit|withdrawal|trade|margin",
-    )
-    parser_ledgers.add_argument(
-        "-s",
-        "--start",
-        default=None,
-        help="starting unix timestamp or ledger id of results (exclusive)",
-    )
-    parser_ledgers.add_argument(
-        "-e",
-        "--end",
-        default=None,
-        help="ending unix timestamp or ledger id of results (exclusive)",
-    )
-    parser_ledgers.add_argument("-o", "--ofs", default=None, help="result offset")
-    parser_ledgers.add_argument(
-        "-i",
-        "--id",
-        default=None,
-        help="comma delimited list of ledger ids to query info about (20 maximum)",
-    )
-    parser_ledgers.set_defaults(sub_func=get_ledgers)
+    for (args, kwargs) in OPTIONS:
+        parser_ledgers.add_argument(*args, **kwargs)
+    parser_ledgers.set_defaults(sub_func=get_ledgers_cmd)

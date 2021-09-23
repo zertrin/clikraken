@@ -15,9 +15,17 @@ from collections import OrderedDict
 
 from clikraken.api.api_utils import query_api
 from clikraken.clikraken_utils import _tabulate as tabulate
+from clikraken.clikraken_utils import csv
+from clikraken.clikraken_utils import process_options
 
 
 def list_open_positions(args):
+    """List open positions."""
+    args = process_options({}, {})
+    return list_open_positions_api(args)
+
+
+def list_open_positions_api(args):
     """List open positions."""
 
     # Parameters to pass to the API
@@ -26,6 +34,13 @@ def list_open_positions(args):
     }
 
     res = query_api("private", "OpenPositions", api_params, args)
+
+    return res
+
+
+def list_open_positions_cmd(args):
+    """List open positions."""
+    res = list_open_positions_api(args)
 
     pos_list = []
     for order in res.values():
@@ -46,7 +61,10 @@ def list_open_positions(args):
 
         pos_list.append(pos)
 
-    print(tabulate(pos_list, headers="keys"))
+    if args.csv:
+        print(csv(pos_list, headers="keys"))
+    else:
+        print(tabulate(pos_list, headers="keys"))
 
 
 def init(subparsers):
@@ -56,4 +74,4 @@ def init(subparsers):
         help="[private] Get a list of your open positions",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
-    parser_oplist.set_defaults(sub_func=list_open_positions)
+    parser_oplist.set_defaults(sub_func=list_open_positions_cmd)

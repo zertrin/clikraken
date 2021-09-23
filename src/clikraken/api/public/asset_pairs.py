@@ -15,15 +15,30 @@ from collections import OrderedDict
 from clikraken.api.api_utils import query_api
 from clikraken.clikraken_utils import _tabulate as tabulate
 from clikraken.clikraken_utils import csv
+from clikraken.clikraken_utils import process_options
 
 
-def asset_pairs(args):
+def asset_pairs():
+    """Get available asset pairs."""
+    args = process_options({}, {})
+    return asset_pairs_api(args)
+
+
+def asset_pairs_api(args):
     """Get available asset pairs."""
 
     # Parameters to pass to the API
     api_params = {}
 
     res = query_api("public", "AssetPairs", api_params, args)
+
+    return res
+
+
+def asset_pairs_cmd(args):
+    """Get available asset pairs."""
+
+    res = asset_pairs_api(args)
 
     # initialize a list to store the parsed assets pairs
     assetlist = []
@@ -52,4 +67,4 @@ def init(subparsers):
         help="[public] Get the list of available asset pairs",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
-    parser_asset_pairs.set_defaults(sub_func=asset_pairs)
+    parser_asset_pairs.set_defaults(sub_func=asset_pairs_cmd)

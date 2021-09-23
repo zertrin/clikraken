@@ -6,7 +6,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
-- Placeholder
+- Switch to GitHub actions to run CI
+- Add `samples/buy_and_move.py` to automate a DCA process and demonstrate how to use the libraries in Python code.
+- Allow to use commands as functions in Python code.
+- Add the `list_withdraw_information`, `withdraw`, `list_withdrawals` commands.
+- Add `stop-loss`, `take-profit`, `stop-loss-limit` and `take-profit-limit` order support in `place_order` command.
+- Dynamically load commands.
 
 ## 0.8.3.2 - 2020-02-16
 - No code changes, update CI only, remove py3.4, add py3.7 and py3.8.

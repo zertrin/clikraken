@@ -19,9 +19,27 @@ from clikraken.api.api_utils import query_api
 from clikraken.clikraken_utils import _tabulate as tabulate
 from clikraken.clikraken_utils import asset_pair_short
 from clikraken.clikraken_utils import csv
+from clikraken.clikraken_utils import process_options
+
+pairs_help = "comma delimited list of asset pairs"
+
+OPTIONS = (
+    (
+        ("-p", "--pair"),
+        {"default": gv.TICKER_PAIRS, "help": pairs_help + " to get info on. "},
+    ),
+)
+
+MANDATORY_OPTIONS = ("pair",)
 
 
-def ticker(args):
+def ticker(**kwargs):
+    """Get currency ticker information."""
+    args = process_options(kwargs, OPTIONS, MANDATORY_OPTIONS)
+    return ticker_api(args)
+
+
+def ticker_api(args):
     """Get currency ticker information."""
 
     # Parameters to pass to the API
@@ -31,6 +49,12 @@ def ticker(args):
 
     res = query_api("public", "Ticker", api_params, args)
 
+    return res
+
+
+def ticker_cmd(args):
+    """Get currency ticker information."""
+    res = ticker_api(args)
     # the list will contain one OrderedDict containing
     # the parser ticker info per asset pair
     ticker_list = []
@@ -84,14 +108,12 @@ def ticker(args):
 
 
 def init(subparsers):
-    pairs_help = "comma delimited list of asset pairs"
     parser_ticker = subparsers.add_parser(
         "ticker",
         aliases=["t"],
         help="[public] Get the ticker",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
-    parser_ticker.add_argument(
-        "-p", "--pair", default=gv.TICKER_PAIRS, help=pairs_help + " to get info on. "
-    )
-    parser_ticker.set_defaults(sub_func=ticker)
+    for (args, kwargs) in OPTIONS:
+        parser_ticker.add_argument(*args, **kwargs)
+    parser_ticker.set_defaults(sub_func=ticker_cmd)

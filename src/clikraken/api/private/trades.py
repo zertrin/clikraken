@@ -16,9 +16,54 @@ from clikraken.api.api_utils import query_api
 from clikraken.clikraken_utils import asset_pair_short
 from clikraken.clikraken_utils import csv, format_timestamp
 from clikraken.clikraken_utils import _tabulate as tabulate
+from clikraken.clikraken_utils import process_options
 
 
-def trades(args):
+pair_help = "asset pair"
+
+OPTIONS = (
+    (
+        ("-t", "--type"),
+        {
+            "default": "all",
+            "help": "type of trade. Values: all|any position|closed position|closing position|no position",
+        },
+    ),
+    # TODO: trades parameter
+    (
+        ("-s", "--start"),
+        {
+            "default": None,
+            "help": "starting unix timestamp or trade tx id of results (exclusive)",
+        },
+    ),
+    (
+        ("-e", "--end"),
+        {
+            "default": None,
+            "help": "ending unix timestamp or trade tx id of results (exclusive)",
+        },
+    ),
+    (("-o", "--ofs"), {"default": None, "help": "result offset"}),
+    (
+        ("-i", "--id"),
+        {
+            "default": None,
+            "help": "comma delimited list of transaction ids to query info about (20 maximum)",
+        },
+    ),
+    (("-p", "--pair"), {"default": None, "help": pair_help}),
+)
+
+
+def trades(**kwargs):
+    """Get trades history or Query trades info"""
+    args = process_options(kwargs, OPTIONS)
+
+    return trades_api(args)
+
+
+def trades_api(args):
     """Get trades history or Query trades info"""
 
     # Parameters to pass to the API
@@ -88,6 +133,14 @@ def trades(args):
     # sort orders by time
     tl2 = sorted(tl2, key=lambda x: x["time"])
 
+    return tl2
+
+
+def trades_cmd(args):
+    """Get trades history or Query trades info"""
+
+    tl2 = trades_api(args)
+
     if not tl2:
         return
 
@@ -98,38 +151,12 @@ def trades(args):
 
 
 def init(subparsers):
-    pair_help = "asset pair"
     parser_trades = subparsers.add_parser(
         "trades",
         aliases=["tr"],
         help="[private] Get trades history",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
-    parser_trades.add_argument(
-        "-t",
-        "--type",
-        default="all",
-        help="type of trade. Values: all|any position|closed position|closing position|no position",
-    )
-    # TODO: trades parameter
-    parser_trades.add_argument(
-        "-s",
-        "--start",
-        default=None,
-        help="starting unix timestamp or trade tx id of results (exclusive)",
-    )
-    parser_trades.add_argument(
-        "-e",
-        "--end",
-        default=None,
-        help="ending unix timestamp or trade tx id of results (exclusive)",
-    )
-    parser_trades.add_argument("-o", "--ofs", default=None, help="result offset")
-    parser_trades.add_argument(
-        "-i",
-        "--id",
-        default=None,
-        help="comma delimited list of transaction ids to query info about (20 maximum)",
-    )
-    parser_trades.add_argument("-p", "--pair", default=None, help=pair_help)
-    parser_trades.set_defaults(sub_func=trades)
+    for (args, kwargs) in OPTIONS:
+        parser_trades.add_argument(*args, **kwargs)
+    parser_trades.set_defaults(sub_func=trades_cmd)

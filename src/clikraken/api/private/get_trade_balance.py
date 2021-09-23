@@ -13,9 +13,17 @@ import argparse
 
 from clikraken.api.api_utils import query_api
 from clikraken.clikraken_utils import _tabulate as tabulate
+from clikraken.clikraken_utils import csv
+from clikraken.clikraken_utils import process_options
 
 
-def get_trade_balance(args=None):
+def get_trade_balance(**kwargs):
+    """Get user trade balance."""
+    args = process_options({}, {})
+    return get_trade_balance_api(args)
+
+
+def get_trade_balance_api(args=None):
     """Get user trade balance."""
 
     # Parameters to pass to the API
@@ -23,6 +31,12 @@ def get_trade_balance(args=None):
 
     res = query_api("private", "TradeBalance", api_params, args)
 
+    return res
+
+
+def get_trade_balance_cmd(args=None):
+    """Get user trade balance."""
+    res = get_trade_balance_api(args)
     tbal_list = [
         ["equivalent balance", res.get("eb", "n/a")],
         ["trade balance", res.get("tb", "n/a")],
@@ -34,7 +48,12 @@ def get_trade_balance(args=None):
         ["margin level", res.get("ml", "n/a")],
         ["unrealized net profit/loss of open positions", res.get("n", "n/a")],
     ]
-    print(tabulate(tbal_list))
+    if args.csv:
+        d = [{key: value for key, value in tbal_list}]
+        k = [key for key, value in tbal_list]
+        print(csv(d, headers=k))
+    else:
+        print(tabulate(tbal_list))
 
 
 def init(subparsers):
@@ -44,4 +63,4 @@ def init(subparsers):
         help="[private] Get your current trade balance",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
-    parser_trade_balance.set_defaults(sub_func=get_trade_balance)
+    parser_trade_balance.set_defaults(sub_func=get_trade_balance_cmd)

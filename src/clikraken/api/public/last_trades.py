@@ -21,12 +21,30 @@ from clikraken.clikraken_utils import (
 )
 from clikraken.clikraken_utils import _tabulate as tabulate
 from clikraken.clikraken_utils import csv
+from clikraken.clikraken_utils import process_options
+
+pair_help = "asset pair"
+
+OPTIONS = (
+    (("-p", "--pair"), {"default": gv.DEFAULT_PAIR, "help": pair_help}),
+    (("-s", "--since"), {"default": None, "help": "return trade data since given id"}),
+    (
+        ("-c", "--count"),
+        {"type": int, "default": 15, "help": "maximum number of trades."},
+    ),
+)
+
+MANDATORY_OPTIONS = ("pair",)
 
 
-def last_trades(args):
+def last_trades(**kwargs):
     """Get last trades."""
+    args = process_options(kwargs, OPTIONS, MANDATORY_OPTIONS)
+    return last_trades_api(args)
 
-    _, quote_currency = base_quote_short_from_asset_pair(args.pair)
+
+def last_trades_api(args):
+    """Get last trades."""
 
     # Parameters to pass to the API
     api_params = {
@@ -37,6 +55,13 @@ def last_trades(args):
 
     res = query_api("public", "Trades", api_params, args)
 
+    return res
+
+
+def last_trades_cmd(args):
+    """Get last trades."""
+    res = last_trades_api(args)
+    _, quote_currency = base_quote_short_from_asset_pair(args.pair)
     results = res[args.pair]
     last_id = res["last"]
 
@@ -88,20 +113,12 @@ def last_trades(args):
 
 
 def init(subparsers):
-    pair_help = "asset pair"
     parser_last_trades = subparsers.add_parser(
         "last_trades",
         aliases=["lt"],
         help="[public] Get the last trades",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
-    parser_last_trades.add_argument(
-        "-p", "--pair", default=gv.DEFAULT_PAIR, help=pair_help
-    )
-    parser_last_trades.add_argument(
-        "-s", "--since", default=None, help="return trade data since given id"
-    )
-    parser_last_trades.add_argument(
-        "-c", "--count", type=int, default=15, help="maximum number of trades."
-    )
-    parser_last_trades.set_defaults(sub_func=last_trades)
+    for (args, kwargs) in OPTIONS:
+        parser_last_trades.add_argument(*args, **kwargs)
+    parser_last_trades.set_defaults(sub_func=last_trades_cmd)
