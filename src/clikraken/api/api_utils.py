@@ -10,6 +10,7 @@ Licensed under the Apache License, Version 2.0. See the LICENSE file.
 """
 
 import http.client
+import requests.exceptions
 import socket
 from collections import OrderedDict
 
@@ -73,7 +74,8 @@ def query_api(api_type, api_method, api_params, args):
         try:
             # call to the krakenex API
             res = func(api_method, api_params)
-        except (socket.timeout, socket.error, http.client.BadStatusLine) as e:
+        except (socket.timeout, socket.error,
+                http.client.BadStatusLine, requests.exceptions.HTTPError) as e:
             log('Network error while querying Kraken API!')
             log('Error details: ' + repr(e))
         except ValueError as e:
