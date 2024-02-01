@@ -31,7 +31,7 @@ setup(
     include_package_data=True,
     url=about['__url__'],
     install_requires=[
-        'krakenex>=0.1,<1.0',
+        'krakenex>=2.2.1,<3.0',
         'arrow<0.14',
         'tabulate',
         'colorlog',
@@ -46,6 +46,9 @@ setup(
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
         "Topic :: Office/Business :: Financial",
         "Topic :: Office/Business :: Financial :: Investment",
     ],

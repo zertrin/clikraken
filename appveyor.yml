@@ -6,6 +6,9 @@ environment:
     - TOXENV: py36
     - TOXENV: py37
     - TOXENV: py38
+    - TOXENV: py39
+    - TOXENV: py310
+    - TOXENV: py311
 install:
   - pip install tox
 test_script:
