@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 - Placeholder
 
+## [0.8.4] - 2024-02-02
+- Updated krakenex dependency to v2.2.1 to solve issue where public API calls require to use GET method instead of POST.
+
 ## 0.8.3.2 - 2020-02-16
 - No code changes, update CI only, remove py3.4, add py3.7 and py3.8.
 
