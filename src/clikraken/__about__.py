@@ -7,7 +7,7 @@ __title__ = "clikraken"
 __summary__ = "Command-line client for the Kraken exchange"
 __url__ = "https://github.com/zertrin/clikraken"
 
-__version__ = "0.8.4"
+__version__ = "0.8.5"
 
 __author__ = "Marc Gallet"
 __email__ = "zertrin@gmail.com"

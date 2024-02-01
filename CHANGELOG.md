@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 - Placeholder
 
+## [0.8.5] - 2024-02-02
+- Handle exception requests.exceptions.HTTPError as per krakenex v2.0.0 migration instructions
+
 ## [0.8.4] - 2024-02-02
 - Updated krakenex dependency to v2.2.1 to solve issue where public API calls require to use GET method instead of POST.
 
